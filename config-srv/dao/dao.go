@@ -2,6 +2,7 @@ package dao
 
 import (
 	"github.com/Allenxuxu/XConf/config-srv/conf"
+	"github.com/Allenxuxu/XConf/config-srv/model"
 	"github.com/jinzhu/gorm"
 )
 
@@ -37,7 +38,12 @@ func newDao(c *conf.Config) (*Dao, error) {
 	d.client.DB().SetMaxIdleConns(10)  //SetMaxIdleConns用于设置闲置的连接数
 	d.client.LogMode(true)
 
-	if err = d.client.AutoMigrate().Error; err != nil {
+	if err = d.client.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(
+		&model.App{},
+		&model.Cluster{},
+		&model.Namespace{},
+		&model.Item{},
+	).Error; err != nil {
 		_ = d.client.Close()
 		return nil, err
 	}
