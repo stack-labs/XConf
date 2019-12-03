@@ -42,3 +42,8 @@ func (d *Dao) ListNamespaces(appName, clusterName string) (namespaces []*model.N
 	err = d.client.Table("namespace").Find(&namespaces, "app_name = ? and cluster_name = ?", appName, clusterName).Error
 	return
 }
+
+func (d *Dao) UpdateConfig(appName, clusterName, namespaceName, value string) error {
+	return d.client.Table("namespace").Where("app_name = ? and cluster_name = ? and namespace_name = ?",
+		appName, clusterName, namespaceName).Update("value", value).Error
+}
