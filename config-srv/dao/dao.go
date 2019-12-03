@@ -42,7 +42,6 @@ func newDao(c *conf.Config) (*Dao, error) {
 		&model.App{},
 		&model.Cluster{},
 		&model.Namespace{},
-		&model.Item{},
 	).Error; err != nil {
 		_ = d.client.Close()
 		return nil, err

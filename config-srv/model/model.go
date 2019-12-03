@@ -27,13 +27,6 @@ type Namespace struct {
 	AppName       string `gorm:"column:app_name;        not null; unique_index:namespace_uindex; size:500" json:"appName"`
 	ClusterName   string `gorm:"column:cluster_name;    not null; unique_index:namespace_uindex; size:100" json:"clusterName"`
 	NamespaceName string `gorm:"column:namespace_name;  not null; unique_index:namespace_uindex; size:100" json:"namespaceName"`
-	Description   string `gorm:"column:description;                                                size:500" json:"description"`
-}
-
-type Item struct {
-	Model
-	AppName       string `gorm:"column:app_name;       not null; unique_index:item_uindex; size:500" json:"appName"`
-	ClusterName   string `gorm:"column:cluster_name;   not null; unique_index:item_uindex; size:100" json:"clusterName"`
-	NamespaceName string `gorm:"column:namespace_name; not null; unique_index:item_uindex; size:100" json:"namespaceName"`
-	Value         string `gorm:"column:value;          type:longtext"                                json:"value"`
+	Value         string `gorm:"column:value;           type:longtext"                                     json:"value"`
+	Description   string `gorm:"column:description;                                              size:500" json:"description"`
 }
