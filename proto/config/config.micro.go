@@ -39,10 +39,10 @@ type ConfigService interface {
 	ListApps(ctx context.Context, in *Request, opts ...client.CallOption) (*Apps, error)
 	CreateCluster(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Cluster, error)
 	DeleteCluster(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Response, error)
-	ListClusters(ctx context.Context, in *Request, opts ...client.CallOption) (*Clusters, error)
+	ListClusters(ctx context.Context, in *App, opts ...client.CallOption) (*Clusters, error)
 	CreateNamespace(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Namespace, error)
 	DeleteNamespace(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Response, error)
-	ListNamespaces(ctx context.Context, in *Request, opts ...client.CallOption) (*Namespaces, error)
+	ListNamespaces(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Namespaces, error)
 	UpdateConfig(ctx context.Context, in *ConfigValue, opts ...client.CallOption) (*Response, error)
 }
 
@@ -114,7 +114,7 @@ func (c *configService) DeleteCluster(ctx context.Context, in *Cluster, opts ...
 	return out, nil
 }
 
-func (c *configService) ListClusters(ctx context.Context, in *Request, opts ...client.CallOption) (*Clusters, error) {
+func (c *configService) ListClusters(ctx context.Context, in *App, opts ...client.CallOption) (*Clusters, error) {
 	req := c.c.NewRequest(c.name, "Config.ListClusters", in)
 	out := new(Clusters)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -144,7 +144,7 @@ func (c *configService) DeleteNamespace(ctx context.Context, in *Namespace, opts
 	return out, nil
 }
 
-func (c *configService) ListNamespaces(ctx context.Context, in *Request, opts ...client.CallOption) (*Namespaces, error) {
+func (c *configService) ListNamespaces(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Namespaces, error) {
 	req := c.c.NewRequest(c.name, "Config.ListNamespaces", in)
 	out := new(Namespaces)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -172,10 +172,10 @@ type ConfigHandler interface {
 	ListApps(context.Context, *Request, *Apps) error
 	CreateCluster(context.Context, *Cluster, *Cluster) error
 	DeleteCluster(context.Context, *Cluster, *Response) error
-	ListClusters(context.Context, *Request, *Clusters) error
+	ListClusters(context.Context, *App, *Clusters) error
 	CreateNamespace(context.Context, *Namespace, *Namespace) error
 	DeleteNamespace(context.Context, *Namespace, *Response) error
-	ListNamespaces(context.Context, *Request, *Namespaces) error
+	ListNamespaces(context.Context, *Cluster, *Namespaces) error
 	UpdateConfig(context.Context, *ConfigValue, *Response) error
 }
 
@@ -186,10 +186,10 @@ func RegisterConfigHandler(s server.Server, hdlr ConfigHandler, opts ...server.H
 		ListApps(ctx context.Context, in *Request, out *Apps) error
 		CreateCluster(ctx context.Context, in *Cluster, out *Cluster) error
 		DeleteCluster(ctx context.Context, in *Cluster, out *Response) error
-		ListClusters(ctx context.Context, in *Request, out *Clusters) error
+		ListClusters(ctx context.Context, in *App, out *Clusters) error
 		CreateNamespace(ctx context.Context, in *Namespace, out *Namespace) error
 		DeleteNamespace(ctx context.Context, in *Namespace, out *Response) error
-		ListNamespaces(ctx context.Context, in *Request, out *Namespaces) error
+		ListNamespaces(ctx context.Context, in *Cluster, out *Namespaces) error
 		UpdateConfig(ctx context.Context, in *ConfigValue, out *Response) error
 	}
 	type Config struct {
@@ -223,7 +223,7 @@ func (h *configHandler) DeleteCluster(ctx context.Context, in *Cluster, out *Res
 	return h.ConfigHandler.DeleteCluster(ctx, in, out)
 }
 
-func (h *configHandler) ListClusters(ctx context.Context, in *Request, out *Clusters) error {
+func (h *configHandler) ListClusters(ctx context.Context, in *App, out *Clusters) error {
 	return h.ConfigHandler.ListClusters(ctx, in, out)
 }
 
@@ -235,7 +235,7 @@ func (h *configHandler) DeleteNamespace(ctx context.Context, in *Namespace, out 
 	return h.ConfigHandler.DeleteNamespace(ctx, in, out)
 }
 
-func (h *configHandler) ListNamespaces(ctx context.Context, in *Request, out *Namespaces) error {
+func (h *configHandler) ListNamespaces(ctx context.Context, in *Cluster, out *Namespaces) error {
 	return h.ConfigHandler.ListNamespaces(ctx, in, out)
 }
 

@@ -53,3 +53,7 @@ func newDao(c *conf.Config) (*Dao, error) {
 func (d *Dao) Ping() error {
 	return d.client.DB().Ping()
 }
+
+func (d *Dao) Disconnect() error {
+	return d.client.DB().Close()
+}

@@ -7,11 +7,11 @@ service Config {
 
     rpc CreateCluster (Cluster) returns (Cluster) {}
     rpc DeleteCluster (Cluster) returns (Response) {}
-    rpc ListClusters (Request) returns (Clusters) {}
+    rpc ListClusters (App) returns (Clusters) {}
 
     rpc CreateNamespace (Namespace) returns (Namespace) {}
     rpc DeleteNamespace(Namespace) returns (Response) {}
-    rpc ListNamespaces(Request)returns (Namespaces){}
+    rpc ListNamespaces(Cluster)returns (Namespaces){}
 
     rpc UpdateConfig (ConfigValue) returns (Response) {}
 }

@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/Allenxuxu/XConf/config-srv/conf"
 	"github.com/Allenxuxu/XConf/config-srv/dao"
+	"github.com/Allenxuxu/XConf/config-srv/handler"
+	protoConfig "github.com/Allenxuxu/XConf/proto/config"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
@@ -15,7 +17,7 @@ func main() {
 	log.Name("XConf")
 
 	service := micro.NewService(
-		micro.Name("go.micro.config"),
+		micro.Name("go.micro.srv.config"),
 		micro.Flags(
 			cli.StringFlag{
 				Name:   "database_driver",
@@ -27,7 +29,7 @@ func main() {
 				Name:   "database_url",
 				Usage:  "database url",
 				EnvVar: "DATABASE_URL",
-				Value:  "root:123@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local",
+				Value:  "root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local",
 			}),
 	)
 	service.Init(
@@ -43,10 +45,16 @@ func main() {
 			if err = dao.GetDao().Ping(); err != nil {
 				return
 			}
-
 			return
 		}),
+		micro.BeforeStop(func() error {
+			return dao.GetDao().Disconnect()
+		}),
 	)
+
+	if err := protoConfig.RegisterConfigHandler(service.Server(), new(handler.Config)); err != nil {
+		panic(err)
+	}
 
 	if err := service.Run(); err != nil {
 		panic(err)
