@@ -14,6 +14,7 @@ service Config {
     rpc ListNamespaces(Cluster)returns (Namespaces){}
 
     rpc UpdateConfig (Namespace) returns (Response) {}
+    rpc ReleaseConfig(Release) returns (Response) {}
 
     rpc Read(Namespaces) returns (Namespaces) {}
     rpc Watch(Request) returns (stream Namespaces) {}
@@ -60,6 +61,17 @@ message Namespace {
 
 message Namespaces {
     repeated Namespace namespaces = 1;
+}
+
+message Release {
+    int64 id = 1;
+    int64 createdAt = 2;
+    int64 updatedAt = 3;
+
+    string appName = 4;
+    string clusterName = 5;
+    string namespaceName = 6;
+    string comment = 7;
 }
 
 message Request {

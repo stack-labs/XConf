@@ -190,3 +190,13 @@ func (c *Config) Watch(ctx context.Context, req *config.Request, stream config.C
 
 	return errors.New("hhhh")
 }
+
+func (c *Config) ReleaseConfig(ctx context.Context, req *config.Release, rsp *config.Response) error {
+	releaseConfig, err := dao.GetDao().ReadConfig(req.GetAppName(), req.GetClusterName(), req.GetNamespaceName())
+	if err != nil {
+		return err
+	}
+
+	return dao.GetDao().ReleaseConfig(
+		releaseConfig.AppName, releaseConfig.ClusterName, releaseConfig.NamespaceName, releaseConfig.Value, req.GetComment())
+}

@@ -44,6 +44,7 @@ type ConfigService interface {
 	DeleteNamespace(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Response, error)
 	ListNamespaces(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Namespaces, error)
 	UpdateConfig(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Response, error)
+	ReleaseConfig(ctx context.Context, in *Release, opts ...client.CallOption) (*Response, error)
 	Read(ctx context.Context, in *Namespaces, opts ...client.CallOption) (*Namespaces, error)
 	Watch(ctx context.Context, in *Request, opts ...client.CallOption) (Config_WatchService, error)
 }
@@ -166,6 +167,16 @@ func (c *configService) UpdateConfig(ctx context.Context, in *Namespace, opts ..
 	return out, nil
 }
 
+func (c *configService) ReleaseConfig(ctx context.Context, in *Release, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "Config.ReleaseConfig", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *configService) Read(ctx context.Context, in *Namespaces, opts ...client.CallOption) (*Namespaces, error) {
 	req := c.c.NewRequest(c.name, "Config.Read", in)
 	out := new(Namespaces)
@@ -233,6 +244,7 @@ type ConfigHandler interface {
 	DeleteNamespace(context.Context, *Namespace, *Response) error
 	ListNamespaces(context.Context, *Cluster, *Namespaces) error
 	UpdateConfig(context.Context, *Namespace, *Response) error
+	ReleaseConfig(context.Context, *Release, *Response) error
 	Read(context.Context, *Namespaces, *Namespaces) error
 	Watch(context.Context, *Request, Config_WatchStream) error
 }
@@ -249,6 +261,7 @@ func RegisterConfigHandler(s server.Server, hdlr ConfigHandler, opts ...server.H
 		DeleteNamespace(ctx context.Context, in *Namespace, out *Response) error
 		ListNamespaces(ctx context.Context, in *Cluster, out *Namespaces) error
 		UpdateConfig(ctx context.Context, in *Namespace, out *Response) error
+		ReleaseConfig(ctx context.Context, in *Release, out *Response) error
 		Read(ctx context.Context, in *Namespaces, out *Namespaces) error
 		Watch(ctx context.Context, stream server.Stream) error
 	}
@@ -301,6 +314,10 @@ func (h *configHandler) ListNamespaces(ctx context.Context, in *Cluster, out *Na
 
 func (h *configHandler) UpdateConfig(ctx context.Context, in *Namespace, out *Response) error {
 	return h.ConfigHandler.UpdateConfig(ctx, in, out)
+}
+
+func (h *configHandler) ReleaseConfig(ctx context.Context, in *Release, out *Response) error {
+	return h.ConfigHandler.ReleaseConfig(ctx, in, out)
 }
 
 func (h *configHandler) Read(ctx context.Context, in *Namespaces, out *Namespaces) error {
