@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/Allenxuxu/XConf/config-srv/broadcast"
+	"github.com/Allenxuxu/XConf/config-srv/broadcast/broker"
 	"github.com/Allenxuxu/XConf/config-srv/conf"
 	"github.com/Allenxuxu/XConf/config-srv/dao"
 	"github.com/Allenxuxu/XConf/config-srv/handler"
@@ -45,6 +47,13 @@ func main() {
 			if err = dao.GetDao().Ping(); err != nil {
 				return
 			}
+
+			// TODO database broadcast
+			bc, err := broker.New(service)
+			if err != nil {
+				return err
+			}
+			broadcast.Init(bc)
 			return
 		}),
 		micro.BeforeStop(func() error {

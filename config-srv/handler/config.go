@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/Allenxuxu/XConf/config-srv/dao"
 	"github.com/Allenxuxu/XConf/proto/config"
@@ -143,11 +144,49 @@ func (c *Config) ListNamespaces(ctx context.Context, req *config.Cluster, rsp *c
 	return nil
 }
 
-func (c *Config) UpdateConfig(ctx context.Context, req *config.ConfigValue, rsp *config.Response) error {
-	namespace := req.GetNamespace()
-	if namespace == nil {
-		return errors.New("[UpdateConfig] namespace is nil")
+func (c *Config) UpdateConfig(ctx context.Context, req *config.Namespace, rsp *config.Response) error {
+	return dao.GetDao().UpdateConfig(req.GetAppName(), req.GetClusterName(), req.GetNamespaceName(), req.GetValue())
+}
+
+func (c *Config) Read(ctx context.Context, req *config.Namespaces, rsp *config.Namespaces) error {
+	namespaces := req.GetNamespaces()
+	if len(namespaces) == 0 {
+		return errors.New("[Read] namespaces len is 0")
 	}
 
-	return dao.GetDao().UpdateConfig(namespace.AppName, namespace.ClusterName, namespace.NamespaceName, req.GetValue())
+	for _, v := range namespaces {
+		value, err := dao.GetDao().ReadConfig(v.AppName, v.ClusterName, v.NamespaceName)
+		if err != nil {
+			return err
+		}
+
+		rsp.Namespaces = append(rsp.Namespaces, &config.Namespace{
+			Id:            int64(value.ID),
+			CreatedAt:     value.CreatedAt.Unix(),
+			UpdatedAt:     value.UpdatedAt.Unix(),
+			AppName:       value.AppName,
+			ClusterName:   value.ClusterName,
+			NamespaceName: value.NamespaceName,
+			Value:         value.Value,
+			Description:   value.Description,
+		})
+	}
+	return nil
+}
+
+func (c *Config) Watch(ctx context.Context, req *config.Request, stream config.Config_WatchStream) error {
+
+	for i := 0; i < 5; i++ {
+		time.Sleep(time.Second * 5)
+		var namespaces config.Namespaces
+		namespaces.Namespaces = append(namespaces.Namespaces, &config.Namespace{
+			Id: 1,
+		})
+		err := stream.Send(&namespaces)
+		if err != nil {
+			return err
+		}
+	}
+
+	return errors.New("hhhh")
 }

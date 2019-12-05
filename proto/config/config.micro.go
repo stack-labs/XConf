@@ -43,7 +43,9 @@ type ConfigService interface {
 	CreateNamespace(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Namespace, error)
 	DeleteNamespace(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Response, error)
 	ListNamespaces(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Namespaces, error)
-	UpdateConfig(ctx context.Context, in *ConfigValue, opts ...client.CallOption) (*Response, error)
+	UpdateConfig(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Response, error)
+	Read(ctx context.Context, in *Namespaces, opts ...client.CallOption) (*Namespaces, error)
+	Watch(ctx context.Context, in *Request, opts ...client.CallOption) (Config_WatchService, error)
 }
 
 type configService struct {
@@ -154,7 +156,7 @@ func (c *configService) ListNamespaces(ctx context.Context, in *Cluster, opts ..
 	return out, nil
 }
 
-func (c *configService) UpdateConfig(ctx context.Context, in *ConfigValue, opts ...client.CallOption) (*Response, error) {
+func (c *configService) UpdateConfig(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "Config.UpdateConfig", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -162,6 +164,60 @@ func (c *configService) UpdateConfig(ctx context.Context, in *ConfigValue, opts 
 		return nil, err
 	}
 	return out, nil
+}
+
+func (c *configService) Read(ctx context.Context, in *Namespaces, opts ...client.CallOption) (*Namespaces, error) {
+	req := c.c.NewRequest(c.name, "Config.Read", in)
+	out := new(Namespaces)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *configService) Watch(ctx context.Context, in *Request, opts ...client.CallOption) (Config_WatchService, error) {
+	req := c.c.NewRequest(c.name, "Config.Watch", &Request{})
+	stream, err := c.c.Stream(ctx, req, opts...)
+	if err != nil {
+		return nil, err
+	}
+	if err := stream.Send(in); err != nil {
+		return nil, err
+	}
+	return &configServiceWatch{stream}, nil
+}
+
+type Config_WatchService interface {
+	SendMsg(interface{}) error
+	RecvMsg(interface{}) error
+	Close() error
+	Recv() (*Namespaces, error)
+}
+
+type configServiceWatch struct {
+	stream client.Stream
+}
+
+func (x *configServiceWatch) Close() error {
+	return x.stream.Close()
+}
+
+func (x *configServiceWatch) SendMsg(m interface{}) error {
+	return x.stream.Send(m)
+}
+
+func (x *configServiceWatch) RecvMsg(m interface{}) error {
+	return x.stream.Recv(m)
+}
+
+func (x *configServiceWatch) Recv() (*Namespaces, error) {
+	m := new(Namespaces)
+	err := x.stream.Recv(m)
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 // Server API for Config service
@@ -176,7 +232,9 @@ type ConfigHandler interface {
 	CreateNamespace(context.Context, *Namespace, *Namespace) error
 	DeleteNamespace(context.Context, *Namespace, *Response) error
 	ListNamespaces(context.Context, *Cluster, *Namespaces) error
-	UpdateConfig(context.Context, *ConfigValue, *Response) error
+	UpdateConfig(context.Context, *Namespace, *Response) error
+	Read(context.Context, *Namespaces, *Namespaces) error
+	Watch(context.Context, *Request, Config_WatchStream) error
 }
 
 func RegisterConfigHandler(s server.Server, hdlr ConfigHandler, opts ...server.HandlerOption) error {
@@ -190,7 +248,9 @@ func RegisterConfigHandler(s server.Server, hdlr ConfigHandler, opts ...server.H
 		CreateNamespace(ctx context.Context, in *Namespace, out *Namespace) error
 		DeleteNamespace(ctx context.Context, in *Namespace, out *Response) error
 		ListNamespaces(ctx context.Context, in *Cluster, out *Namespaces) error
-		UpdateConfig(ctx context.Context, in *ConfigValue, out *Response) error
+		UpdateConfig(ctx context.Context, in *Namespace, out *Response) error
+		Read(ctx context.Context, in *Namespaces, out *Namespaces) error
+		Watch(ctx context.Context, stream server.Stream) error
 	}
 	type Config struct {
 		config
@@ -239,6 +299,45 @@ func (h *configHandler) ListNamespaces(ctx context.Context, in *Cluster, out *Na
 	return h.ConfigHandler.ListNamespaces(ctx, in, out)
 }
 
-func (h *configHandler) UpdateConfig(ctx context.Context, in *ConfigValue, out *Response) error {
+func (h *configHandler) UpdateConfig(ctx context.Context, in *Namespace, out *Response) error {
 	return h.ConfigHandler.UpdateConfig(ctx, in, out)
+}
+
+func (h *configHandler) Read(ctx context.Context, in *Namespaces, out *Namespaces) error {
+	return h.ConfigHandler.Read(ctx, in, out)
+}
+
+func (h *configHandler) Watch(ctx context.Context, stream server.Stream) error {
+	m := new(Request)
+	if err := stream.Recv(m); err != nil {
+		return err
+	}
+	return h.ConfigHandler.Watch(ctx, m, &configWatchStream{stream})
+}
+
+type Config_WatchStream interface {
+	SendMsg(interface{}) error
+	RecvMsg(interface{}) error
+	Close() error
+	Send(*Namespaces) error
+}
+
+type configWatchStream struct {
+	stream server.Stream
+}
+
+func (x *configWatchStream) Close() error {
+	return x.stream.Close()
+}
+
+func (x *configWatchStream) SendMsg(m interface{}) error {
+	return x.stream.Send(m)
+}
+
+func (x *configWatchStream) RecvMsg(m interface{}) error {
+	return x.stream.Recv(m)
+}
+
+func (x *configWatchStream) Send(m *Namespaces) error {
+	return x.stream.Send(m)
 }
