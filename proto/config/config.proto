@@ -17,7 +17,7 @@ service Config {
     rpc ReleaseConfig(Release) returns (Response) {}
 
     rpc Read(Namespaces) returns (Namespaces) {}
-    rpc Watch(Request) returns (stream Namespaces) {}
+    rpc Watch(Request) returns (stream Namespace) {}
 }
 
 message App {

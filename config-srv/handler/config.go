@@ -3,8 +3,9 @@ package handler
 import (
 	"context"
 	"errors"
-	"time"
+	"fmt"
 
+	"github.com/Allenxuxu/XConf/config-srv/broadcast"
 	"github.com/Allenxuxu/XConf/config-srv/dao"
 	"github.com/Allenxuxu/XConf/proto/config"
 	"github.com/micro/go-micro/util/log"
@@ -175,20 +176,26 @@ func (c *Config) Read(ctx context.Context, req *config.Namespaces, rsp *config.N
 }
 
 func (c *Config) Watch(ctx context.Context, req *config.Request, stream config.Config_WatchStream) error {
+	watcher := broadcast.GetBroadcast().Watch()
+	defer func() {
+		_ = watcher.Stop()
+	}()
 
-	for i := 0; i < 5; i++ {
-		time.Sleep(time.Second * 5)
-		var namespaces config.Namespaces
-		namespaces.Namespaces = append(namespaces.Namespaces, &config.Namespace{
-			Id: 1,
-		})
-		err := stream.Send(&namespaces)
+	for {
+		namespace, err := watcher.Next()
 		if err != nil {
+			err = errors.New(fmt.Sprintf("[Watch] watcher next error : %s", err.Error()))
+			log.Error(err)
+			return err
+		}
+
+		err = stream.Send(namespace)
+		if err != nil {
+			err = errors.New(fmt.Sprintf("[Watch] stream send error : %s", err.Error()))
+			log.Error(err)
 			return err
 		}
 	}
-
-	return errors.New("hhhh")
 }
 
 func (c *Config) ReleaseConfig(ctx context.Context, req *config.Release, rsp *config.Response) error {
@@ -197,6 +204,25 @@ func (c *Config) ReleaseConfig(ctx context.Context, req *config.Release, rsp *co
 		return err
 	}
 
+	protoConfig := &config.Namespace{
+		Id:            int64(releaseConfig.ID),
+		CreatedAt:     releaseConfig.CreatedAt.Unix(),
+		UpdatedAt:     releaseConfig.UpdatedAt.Unix(),
+		AppName:       releaseConfig.AppName,
+		ClusterName:   releaseConfig.ClusterName,
+		NamespaceName: releaseConfig.NamespaceName,
+		Value:         releaseConfig.Value,
+		Description:   releaseConfig.Description,
+	}
+	broadcastFunc := func() error {
+		return broadcast.GetBroadcast().Send(protoConfig)
+	}
+
 	return dao.GetDao().ReleaseConfig(
-		releaseConfig.AppName, releaseConfig.ClusterName, releaseConfig.NamespaceName, releaseConfig.Value, req.GetComment())
+		releaseConfig.AppName,
+		releaseConfig.ClusterName,
+		releaseConfig.NamespaceName,
+		releaseConfig.Value,
+		req.GetComment(),
+		broadcastFunc)
 }

@@ -203,7 +203,7 @@ type Config_WatchService interface {
 	SendMsg(interface{}) error
 	RecvMsg(interface{}) error
 	Close() error
-	Recv() (*Namespaces, error)
+	Recv() (*Namespace, error)
 }
 
 type configServiceWatch struct {
@@ -222,8 +222,8 @@ func (x *configServiceWatch) RecvMsg(m interface{}) error {
 	return x.stream.Recv(m)
 }
 
-func (x *configServiceWatch) Recv() (*Namespaces, error) {
-	m := new(Namespaces)
+func (x *configServiceWatch) Recv() (*Namespace, error) {
+	m := new(Namespace)
 	err := x.stream.Recv(m)
 	if err != nil {
 		return nil, err
@@ -336,7 +336,7 @@ type Config_WatchStream interface {
 	SendMsg(interface{}) error
 	RecvMsg(interface{}) error
 	Close() error
-	Send(*Namespaces) error
+	Send(*Namespace) error
 }
 
 type configWatchStream struct {
@@ -355,6 +355,6 @@ func (x *configWatchStream) RecvMsg(m interface{}) error {
 	return x.stream.Recv(m)
 }
 
-func (x *configWatchStream) Send(m *Namespaces) error {
+func (x *configWatchStream) Send(m *Namespace) error {
 	return x.stream.Send(m)
 }
