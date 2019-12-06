@@ -1,0 +1,65 @@
+package handler
+
+import (
+	"net/http"
+
+	"github.com/Allenxuxu/XConf/admin-api/config"
+	"github.com/gin-gonic/gin"
+)
+
+func CreateCluster(c *gin.Context) {
+	var req = struct {
+		AppName     string `json:"appName"        binding:"required"`
+		ClusterName string `json:"clusterName"    binding:"required"`
+		Description string `json:"description"`
+	}{}
+	if err := c.Bind(&req); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	cluster, err := config.CreateCluster(req.AppName, req.ClusterName, req.Description)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, cluster)
+}
+
+func DeleteCluster(c *gin.Context) {
+	var req = struct {
+		AppName     string `json:"appName"        binding:"required"`
+		ClusterName string `json:"clusterName"    binding:"required"`
+	}{}
+	if err := c.Bind(&req); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	err := config.DeleteCluster(req.AppName, req.ClusterName)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
+}
+
+func ListClusters(c *gin.Context) {
+	var req = struct {
+		AppName string `form:"appName"        binding:"required"`
+	}{}
+	if err := c.Bind(&req); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	clusters, err := config.ListClusters(req.AppName)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, clusters)
+}
