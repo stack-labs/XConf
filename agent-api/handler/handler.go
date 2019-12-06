@@ -56,6 +56,7 @@ func WatchUpdate(c *gin.Context) {
 		} else {
 			if value.UpdatedAt > req.UpdatedAt {
 				c.JSON(http.StatusOK, value)
+				return
 			}
 		}
 	}
