@@ -3,6 +3,7 @@ package config
 import (
 	"container/list"
 	"context"
+	"fmt"
 	"sync"
 
 	"github.com/Allenxuxu/XConf/agent-api/config/cache"
@@ -14,7 +15,7 @@ type Config struct {
 	sync.RWMutex
 	configServiceClient config.ConfigService
 	cache               cache.Cache
-	watchers            *list.List
+	watchers            map[string]*list.List
 }
 
 var defaultConfig *Config
@@ -28,15 +29,15 @@ func ReadConfig(appName, clusterName, namespaceName string) (*config.Namespace, 
 	return defaultConfig.ReadConfig(appName, clusterName, namespaceName)
 }
 
-func Watch() *Watcher {
-	return defaultConfig.Watch()
+func Watch(appName, clusterName, namespaceName string) *Watcher {
+	return defaultConfig.Watch(appName, clusterName, namespaceName)
 }
 
 func newConfig(client config.ConfigService, cacheSize int) *Config {
 	return &Config{
 		configServiceClient: client,
 		cache:               cache.New(cacheSize),
-		watchers:            list.New(),
+		watchers:            make(map[string]*list.List),
 	}
 }
 
@@ -59,7 +60,16 @@ func (c *Config) run() {
 			}
 
 			log.Info("get release config :", value)
-			c.notify(value)
+
+			watchers := c.copyWatchers(getKey(value.AppName, value.ClusterName, value.NamespaceName))
+			for e := watchers.Front(); e != nil; e = e.Next() {
+				w := e.Value.(*Watcher)
+				select {
+				case w.updates <- value:
+				default:
+				}
+			}
+
 			if err := c.cache.Set(value); err != nil {
 				log.Error("update cache error:", err)
 			}
@@ -69,36 +79,39 @@ func (c *Config) run() {
 	}
 }
 
-func (c *Config) notify(value *config.Namespace) {
-	watchers := make([]*Watcher, 0, c.watchers.Len())
+func (c *Config) copyWatchers(key string) *list.List {
+	watcherList := list.New()
 	c.RLock()
-	for e := c.watchers.Front(); e != nil; e = e.Next() {
-		watchers = append(watchers, e.Value.(*Watcher))
+	watchers := c.watchers[key]
+	if watchers != nil {
+		watcherList.PushBackList(watchers)
 	}
 	c.RUnlock()
 
-	for _, w := range watchers {
-		select {
-		case w.updates <- value:
-		default:
-		}
-	}
+	return watcherList
 }
 
-func (c *Config) Watch() *Watcher {
+func (c *Config) Watch(appName, clusterName, namespaceName string) *Watcher {
 	w := &Watcher{
 		exit:    make(chan interface{}),
 		updates: make(chan *config.Namespace, 1),
 	}
 
+	key := getKey(appName, clusterName, namespaceName)
 	c.Lock()
-	e := c.watchers.PushBack(w)
+	watchers := c.watchers[key]
+	if watchers == nil {
+		watchers = list.New()
+		c.watchers[key] = watchers
+	}
+
+	e := watchers.PushBack(w)
 	c.Unlock()
 
 	go func() {
 		<-w.exit
 		c.Lock()
-		c.watchers.Remove(e)
+		watchers.Remove(e)
 		c.Unlock()
 	}()
 
@@ -133,4 +146,8 @@ func (c *Config) ReadConfig(appName, clusterName, namespaceName string) (*config
 		}
 		return namespaces.Namespaces[0], nil
 	}
+}
+
+func getKey(appName, clusterName, namespaceName string) string {
+	return fmt.Sprintf("%s/%s/%s", appName, clusterName, namespaceName)
 }

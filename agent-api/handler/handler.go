@@ -6,20 +6,19 @@ import (
 
 	"github.com/Allenxuxu/XConf/agent-api/config"
 	"github.com/gin-gonic/gin"
+	"github.com/micro/go-micro/util/log"
 )
-
-type Request struct {
-	AppName       string `form:"appName"        binding:"required"`
-	ClusterName   string `form:"clusterName"    binding:"required"`
-	NamespaceName string `form:"namespaceName"  binding:"required"`
-}
 
 type ErrorResponse struct {
 	Error string
 }
 
 func ReadConfig(c *gin.Context) {
-	var req Request
+	var req = struct {
+		AppName       string `form:"appName"        binding:"required"`
+		ClusterName   string `form:"clusterName"    binding:"required"`
+		NamespaceName string `form:"namespaceName"  binding:"required"`
+	}{}
 	if err := c.Bind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
@@ -35,17 +34,31 @@ func ReadConfig(c *gin.Context) {
 }
 
 func WatchUpdate(c *gin.Context) {
-	var req Request
+	var req = struct {
+		AppName       string `form:"appName"        binding:"required"`
+		ClusterName   string `form:"clusterName"    binding:"required"`
+		NamespaceName string `form:"namespaceName"  binding:"required"`
+		UpdatedAt     int64  `form:"updatedAt"`
+	}{}
 	if err := c.Bind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}
 
-	// TODO 先读缓存，比较时间戳？？
-	w := config.Watch()
+	w := config.Watch(req.AppName, req.ClusterName, req.NamespaceName)
 	time.AfterFunc(time.Second*60, func() {
-		w.Stop()
+		_ = w.Stop()
 	})
+	if req.UpdatedAt > 0 {
+		value, err := config.ReadConfig(req.AppName, req.ClusterName, req.NamespaceName)
+		if err != nil {
+			log.Errorf(err.Error())
+		} else {
+			if value.UpdatedAt > req.UpdatedAt {
+				c.JSON(http.StatusOK, value)
+			}
+		}
+	}
 
 	value, err := w.Next()
 	if err != nil {
