@@ -7,7 +7,16 @@ import (
 	"github.com/Allenxuxu/XConf/config-srv/model"
 )
 
+func (d *Dao) NamespaceExist(appName, clusterName, namespaceName string) bool {
+	return !d.client.Table("namespace").Where("app_name = ? and cluster_name = ? and namespace_name = ?",
+		appName, clusterName, namespaceName).First(&model.Namespace{}).RecordNotFound()
+}
+
 func (d *Dao) CreateNamespace(appName, clusterName, namespaceName, description string) (*model.Namespace, error) {
+	if !d.ClusterExist(appName, clusterName) {
+		return nil, errors.New("cluster not found")
+	}
+
 	namespace := &model.Namespace{
 		AppName:       appName,
 		ClusterName:   clusterName,
@@ -44,6 +53,10 @@ func (d *Dao) ListNamespaces(appName, clusterName string) (namespaces []*model.N
 }
 
 func (d *Dao) UpdateConfig(appName, clusterName, namespaceName, value string) error {
+	if !d.NamespaceExist(appName, clusterName, namespaceName) {
+		return errors.New("namespace not found")
+	}
+
 	return d.client.Table("namespace").Where("app_name = ? and cluster_name = ? and namespace_name = ?",
 		appName, clusterName, namespaceName).Update("value", value).Error
 }

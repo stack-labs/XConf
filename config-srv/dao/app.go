@@ -7,6 +7,10 @@ import (
 	"github.com/Allenxuxu/XConf/config-srv/model"
 )
 
+func (d *Dao) AppExist(appName string) bool {
+	return !d.client.Table("app").Where("app_name = ?", appName).First(&model.App{}).RecordNotFound()
+}
+
 func (d *Dao) CreateApp(appName, description string) (*model.App, error) {
 	app := &model.App{
 		AppName:     appName,

@@ -7,13 +7,21 @@ import (
 	"github.com/Allenxuxu/XConf/config-srv/model"
 )
 
+func (d *Dao) ClusterExist(appName, clusterName string) bool {
+	return !d.client.Table("cluster").Where("app_name = ? and cluster_name = ?", appName, clusterName).First(&model.Cluster{}).RecordNotFound()
+}
+
 func (d *Dao) CreateCluster(appName, clusterName, description string) (*model.Cluster, error) {
+	if !d.AppExist(appName) {
+		return nil, errors.New("app not found")
+	}
+
 	cluster := &model.Cluster{
 		AppName:     appName,
 		ClusterName: clusterName,
 		Description: description,
 	}
-	err := d.client.Create(cluster).Error
+	err := d.client.Table("cluster").Create(cluster).Error
 
 	return cluster, err
 }
