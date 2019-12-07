@@ -12,6 +12,7 @@ func CreateNamespace(c *gin.Context) {
 		AppName       string `json:"appName"        binding:"required"`
 		ClusterName   string `json:"clusterName"    binding:"required"`
 		NamespaceName string `json:"namespaceName"  binding:"required"`
+		Format        string `json:"format"         binding:"required"`
 		Description   string `json:"description"`
 	}{}
 	if err := c.Bind(&req); err != nil {
@@ -19,7 +20,7 @@ func CreateNamespace(c *gin.Context) {
 		return
 	}
 
-	namespaces, err := config.CreateNamespace(req.AppName, req.ClusterName, req.NamespaceName, req.Description)
+	namespaces, err := config.CreateNamespace(req.AppName, req.ClusterName, req.NamespaceName, req.Format, req.Description)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
 		return

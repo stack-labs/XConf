@@ -53,11 +53,12 @@ func ListClusters(appName string) (*config.Clusters, error) {
 	})
 }
 
-func CreateNamespace(appName, clusterName, namespaceName, description string) (*config.Namespace, error) {
+func CreateNamespace(appName, clusterName, namespaceName, format, description string) (*config.Namespace, error) {
 	return configServiceClient.CreateNamespace(context.Background(), &config.Namespace{
 		AppName:       appName,
 		ClusterName:   clusterName,
 		NamespaceName: namespaceName,
+		Format:        format,
 		Description:   description,
 	})
 }

@@ -55,8 +55,9 @@ message Namespace {
     string appName = 4;
     string clusterName = 5;
     string namespaceName = 6;
-    string value = 7;
-    string description = 8;
+    string format = 7;
+    string value = 8;
+    string description = 9;
 }
 
 message Namespaces {

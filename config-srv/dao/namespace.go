@@ -12,7 +12,7 @@ func (d *Dao) NamespaceExist(appName, clusterName, namespaceName string) bool {
 		appName, clusterName, namespaceName).First(&model.Namespace{}).RecordNotFound()
 }
 
-func (d *Dao) CreateNamespace(appName, clusterName, namespaceName, description string) (*model.Namespace, error) {
+func (d *Dao) CreateNamespace(appName, clusterName, namespaceName, format, description string) (*model.Namespace, error) {
 	if !d.ClusterExist(appName, clusterName) {
 		return nil, errors.New("cluster not found")
 	}
@@ -21,6 +21,7 @@ func (d *Dao) CreateNamespace(appName, clusterName, namespaceName, description s
 		AppName:       appName,
 		ClusterName:   clusterName,
 		NamespaceName: namespaceName,
+		Format:        format,
 		Description:   description,
 	}
 	err := d.client.Table("namespace").Create(namespace).Error

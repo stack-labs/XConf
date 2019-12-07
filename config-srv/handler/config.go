@@ -101,7 +101,7 @@ func (c *Config) ListClusters(ctx context.Context, req *config.App, rsp *config.
 }
 
 func (c *Config) CreateNamespace(ctx context.Context, req *config.Namespace, rsp *config.Namespace) error {
-	namespace, err := dao.GetDao().CreateNamespace(req.GetAppName(), req.GetClusterName(), req.GetNamespaceName(), req.GetDescription())
+	namespace, err := dao.GetDao().CreateNamespace(req.GetAppName(), req.GetClusterName(), req.GetNamespaceName(), req.GetFormat(), req.GetDescription())
 	if err != nil {
 		log.Error("[CreateNamespace]", err)
 		return err
@@ -113,6 +113,7 @@ func (c *Config) CreateNamespace(ctx context.Context, req *config.Namespace, rsp
 	rsp.AppName = namespace.AppName
 	rsp.ClusterName = namespace.ClusterName
 	rsp.NamespaceName = namespace.NamespaceName
+	rsp.Format = namespace.Format
 	return nil
 }
 
@@ -139,6 +140,7 @@ func (c *Config) ListNamespaces(ctx context.Context, req *config.Cluster, rsp *c
 			AppName:       v.AppName,
 			ClusterName:   v.ClusterName,
 			NamespaceName: v.NamespaceName,
+			Format:        v.Format,
 			Description:   v.Description,
 		})
 	}
@@ -168,6 +170,7 @@ func (c *Config) Read(ctx context.Context, req *config.Namespaces, rsp *config.N
 			AppName:       value.AppName,
 			ClusterName:   value.ClusterName,
 			NamespaceName: value.NamespaceName,
+			Format:        value.Format,
 			Value:         value.Value,
 			Description:   value.Description,
 		})
@@ -211,6 +214,7 @@ func (c *Config) ReleaseConfig(ctx context.Context, req *config.Release, rsp *co
 		AppName:       releaseConfig.AppName,
 		ClusterName:   releaseConfig.ClusterName,
 		NamespaceName: releaseConfig.NamespaceName,
+		Format:        releaseConfig.Format,
 		Value:         releaseConfig.Value,
 		Description:   releaseConfig.Description,
 	}
