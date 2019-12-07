@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/Allenxuxu/XConf/agent-api/config/cache"
 	"github.com/Allenxuxu/XConf/proto/config"
@@ -47,7 +48,8 @@ func (c *Config) run() {
 
 		stream, err := c.configServiceClient.Watch(context.Background(), &config.Request{})
 		if err != nil {
-			log.Info("stream watch error :", err)
+			log.Errorf("stream watch error : %s (will sleep 1 second)", err.Error())
+			time.Sleep(time.Second)
 			continue
 		}
 		log.Info("config watcher reconnected")
