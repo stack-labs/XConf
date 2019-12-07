@@ -51,12 +51,18 @@
 
 ### 测试获取配置
 
+- 创建 app，cluster, namespace 和 更新配置
 ```
 curl -X POST http://127.0.0.1:8080/admin/api/v1/app  -H 'Content-Type: application/json' -d '{ "appName":"app", "description": "测试app"}'
 curl -X POST http://127.0.0.1:8080/admin/api/v1/cluster  -H 'Content-Type: application/json' -d '{ "appName":"app", "clusterName": "dev", "description": "测试dev 集群"}'
 curl -X POST http://127.0.0.1:8080/admin/api/v1/namespace  -H 'Content-Type: application/json' -d '{ "appName": "app", "clusterName": "dev", "namespaceName": "test", "format": "json", "description": "测试app"}'
 curl -X POST http://127.0.0.1:8080/admin/api/v1/config  -H 'Content-Type: application/json' -d '{ "appName": "app", "clusterName": "dev", "namespaceName": "test", "value": "{}"}'
 
+```
+
+- 发布配置
+
+```
 curl -X POST http://127.0.0.1:8080/admin/api/v1/release  -H 'Content-Type: application/json' -d '{ "appName": "app", "clusterName": "dev",  "namespaceName": "test", "comment": "测试发布"}'
 ```
 
