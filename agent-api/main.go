@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/Allenxuxu/XConf/agent-api/config"
-	"github.com/Allenxuxu/XConf/agent-api/handler"
-	pconfig "github.com/Allenxuxu/XConf/proto/config"
 	"github.com/gin-gonic/gin"
+	"github.com/micro-in-cn/XConf/agent-api/config"
+	"github.com/micro-in-cn/XConf/agent-api/handler"
+	pconfig "github.com/micro-in-cn/XConf/proto/config"
 	"github.com/micro/go-micro/web"
 )
 

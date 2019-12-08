@@ -1,6 +1,6 @@
 package cache
 
-import "github.com/Allenxuxu/XConf/proto/config"
+import "github.com/micro-in-cn/XConf/proto/config"
 
 type Cache interface {
 	Set(config *config.Namespace) error

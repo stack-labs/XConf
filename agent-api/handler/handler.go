@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Allenxuxu/XConf/agent-api/config"
 	"github.com/gin-gonic/gin"
+	"github.com/micro-in-cn/XConf/agent-api/config"
 	"github.com/micro/go-micro/util/log"
 )
 

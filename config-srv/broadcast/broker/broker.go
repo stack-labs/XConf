@@ -5,8 +5,8 @@ import (
 	"context"
 	"sync"
 
-	"github.com/Allenxuxu/XConf/config-srv/broadcast"
-	"github.com/Allenxuxu/XConf/proto/config"
+	"github.com/micro-in-cn/XConf/config-srv/broadcast"
+	"github.com/micro-in-cn/XConf/proto/config"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/metadata"
 	"github.com/micro/go-micro/util/log"

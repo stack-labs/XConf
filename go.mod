@@ -1,4 +1,4 @@
-module github.com/Allenxuxu/XConf
+module github.com/micro-in-cn/XConf
 
 go 1.13
 

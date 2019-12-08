@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Allenxuxu/XConf/agent-api/config/cache"
-	"github.com/Allenxuxu/XConf/proto/config"
+	"github.com/micro-in-cn/XConf/agent-api/config/cache"
+	"github.com/micro-in-cn/XConf/proto/config"
 	"github.com/micro/go-micro/util/log"
 )
 

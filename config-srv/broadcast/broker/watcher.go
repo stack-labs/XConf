@@ -3,8 +3,8 @@ package broker
 import (
 	"errors"
 
-	"github.com/Allenxuxu/XConf/config-srv/broadcast"
-	"github.com/Allenxuxu/XConf/proto/config"
+	"github.com/micro-in-cn/XConf/config-srv/broadcast"
+	"github.com/micro-in-cn/XConf/proto/config"
 )
 
 var ErrWatcherStopped = errors.New("watcher stopped")

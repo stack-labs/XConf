@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Allenxuxu/XConf/client/source"
+	"github.com/micro-in-cn/XConf/client/source"
 	"github.com/micro/go-micro/config"
 	"github.com/micro/go-micro/util/log"
 )

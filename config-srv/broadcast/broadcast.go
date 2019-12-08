@@ -1,7 +1,7 @@
 package broadcast
 
 import (
-	"github.com/Allenxuxu/XConf/proto/config"
+	"github.com/micro-in-cn/XConf/proto/config"
 )
 
 type Broadcast interface {

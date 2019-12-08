@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/Allenxuxu/XConf/config-srv/broadcast"
-	"github.com/Allenxuxu/XConf/config-srv/broadcast/broker"
-	"github.com/Allenxuxu/XConf/config-srv/conf"
-	"github.com/Allenxuxu/XConf/config-srv/dao"
-	"github.com/Allenxuxu/XConf/config-srv/handler"
-	protoConfig "github.com/Allenxuxu/XConf/proto/config"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/micro-in-cn/XConf/config-srv/broadcast"
+	"github.com/micro-in-cn/XConf/config-srv/broadcast/broker"
+	"github.com/micro-in-cn/XConf/config-srv/conf"
+	"github.com/micro-in-cn/XConf/config-srv/dao"
+	"github.com/micro-in-cn/XConf/config-srv/handler"
+	protoConfig "github.com/micro-in-cn/XConf/proto/config"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/util/log"

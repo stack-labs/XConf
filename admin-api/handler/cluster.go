@@ -3,8 +3,8 @@ package handler
 import (
 	"net/http"
 
-	"github.com/Allenxuxu/XConf/admin-api/config"
 	"github.com/gin-gonic/gin"
+	"github.com/micro-in-cn/XConf/admin-api/config"
 )
 
 func CreateCluster(c *gin.Context) {

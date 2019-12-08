@@ -3,7 +3,7 @@ package config
 import (
 	"errors"
 
-	"github.com/Allenxuxu/XConf/proto/config"
+	"github.com/micro-in-cn/XConf/proto/config"
 )
 
 var ErrWatcherStopped = errors.New("watcher stopped")

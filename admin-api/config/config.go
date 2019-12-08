@@ -3,7 +3,7 @@ package config
 import (
 	"context"
 
-	"github.com/Allenxuxu/XConf/proto/config"
+	"github.com/micro-in-cn/XConf/proto/config"
 )
 
 var configServiceClient config.ConfigService

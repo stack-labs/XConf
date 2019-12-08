@@ -1,9 +1,9 @@
 package dao
 
 import (
-	"github.com/Allenxuxu/XConf/config-srv/conf"
-	"github.com/Allenxuxu/XConf/config-srv/model"
 	"github.com/jinzhu/gorm"
+	"github.com/micro-in-cn/XConf/config-srv/conf"
+	"github.com/micro-in-cn/XConf/config-srv/model"
 )
 
 // Dao def

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"runtime/debug"
 
-	"github.com/Allenxuxu/XConf/proto/config"
 	"github.com/Allenxuxu/toolkit/convert"
 	"github.com/coocood/freecache"
+	"github.com/micro-in-cn/XConf/proto/config"
 	"github.com/micro/go-micro/util/log"
 )
 

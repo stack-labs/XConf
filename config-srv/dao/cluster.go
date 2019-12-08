@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Allenxuxu/XConf/config-srv/model"
+	"github.com/micro-in-cn/XConf/config-srv/model"
 )
 
 func (d *Dao) ClusterExist(appName, clusterName string) bool {
