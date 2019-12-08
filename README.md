@@ -1,5 +1,11 @@
 # XConf 分布式配置中心
 
+[![Github Actions](https://github.com/micro-in-cn/XConf/workflows/CI/badge.svg)](https://github.com/micro-in-cn/XConf/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/micro-in-cn/XConf)](https://goreportcard.com/report/github.com/micro-in-cn/XConf)
+[![GoDoc](https://godoc.org/github.com/micro-in-cn/XConf?status.svg)](https://godoc.org/github.com/micro-in-cn/XConf)
+[![LICENSE](https://img.shields.io/badge/LICENSE-MIT-blue)](https://github.com/micro-in-cn/XConf/blob/master/LICENSE)
+[![Code Size](https://img.shields.io/github/languages/code-size/micro-in-cn/XConf.svg?style=flat)](https://img.shields.io/github/languages/code-size/micro-in-cn/XConf.svg?style=flat)
+
 > 持续开发中
 
 `XConf` 基于 go-micro 构建的分布式配置中心，提供配置的管理与发布、实时推送.
