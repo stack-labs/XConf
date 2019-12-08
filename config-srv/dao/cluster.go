@@ -31,7 +31,7 @@ func (d *Dao) DeleteCluster(appName, clusterName string) error {
 	tx := d.client.Begin()
 	defer func() {
 		if err != nil {
-			err = errors.New(fmt.Sprintf("[DeleteCluster] delete cluster:%s-%s error: %s", appName, clusterName, err.Error()))
+			err = fmt.Errorf("[DeleteCluster] delete cluster:%s-%s error: %s", appName, clusterName, err.Error())
 			tx.Rollback()
 		}
 	}()

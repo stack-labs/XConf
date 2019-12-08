@@ -34,7 +34,7 @@ func (d *Dao) DeleteNamespace(appName, clusterName, namespaceName string) error 
 	tx := d.client.Begin()
 	defer func() {
 		if err != nil {
-			err = errors.New(fmt.Sprintf("[DeleteNamespace] delete namespace:%s-%s-%s error: %s", appName, clusterName, namespaceName, err.Error()))
+			err = fmt.Errorf("[DeleteNamespace] delete namespace:%s-%s-%s error: %s", appName, clusterName, namespaceName, err.Error())
 			tx.Rollback()
 		}
 	}()

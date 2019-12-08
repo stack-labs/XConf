@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/micro-in-cn/XConf/config-srv/model"
@@ -26,7 +25,7 @@ func (d *Dao) DeleteApp(appName string) error {
 	tx := d.client.Begin()
 	defer func() {
 		if err != nil {
-			err = errors.New(fmt.Sprintf("[DeleteApp] delete app:%s error: %s", appName, err.Error()))
+			err = fmt.Errorf("[DeleteApp] delete app:%s error: %s", appName, err.Error())
 			tx.Rollback()
 		}
 	}()
