@@ -1,5 +1,7 @@
 # XConf 分布式配置中心
 
+> 持续开发中
+
 `XConf` 基于 go-micro 构建的分布式配置中心，提供配置的管理与发布、实时推送.
 
 ## 特点
@@ -49,6 +51,14 @@
     go run main.go
     ```
 
+- client 适配 micro config 的 source 插件
+    > micro config 只有在发布内容更改的情况下 watcher.Next 才会返回
+
+    ```
+    cd client/example
+    go run main.go
+    ```
+
 ### 测试获取配置
 
 - 创建 app，cluster, namespace 和 更新配置
@@ -56,11 +66,12 @@
 curl -X POST http://127.0.0.1:8080/admin/api/v1/app  -H 'Content-Type: application/json' -d '{ "appName":"app", "description": "测试app"}'
 curl -X POST http://127.0.0.1:8080/admin/api/v1/cluster  -H 'Content-Type: application/json' -d '{ "appName":"app", "clusterName": "dev", "description": "测试dev 集群"}'
 curl -X POST http://127.0.0.1:8080/admin/api/v1/namespace  -H 'Content-Type: application/json' -d '{ "appName": "app", "clusterName": "dev", "namespaceName": "test", "format": "json", "description": "测试app"}'
-curl -X POST http://127.0.0.1:8080/admin/api/v1/config  -H 'Content-Type: application/json' -d '{ "appName": "app", "clusterName": "dev", "namespaceName": "test", "value":  "{\"hosts\":{\"database\":{\"address\":\"11111\",\"port\":2}}}"}'
 
+curl -X POST http://127.0.0.1:8080/admin/api/v1/config  -H 'Content-Type: application/json' -d '{ "appName": "app", "clusterName": "dev", "namespaceName": "test", "value":  "{\"hosts\":{\"database\":{\"address\":\"11111\",\"port\":2}}}"}'
 ```
 
 - 发布配置
+> 更新配置并不会触发客户端更新推送，只有 发布配置 操作才会推送更新。
 
 ```
 curl -X POST http://127.0.0.1:8080/admin/api/v1/release  -H 'Content-Type: application/json' -d '{ "appName": "app", "clusterName": "dev",  "namespaceName": "test", "comment": "测试发布"}'
