@@ -30,13 +30,13 @@ func (d *Dao) DeleteApp(appName string) error {
 		}
 	}()
 
-	if err = tx.Table("namespace").Delete(model.Namespace{}, "app_name = ?", appName).Error; err != nil {
+	if err = tx.Table("namespace").Unscoped().Delete(model.Namespace{}, "app_name = ?", appName).Error; err != nil {
 		return err
 	}
-	if err = tx.Table("cluster").Delete(model.Cluster{}, "app_name = ?", appName).Error; err != nil {
+	if err = tx.Table("cluster").Unscoped().Delete(model.Cluster{}, "app_name = ?", appName).Error; err != nil {
 		return err
 	}
-	if err = tx.Table("app").Delete(model.App{}, "app_name = ?", appName).Error; err != nil {
+	if err = tx.Table("app").Unscoped().Delete(model.App{}, "app_name = ?", appName).Error; err != nil {
 		return err
 	}
 

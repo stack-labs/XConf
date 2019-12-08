@@ -39,7 +39,7 @@ func (d *Dao) DeleteNamespace(appName, clusterName, namespaceName string) error 
 		}
 	}()
 
-	if err = tx.Table("namespace").Delete(model.Namespace{}, "app_name = ? and cluster_name = ? and namespace_name = ?",
+	if err = tx.Table("namespace").Unscoped().Delete(model.Namespace{}, "app_name = ? and cluster_name = ? and namespace_name = ?",
 		appName, clusterName, namespaceName).Error; err != nil {
 		return err
 	}

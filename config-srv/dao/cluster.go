@@ -36,11 +36,11 @@ func (d *Dao) DeleteCluster(appName, clusterName string) error {
 		}
 	}()
 
-	if err = tx.Table("namespace").Delete(model.Namespace{}, "app_name = ? and cluster_name = ?",
+	if err = tx.Table("namespace").Unscoped().Delete(model.Namespace{}, "app_name = ? and cluster_name = ?",
 		appName, clusterName).Error; err != nil {
 		return err
 	}
-	if err = tx.Table("cluster").Delete(model.Cluster{}, "app_name = ? and cluster_name = ?",
+	if err = tx.Table("cluster").Unscoped().Delete(model.Cluster{}, "app_name = ? and cluster_name = ?",
 		appName, clusterName).Error; err != nil {
 		return err
 	}
