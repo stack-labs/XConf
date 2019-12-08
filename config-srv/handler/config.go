@@ -187,14 +187,14 @@ func (c *Config) Watch(ctx context.Context, req *config.Request, stream config.C
 	for {
 		namespace, err := watcher.Next()
 		if err != nil {
-			err = errors.New(fmt.Sprintf("[Watch] watcher next error : %s", err.Error()))
+			err = fmt.Errorf("[Watch] watcher next error : %s", err.Error())
 			log.Error(err)
 			return err
 		}
 
 		err = stream.Send(namespace)
 		if err != nil {
-			err = errors.New(fmt.Sprintf("[Watch] stream send error : %s", err.Error()))
+			err = fmt.Errorf("[Watch] stream send error : %s", err.Error())
 			log.Error(err)
 			return err
 		}
