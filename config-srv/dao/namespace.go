@@ -59,7 +59,10 @@ func (d *Dao) UpdateConfig(appName, clusterName, namespaceName, value string) er
 	}
 
 	return d.client.Table("namespace").Where("app_name = ? and cluster_name = ? and namespace_name = ?",
-		appName, clusterName, namespaceName).Update("value", value).Error
+		appName, clusterName, namespaceName).Updates(map[string]interface{}{
+		"value":    value,
+		"released": false,
+	}).Error
 }
 
 func (d *Dao) ReadConfig(appName, clusterName, namespaceName string) (*model.Namespace, error) {

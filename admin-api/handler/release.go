@@ -12,6 +12,7 @@ func Release(c *gin.Context) {
 		AppName       string `json:"appName"        binding:"required"`
 		ClusterName   string `json:"clusterName"    binding:"required"`
 		NamespaceName string `json:"namespaceName"  binding:"required"`
+		Tag           string `json:"tag"            binding:"required"`
 		Comment       string `json:"comment"`
 	}{}
 	if err := c.Bind(&req); err != nil {
@@ -19,7 +20,7 @@ func Release(c *gin.Context) {
 		return
 	}
 
-	err := config.ReleaseConfig(req.AppName, req.ClusterName, req.NamespaceName, req.Comment)
+	err := config.ReleaseConfig(req.AppName, req.ClusterName, req.NamespaceName, req.Tag, req.Comment)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
 		return

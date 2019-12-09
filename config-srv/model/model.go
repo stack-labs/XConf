@@ -29,14 +29,16 @@ type Namespace struct {
 	NamespaceName string `gorm:"column:namespace_name;  not null; unique_index:namespace_uindex; size:100" json:"namespaceName"`
 	Format        string `gorm:"column:format"                                                             json:"format"`
 	Value         string `gorm:"column:value;           type:longtext"                                     json:"value"`
+	Released      bool   `gorm:"column:released"                                                           json:"released"`
 	Description   string `gorm:"column:description;                                              size:500" json:"description"`
 }
 
 type Release struct {
 	Model
-	AppName       string `gorm:"column:app_name;        not null; size:500" json:"appName"`
-	ClusterName   string `gorm:"column:cluster_name;    not null; size:100" json:"clusterName"`
-	NamespaceName string `gorm:"column:namespace_name;  not null; size:100" json:"namespaceName"`
+	AppName       string `gorm:"column:app_name;        not null; unique_index:release_uindex; size:500" json:"appName"`
+	ClusterName   string `gorm:"column:cluster_name;    not null; unique_index:release_uindex; size:100" json:"clusterName"`
+	NamespaceName string `gorm:"column:namespace_name;  not null; unique_index:release_uindex; size:100" json:"namespaceName"`
+	Tag           string `gorm:"column:tag;             not null; unique_index:release_uindex; size:100" json:"tag"`
 	Value         string `gorm:"column:value;           type:longtext"      json:"value"`
 	Comment       string `gorm:"column:comment;         size:500"           json:"comment"`
 }

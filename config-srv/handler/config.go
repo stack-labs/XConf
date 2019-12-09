@@ -227,6 +227,7 @@ func (c *Config) ReleaseConfig(ctx context.Context, req *config.Release, rsp *co
 		releaseConfig.ClusterName,
 		releaseConfig.NamespaceName,
 		releaseConfig.Value,
+		req.GetTag(),
 		req.GetComment(),
 		broadcastFunc)
 }

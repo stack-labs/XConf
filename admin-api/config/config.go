@@ -89,11 +89,12 @@ func UpdateConfig(appName, clusterName, namespaceName, value string) error {
 	return err
 }
 
-func ReleaseConfig(appName, clusterName, namespaceName, comment string) error {
+func ReleaseConfig(appName, clusterName, namespaceName, tag, comment string) error {
 	_, err := configServiceClient.ReleaseConfig(context.Background(), &config.Release{
 		AppName:       appName,
 		ClusterName:   clusterName,
 		NamespaceName: namespaceName,
+		Tag:           tag,
 		Comment:       comment,
 	})
 
