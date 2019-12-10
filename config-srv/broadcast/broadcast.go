@@ -5,12 +5,12 @@ import (
 )
 
 type Broadcast interface {
-	Send(namespace *config.Namespace) error
+	Send(namespace *config.ConfigResponse) error
 	Watch() Watcher
 }
 
 type Watcher interface {
-	Next() (*config.Namespace, error)
+	Next() (*config.ConfigResponse, error)
 	Stop() error
 }
 

@@ -3,8 +3,8 @@ package cache
 import "github.com/micro-in-cn/XConf/proto/config"
 
 type Cache interface {
-	Set(config *config.Namespace) error
-	Get(config *config.Namespace) (v *config.Namespace, ok bool)
+	Set(config *config.ConfigResponse) error
+	Get(config *config.QueryConfigRequest) (v *config.ConfigResponse, ok bool)
 	Clear()
 }
 

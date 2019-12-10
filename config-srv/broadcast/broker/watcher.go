@@ -12,10 +12,10 @@ var _ broadcast.Watcher = &Watcher{}
 
 type Watcher struct {
 	exit    chan interface{}
-	updates chan *config.Namespace
+	updates chan *config.ConfigResponse
 }
 
-func (w *Watcher) Next() (*config.Namespace, error) {
+func (w *Watcher) Next() (*config.ConfigResponse, error) {
 	select {
 	case <-w.exit:
 		return nil, ErrWatcherStopped

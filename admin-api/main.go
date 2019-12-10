@@ -43,9 +43,10 @@ func Router() *gin.Engine {
 	r.POST("/namespace", handler.CreateNamespace)
 	r.DELETE("/namespace", handler.DeleteNamespace)
 
-	r.GET("/config", handler.ReadConfig)
 	r.POST("/config", handler.UpdateConfig)
 	r.POST("/release", handler.Release)
+	r.POST("/rollback", handler.Rollback)
+	r.GET("/release/history", handler.ListReleaseHistory)
 
 	return router
 }

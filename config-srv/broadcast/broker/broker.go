@@ -37,14 +37,14 @@ func New(service micro.Service) (broadcast.Broadcast, error) {
 	return broker, nil
 }
 
-func (b *Broker) Send(namespace *config.Namespace) error {
+func (b *Broker) Send(namespace *config.ConfigResponse) error {
 	return b.publisher.Publish(context.Background(), namespace)
 }
 
 func (b *Broker) Watch() broadcast.Watcher {
 	w := &Watcher{
 		exit:    make(chan interface{}),
-		updates: make(chan *config.Namespace, 2), // TODO 1 ?? 2 ?? or config
+		updates: make(chan *config.ConfigResponse, 2), // TODO 1 ?? 2 ?? or config
 	}
 
 	b.Lock()
@@ -61,7 +61,7 @@ func (b *Broker) Watch() broadcast.Watcher {
 	return w
 }
 
-func (b *Broker) subEvent(ctx context.Context, event *config.Namespace) error {
+func (b *Broker) subEvent(ctx context.Context, event *config.ConfigResponse) error {
 	md, _ := metadata.FromContext(ctx)
 	log.Infof("[pubsub.2] Received event %+v with metadata %+v\n", event, md)
 

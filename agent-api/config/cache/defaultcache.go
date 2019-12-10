@@ -26,21 +26,21 @@ func newFreeCache(size int) *freeCache {
 	return c
 }
 
-func (f *freeCache) Set(c *config.Namespace) error {
+func (f *freeCache) Set(c *config.ConfigResponse) error {
 	value, err := json.Marshal(c)
 	if err != nil {
 		return err
 	}
-	return f.cache.Set(getKey(c), value, -1)
+	return f.cache.Set(getKey(c.AppName, c.ClusterName, c.NamespaceName), value, -1)
 }
 
-func (f *freeCache) Get(c *config.Namespace) (*config.Namespace, bool) {
-	v, err := f.cache.Get(getKey(c))
+func (f *freeCache) Get(c *config.QueryConfigRequest) (*config.ConfigResponse, bool) {
+	v, err := f.cache.Get(getKey(c.AppName, c.ClusterName, c.NamespaceName))
 	if err != nil {
 		return nil, false
 	}
 
-	var value config.Namespace
+	var value config.ConfigResponse
 	err = json.Unmarshal(v, &value)
 	if err != nil {
 		log.Error("json unmarshal err")
@@ -52,6 +52,6 @@ func (f *freeCache) Clear() {
 	f.cache.Clear()
 }
 
-func getKey(config *config.Namespace) []byte {
-	return convert.StringToBytes(fmt.Sprintf("%s/%s/%s", config.AppName, config.ClusterName, config.NamespaceName))
+func getKey(appName, clusterName, namespaceName string) []byte {
+	return convert.StringToBytes(fmt.Sprintf("%s/%s/%s", appName, clusterName, namespaceName))
 }

@@ -10,7 +10,7 @@ import (
 func TestFreeCache(t *testing.T) {
 	c := cache.New(1024 * 1024)
 
-	err := c.Set(&config.Namespace{
+	err := c.Set(&config.ConfigResponse{
 		Id:            1,
 		CreatedAt:     2,
 		UpdatedAt:     3,
@@ -18,13 +18,12 @@ func TestFreeCache(t *testing.T) {
 		ClusterName:   "cluster",
 		NamespaceName: "namespace",
 		Value:         "value",
-		Description:   "desc",
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	value, ok := c.Get(&config.Namespace{
+	value, ok := c.Get(&config.QueryConfigRequest{
 		AppName:       "app",
 		ClusterName:   "cluster",
 		NamespaceName: "namespace",
@@ -39,14 +38,13 @@ func TestFreeCache(t *testing.T) {
 		value.AppName != "app" ||
 		value.ClusterName != "cluster" ||
 		value.NamespaceName != "namespace" ||
-		value.Value != "value" ||
-		value.Description != "desc" {
+		value.Value != "value" {
 		t.Fatal()
 	}
 
 	c.Clear()
 
-	_, ok = c.Get(&config.Namespace{
+	_, ok = c.Get(&config.QueryConfigRequest{
 		AppName:       "app",
 		ClusterName:   "cluster",
 		NamespaceName: "namespace",

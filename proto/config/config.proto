@@ -1,26 +1,35 @@
 syntax = "proto3";
 
 service Config {
-    rpc CreateApp (App) returns (App) {}
-    rpc DeleteApp (App) returns (Response) {}
-    rpc ListApps (Request) returns (Apps) {}
+    rpc CreateApp (AppRequest) returns (AppResponse) {}
+    rpc DeleteApp (AppRequest) returns (Response) {}
+    rpc ListApps (Request) returns (AppsResponse) {}
 
-    rpc CreateCluster (Cluster) returns (Cluster) {}
-    rpc DeleteCluster (Cluster) returns (Response) {}
-    rpc ListClusters (App) returns (Clusters) {}
+    rpc CreateCluster (ClusterRequest) returns (ClusterResponse) {}
+    rpc DeleteCluster (ClusterRequest) returns (Response) {}
+    rpc ListClusters (AppRequest) returns (ClustersResponse) {}
 
-    rpc CreateNamespace (Namespace) returns (Namespace) {}
-    rpc DeleteNamespace(Namespace) returns (Response) {}
-    rpc ListNamespaces(Cluster)returns (Namespaces){}
+    rpc CreateNamespace (NamespaceRequest) returns (NamespaceResponse) {}
+    rpc DeleteNamespace(NamespaceRequest) returns (Response) {}
+//    rpc QueryNamespace(NamespaceRequest) returns (NamespaceResponse) {}
+    rpc ListNamespaces(ClusterRequest)returns (NamespacesResponse){}
 
-    rpc UpdateConfig (Namespace) returns (Response) {}
-    rpc ReleaseConfig(Release) returns (Response) {}
+    rpc UpdateConfig (UpdateConfigRequest) returns (Response) {}
 
-    rpc Read(Namespaces) returns (Namespaces) {}
-    rpc Watch(Request) returns (stream Namespace) {}
+    rpc ReleaseConfig(ReleaseRequest) returns (Response) {}
+    rpc ListReleaseHistory(NamespaceRequest) returns (ReleaseHistoryResponse) {}
+    rpc Rollback(ReleaseRequest) returns (Response) {}
+
+    rpc Read(QueryConfigRequest) returns (ConfigResponse) {}
+    rpc Watch(Request) returns (stream ConfigResponse) {}
 }
 
-message App {
+message AppRequest {
+    string appName = 4;
+    string description = 5;
+}
+
+message AppResponse {
     int64 id = 1;
     int64 createdAt = 2;
     int64 updatedAt = 3;
@@ -29,11 +38,17 @@ message App {
     string description = 5;
 }
 
-message Apps {
-    repeated App apps = 1;
+message AppsResponse {
+    repeated AppResponse apps = 1;
 }
 
-message Cluster {
+message ClusterRequest {
+    string appName = 4;
+    string clusterName = 5;
+    string description = 6;
+}
+
+message ClusterResponse {
     int64 id = 1;
     int64 createdAt = 2;
     int64 updatedAt = 3;
@@ -43,11 +58,19 @@ message Cluster {
     string description = 6;
 }
 
-message Clusters {
-    repeated Cluster clusters = 1;
+message ClustersResponse {
+    repeated ClusterResponse clusters = 1;
 }
 
-message Namespace {
+message NamespaceRequest {
+    string appName = 4;
+    string clusterName = 5;
+    string namespaceName = 6;
+    string format = 7;
+    string description = 10;
+}
+
+message NamespaceResponse {
     int64 id = 1;
     int64 createdAt = 2;
     int64 updatedAt = 3;
@@ -58,14 +81,48 @@ message Namespace {
     string format = 7;
     string value = 8;
     bool   released = 9;
-    string description = 10;
+    string editValue = 10;
+    string description = 11;
 }
 
-message Namespaces {
-    repeated Namespace namespaces = 1;
+message NamespacesResponse {
+    repeated NamespaceResponse namespaces = 1;
 }
 
-message Release {
+message UpdateConfigRequest {
+    string appName = 4;
+    string clusterName = 5;
+    string namespaceName = 6;
+    string value = 8;
+}
+
+message QueryConfigRequest {
+    string appName = 4;
+    string clusterName = 5;
+    string namespaceName = 6;
+}
+
+message ConfigResponse {
+    int64 id = 1;
+    int64 createdAt = 2;
+    int64 updatedAt = 3;
+
+    string appName = 4;
+    string clusterName = 5;
+    string namespaceName = 6;
+    string format = 7;
+    string value = 8;
+}
+
+message ReleaseRequest {
+    string appName = 4;
+    string clusterName = 5;
+    string namespaceName = 6;
+    string tag = 7;
+    string comment = 9;
+}
+
+message ReleaseResponse {
     int64 id = 1;
     int64 createdAt = 2;
     int64 updatedAt = 3;
@@ -74,7 +131,12 @@ message Release {
     string clusterName = 5;
     string namespaceName = 6;
     string tag = 7;
-    string comment = 8;
+    string value = 8;
+    string comment = 9;
+}
+
+message ReleaseHistoryResponse {
+    repeated ReleaseResponse releaseHistory = 1;
 }
 
 message Request {

@@ -30,6 +30,7 @@ type Namespace struct {
 	Format        string `gorm:"column:format"                                                             json:"format"`
 	Value         string `gorm:"column:value;           type:longtext"                                     json:"value"`
 	Released      bool   `gorm:"column:released"                                                           json:"released"`
+	EditValue     string `gorm:"column:edit_value;      type:longtext"                                     json:"editValue"`
 	Description   string `gorm:"column:description;                                              size:500" json:"description"`
 }
 

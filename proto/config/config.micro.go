@@ -34,18 +34,21 @@ var _ server.Option
 // Client API for Config service
 
 type ConfigService interface {
-	CreateApp(ctx context.Context, in *App, opts ...client.CallOption) (*App, error)
-	DeleteApp(ctx context.Context, in *App, opts ...client.CallOption) (*Response, error)
-	ListApps(ctx context.Context, in *Request, opts ...client.CallOption) (*Apps, error)
-	CreateCluster(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Cluster, error)
-	DeleteCluster(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Response, error)
-	ListClusters(ctx context.Context, in *App, opts ...client.CallOption) (*Clusters, error)
-	CreateNamespace(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Namespace, error)
-	DeleteNamespace(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Response, error)
-	ListNamespaces(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Namespaces, error)
-	UpdateConfig(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Response, error)
-	ReleaseConfig(ctx context.Context, in *Release, opts ...client.CallOption) (*Response, error)
-	Read(ctx context.Context, in *Namespaces, opts ...client.CallOption) (*Namespaces, error)
+	CreateApp(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*AppResponse, error)
+	DeleteApp(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*Response, error)
+	ListApps(ctx context.Context, in *Request, opts ...client.CallOption) (*AppsResponse, error)
+	CreateCluster(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*ClusterResponse, error)
+	DeleteCluster(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*Response, error)
+	ListClusters(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*ClustersResponse, error)
+	CreateNamespace(ctx context.Context, in *NamespaceRequest, opts ...client.CallOption) (*NamespaceResponse, error)
+	DeleteNamespace(ctx context.Context, in *NamespaceRequest, opts ...client.CallOption) (*Response, error)
+	//    rpc QueryNamespace(NamespaceRequest) returns (NamespaceResponse) {}
+	ListNamespaces(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*NamespacesResponse, error)
+	UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...client.CallOption) (*Response, error)
+	ReleaseConfig(ctx context.Context, in *ReleaseRequest, opts ...client.CallOption) (*Response, error)
+	ListReleaseHistory(ctx context.Context, in *NamespaceRequest, opts ...client.CallOption) (*ReleaseHistoryResponse, error)
+	Rollback(ctx context.Context, in *ReleaseRequest, opts ...client.CallOption) (*Response, error)
+	Read(ctx context.Context, in *QueryConfigRequest, opts ...client.CallOption) (*ConfigResponse, error)
 	Watch(ctx context.Context, in *Request, opts ...client.CallOption) (Config_WatchService, error)
 }
 
@@ -67,9 +70,9 @@ func NewConfigService(name string, c client.Client) ConfigService {
 	}
 }
 
-func (c *configService) CreateApp(ctx context.Context, in *App, opts ...client.CallOption) (*App, error) {
+func (c *configService) CreateApp(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*AppResponse, error) {
 	req := c.c.NewRequest(c.name, "Config.CreateApp", in)
-	out := new(App)
+	out := new(AppResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -77,7 +80,7 @@ func (c *configService) CreateApp(ctx context.Context, in *App, opts ...client.C
 	return out, nil
 }
 
-func (c *configService) DeleteApp(ctx context.Context, in *App, opts ...client.CallOption) (*Response, error) {
+func (c *configService) DeleteApp(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "Config.DeleteApp", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -87,9 +90,9 @@ func (c *configService) DeleteApp(ctx context.Context, in *App, opts ...client.C
 	return out, nil
 }
 
-func (c *configService) ListApps(ctx context.Context, in *Request, opts ...client.CallOption) (*Apps, error) {
+func (c *configService) ListApps(ctx context.Context, in *Request, opts ...client.CallOption) (*AppsResponse, error) {
 	req := c.c.NewRequest(c.name, "Config.ListApps", in)
-	out := new(Apps)
+	out := new(AppsResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -97,9 +100,9 @@ func (c *configService) ListApps(ctx context.Context, in *Request, opts ...clien
 	return out, nil
 }
 
-func (c *configService) CreateCluster(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Cluster, error) {
+func (c *configService) CreateCluster(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*ClusterResponse, error) {
 	req := c.c.NewRequest(c.name, "Config.CreateCluster", in)
-	out := new(Cluster)
+	out := new(ClusterResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -107,7 +110,7 @@ func (c *configService) CreateCluster(ctx context.Context, in *Cluster, opts ...
 	return out, nil
 }
 
-func (c *configService) DeleteCluster(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Response, error) {
+func (c *configService) DeleteCluster(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "Config.DeleteCluster", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -117,9 +120,9 @@ func (c *configService) DeleteCluster(ctx context.Context, in *Cluster, opts ...
 	return out, nil
 }
 
-func (c *configService) ListClusters(ctx context.Context, in *App, opts ...client.CallOption) (*Clusters, error) {
+func (c *configService) ListClusters(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*ClustersResponse, error) {
 	req := c.c.NewRequest(c.name, "Config.ListClusters", in)
-	out := new(Clusters)
+	out := new(ClustersResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -127,9 +130,9 @@ func (c *configService) ListClusters(ctx context.Context, in *App, opts ...clien
 	return out, nil
 }
 
-func (c *configService) CreateNamespace(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Namespace, error) {
+func (c *configService) CreateNamespace(ctx context.Context, in *NamespaceRequest, opts ...client.CallOption) (*NamespaceResponse, error) {
 	req := c.c.NewRequest(c.name, "Config.CreateNamespace", in)
-	out := new(Namespace)
+	out := new(NamespaceResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -137,7 +140,7 @@ func (c *configService) CreateNamespace(ctx context.Context, in *Namespace, opts
 	return out, nil
 }
 
-func (c *configService) DeleteNamespace(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Response, error) {
+func (c *configService) DeleteNamespace(ctx context.Context, in *NamespaceRequest, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "Config.DeleteNamespace", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -147,9 +150,9 @@ func (c *configService) DeleteNamespace(ctx context.Context, in *Namespace, opts
 	return out, nil
 }
 
-func (c *configService) ListNamespaces(ctx context.Context, in *Cluster, opts ...client.CallOption) (*Namespaces, error) {
+func (c *configService) ListNamespaces(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*NamespacesResponse, error) {
 	req := c.c.NewRequest(c.name, "Config.ListNamespaces", in)
-	out := new(Namespaces)
+	out := new(NamespacesResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -157,7 +160,7 @@ func (c *configService) ListNamespaces(ctx context.Context, in *Cluster, opts ..
 	return out, nil
 }
 
-func (c *configService) UpdateConfig(ctx context.Context, in *Namespace, opts ...client.CallOption) (*Response, error) {
+func (c *configService) UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "Config.UpdateConfig", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -167,7 +170,7 @@ func (c *configService) UpdateConfig(ctx context.Context, in *Namespace, opts ..
 	return out, nil
 }
 
-func (c *configService) ReleaseConfig(ctx context.Context, in *Release, opts ...client.CallOption) (*Response, error) {
+func (c *configService) ReleaseConfig(ctx context.Context, in *ReleaseRequest, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "Config.ReleaseConfig", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -177,9 +180,29 @@ func (c *configService) ReleaseConfig(ctx context.Context, in *Release, opts ...
 	return out, nil
 }
 
-func (c *configService) Read(ctx context.Context, in *Namespaces, opts ...client.CallOption) (*Namespaces, error) {
+func (c *configService) ListReleaseHistory(ctx context.Context, in *NamespaceRequest, opts ...client.CallOption) (*ReleaseHistoryResponse, error) {
+	req := c.c.NewRequest(c.name, "Config.ListReleaseHistory", in)
+	out := new(ReleaseHistoryResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *configService) Rollback(ctx context.Context, in *ReleaseRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "Config.Rollback", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *configService) Read(ctx context.Context, in *QueryConfigRequest, opts ...client.CallOption) (*ConfigResponse, error) {
 	req := c.c.NewRequest(c.name, "Config.Read", in)
-	out := new(Namespaces)
+	out := new(ConfigResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -203,7 +226,7 @@ type Config_WatchService interface {
 	SendMsg(interface{}) error
 	RecvMsg(interface{}) error
 	Close() error
-	Recv() (*Namespace, error)
+	Recv() (*ConfigResponse, error)
 }
 
 type configServiceWatch struct {
@@ -222,8 +245,8 @@ func (x *configServiceWatch) RecvMsg(m interface{}) error {
 	return x.stream.Recv(m)
 }
 
-func (x *configServiceWatch) Recv() (*Namespace, error) {
-	m := new(Namespace)
+func (x *configServiceWatch) Recv() (*ConfigResponse, error) {
+	m := new(ConfigResponse)
 	err := x.stream.Recv(m)
 	if err != nil {
 		return nil, err
@@ -234,35 +257,40 @@ func (x *configServiceWatch) Recv() (*Namespace, error) {
 // Server API for Config service
 
 type ConfigHandler interface {
-	CreateApp(context.Context, *App, *App) error
-	DeleteApp(context.Context, *App, *Response) error
-	ListApps(context.Context, *Request, *Apps) error
-	CreateCluster(context.Context, *Cluster, *Cluster) error
-	DeleteCluster(context.Context, *Cluster, *Response) error
-	ListClusters(context.Context, *App, *Clusters) error
-	CreateNamespace(context.Context, *Namespace, *Namespace) error
-	DeleteNamespace(context.Context, *Namespace, *Response) error
-	ListNamespaces(context.Context, *Cluster, *Namespaces) error
-	UpdateConfig(context.Context, *Namespace, *Response) error
-	ReleaseConfig(context.Context, *Release, *Response) error
-	Read(context.Context, *Namespaces, *Namespaces) error
+	CreateApp(context.Context, *AppRequest, *AppResponse) error
+	DeleteApp(context.Context, *AppRequest, *Response) error
+	ListApps(context.Context, *Request, *AppsResponse) error
+	CreateCluster(context.Context, *ClusterRequest, *ClusterResponse) error
+	DeleteCluster(context.Context, *ClusterRequest, *Response) error
+	ListClusters(context.Context, *AppRequest, *ClustersResponse) error
+	CreateNamespace(context.Context, *NamespaceRequest, *NamespaceResponse) error
+	DeleteNamespace(context.Context, *NamespaceRequest, *Response) error
+	//    rpc QueryNamespace(NamespaceRequest) returns (NamespaceResponse) {}
+	ListNamespaces(context.Context, *ClusterRequest, *NamespacesResponse) error
+	UpdateConfig(context.Context, *UpdateConfigRequest, *Response) error
+	ReleaseConfig(context.Context, *ReleaseRequest, *Response) error
+	ListReleaseHistory(context.Context, *NamespaceRequest, *ReleaseHistoryResponse) error
+	Rollback(context.Context, *ReleaseRequest, *Response) error
+	Read(context.Context, *QueryConfigRequest, *ConfigResponse) error
 	Watch(context.Context, *Request, Config_WatchStream) error
 }
 
 func RegisterConfigHandler(s server.Server, hdlr ConfigHandler, opts ...server.HandlerOption) error {
 	type config interface {
-		CreateApp(ctx context.Context, in *App, out *App) error
-		DeleteApp(ctx context.Context, in *App, out *Response) error
-		ListApps(ctx context.Context, in *Request, out *Apps) error
-		CreateCluster(ctx context.Context, in *Cluster, out *Cluster) error
-		DeleteCluster(ctx context.Context, in *Cluster, out *Response) error
-		ListClusters(ctx context.Context, in *App, out *Clusters) error
-		CreateNamespace(ctx context.Context, in *Namespace, out *Namespace) error
-		DeleteNamespace(ctx context.Context, in *Namespace, out *Response) error
-		ListNamespaces(ctx context.Context, in *Cluster, out *Namespaces) error
-		UpdateConfig(ctx context.Context, in *Namespace, out *Response) error
-		ReleaseConfig(ctx context.Context, in *Release, out *Response) error
-		Read(ctx context.Context, in *Namespaces, out *Namespaces) error
+		CreateApp(ctx context.Context, in *AppRequest, out *AppResponse) error
+		DeleteApp(ctx context.Context, in *AppRequest, out *Response) error
+		ListApps(ctx context.Context, in *Request, out *AppsResponse) error
+		CreateCluster(ctx context.Context, in *ClusterRequest, out *ClusterResponse) error
+		DeleteCluster(ctx context.Context, in *ClusterRequest, out *Response) error
+		ListClusters(ctx context.Context, in *AppRequest, out *ClustersResponse) error
+		CreateNamespace(ctx context.Context, in *NamespaceRequest, out *NamespaceResponse) error
+		DeleteNamespace(ctx context.Context, in *NamespaceRequest, out *Response) error
+		ListNamespaces(ctx context.Context, in *ClusterRequest, out *NamespacesResponse) error
+		UpdateConfig(ctx context.Context, in *UpdateConfigRequest, out *Response) error
+		ReleaseConfig(ctx context.Context, in *ReleaseRequest, out *Response) error
+		ListReleaseHistory(ctx context.Context, in *NamespaceRequest, out *ReleaseHistoryResponse) error
+		Rollback(ctx context.Context, in *ReleaseRequest, out *Response) error
+		Read(ctx context.Context, in *QueryConfigRequest, out *ConfigResponse) error
 		Watch(ctx context.Context, stream server.Stream) error
 	}
 	type Config struct {
@@ -276,51 +304,59 @@ type configHandler struct {
 	ConfigHandler
 }
 
-func (h *configHandler) CreateApp(ctx context.Context, in *App, out *App) error {
+func (h *configHandler) CreateApp(ctx context.Context, in *AppRequest, out *AppResponse) error {
 	return h.ConfigHandler.CreateApp(ctx, in, out)
 }
 
-func (h *configHandler) DeleteApp(ctx context.Context, in *App, out *Response) error {
+func (h *configHandler) DeleteApp(ctx context.Context, in *AppRequest, out *Response) error {
 	return h.ConfigHandler.DeleteApp(ctx, in, out)
 }
 
-func (h *configHandler) ListApps(ctx context.Context, in *Request, out *Apps) error {
+func (h *configHandler) ListApps(ctx context.Context, in *Request, out *AppsResponse) error {
 	return h.ConfigHandler.ListApps(ctx, in, out)
 }
 
-func (h *configHandler) CreateCluster(ctx context.Context, in *Cluster, out *Cluster) error {
+func (h *configHandler) CreateCluster(ctx context.Context, in *ClusterRequest, out *ClusterResponse) error {
 	return h.ConfigHandler.CreateCluster(ctx, in, out)
 }
 
-func (h *configHandler) DeleteCluster(ctx context.Context, in *Cluster, out *Response) error {
+func (h *configHandler) DeleteCluster(ctx context.Context, in *ClusterRequest, out *Response) error {
 	return h.ConfigHandler.DeleteCluster(ctx, in, out)
 }
 
-func (h *configHandler) ListClusters(ctx context.Context, in *App, out *Clusters) error {
+func (h *configHandler) ListClusters(ctx context.Context, in *AppRequest, out *ClustersResponse) error {
 	return h.ConfigHandler.ListClusters(ctx, in, out)
 }
 
-func (h *configHandler) CreateNamespace(ctx context.Context, in *Namespace, out *Namespace) error {
+func (h *configHandler) CreateNamespace(ctx context.Context, in *NamespaceRequest, out *NamespaceResponse) error {
 	return h.ConfigHandler.CreateNamespace(ctx, in, out)
 }
 
-func (h *configHandler) DeleteNamespace(ctx context.Context, in *Namespace, out *Response) error {
+func (h *configHandler) DeleteNamespace(ctx context.Context, in *NamespaceRequest, out *Response) error {
 	return h.ConfigHandler.DeleteNamespace(ctx, in, out)
 }
 
-func (h *configHandler) ListNamespaces(ctx context.Context, in *Cluster, out *Namespaces) error {
+func (h *configHandler) ListNamespaces(ctx context.Context, in *ClusterRequest, out *NamespacesResponse) error {
 	return h.ConfigHandler.ListNamespaces(ctx, in, out)
 }
 
-func (h *configHandler) UpdateConfig(ctx context.Context, in *Namespace, out *Response) error {
+func (h *configHandler) UpdateConfig(ctx context.Context, in *UpdateConfigRequest, out *Response) error {
 	return h.ConfigHandler.UpdateConfig(ctx, in, out)
 }
 
-func (h *configHandler) ReleaseConfig(ctx context.Context, in *Release, out *Response) error {
+func (h *configHandler) ReleaseConfig(ctx context.Context, in *ReleaseRequest, out *Response) error {
 	return h.ConfigHandler.ReleaseConfig(ctx, in, out)
 }
 
-func (h *configHandler) Read(ctx context.Context, in *Namespaces, out *Namespaces) error {
+func (h *configHandler) ListReleaseHistory(ctx context.Context, in *NamespaceRequest, out *ReleaseHistoryResponse) error {
+	return h.ConfigHandler.ListReleaseHistory(ctx, in, out)
+}
+
+func (h *configHandler) Rollback(ctx context.Context, in *ReleaseRequest, out *Response) error {
+	return h.ConfigHandler.Rollback(ctx, in, out)
+}
+
+func (h *configHandler) Read(ctx context.Context, in *QueryConfigRequest, out *ConfigResponse) error {
 	return h.ConfigHandler.Read(ctx, in, out)
 }
 
@@ -336,7 +372,7 @@ type Config_WatchStream interface {
 	SendMsg(interface{}) error
 	RecvMsg(interface{}) error
 	Close() error
-	Send(*Namespace) error
+	Send(*ConfigResponse) error
 }
 
 type configWatchStream struct {
@@ -355,6 +391,6 @@ func (x *configWatchStream) RecvMsg(m interface{}) error {
 	return x.stream.Recv(m)
 }
 
-func (x *configWatchStream) Send(m *Namespace) error {
+func (x *configWatchStream) Send(m *ConfigResponse) error {
 	return x.stream.Send(m)
 }

@@ -26,7 +26,7 @@ func Init(client config.ConfigService, cacheSize int) {
 	go defaultConfig.run()
 }
 
-func ReadConfig(appName, clusterName, namespaceName string) (*config.Namespace, error) {
+func ReadConfig(appName, clusterName, namespaceName string) (*config.ConfigResponse, error) {
 	return defaultConfig.ReadConfig(appName, clusterName, namespaceName)
 }
 
@@ -96,7 +96,7 @@ func (c *Config) copyWatchers(key string) *list.List {
 func (c *Config) Watch(appName, clusterName, namespaceName string) *Watcher {
 	w := &Watcher{
 		exit:    make(chan interface{}),
-		updates: make(chan *config.Namespace, 1),
+		updates: make(chan *config.ConfigResponse, 1),
 	}
 
 	key := getKey(appName, clusterName, namespaceName)
@@ -120,33 +120,31 @@ func (c *Config) Watch(appName, clusterName, namespaceName string) *Watcher {
 	return w
 }
 
-func (c *Config) ReadConfig(appName, clusterName, namespaceName string) (*config.Namespace, error) {
-	conf := &config.Namespace{
+func (c *Config) ReadConfig(appName, clusterName, namespaceName string) (*config.ConfigResponse, error) {
+	reqConf := &config.QueryConfigRequest{
 		AppName:       appName,
 		ClusterName:   clusterName,
 		NamespaceName: namespaceName,
 	}
 
-	value, ok := c.cache.Get(conf)
+	value, ok := c.cache.Get(reqConf)
 	if ok { // 命中缓存
 		log.Info("命中缓存")
 		return value, nil
 	} else {
 		log.Info("未能命中缓存")
 
-		namespaces, err := c.configServiceClient.Read(context.Background(), &config.Namespaces{
-			Namespaces: []*config.Namespace{conf},
-		})
+		conf, err := c.configServiceClient.Read(context.Background(), reqConf)
 		if err != nil {
 			return nil, err
 		}
 
 		// 更新缓存
-		if err := c.cache.Set(namespaces.Namespaces[0]); err != nil {
+		if err := c.cache.Set(conf); err != nil {
 			log.Error("update cache error:", err)
 			return nil, err
 		}
-		return namespaces.Namespaces[0], nil
+		return conf, nil
 	}
 }
 
