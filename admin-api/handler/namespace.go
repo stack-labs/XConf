@@ -52,7 +52,7 @@ func DeleteNamespace(c *gin.Context) {
 func ListNamespaces(c *gin.Context) {
 	var req = struct {
 		AppName     string `form:"appName"        binding:"required"`
-		ClusterName string `json:"clusterName"    binding:"required"`
+		ClusterName string `form:"clusterName"    binding:"required"`
 	}{}
 	if err := c.Bind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})

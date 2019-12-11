@@ -12,5 +12,3 @@
 *.out
 
 .idea/
-
-config-srv/client/
