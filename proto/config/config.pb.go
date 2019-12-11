@@ -21,8 +21,8 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type AppRequest struct {
-	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName,omitempty"`
-	Description          string   `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName"`
+	Description          string   `protobuf:"bytes,5,opt,name=description,proto3" json:"description"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -68,11 +68,11 @@ func (m *AppRequest) GetDescription() string {
 }
 
 type AppResponse struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	CreatedAt            int64    `protobuf:"varint,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
-	UpdatedAt            int64    `protobuf:"varint,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
-	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName,omitempty"`
-	Description          string   `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	CreatedAt            int64    `protobuf:"varint,2,opt,name=createdAt,proto3" json:"createdAt"`
+	UpdatedAt            int64    `protobuf:"varint,3,opt,name=updatedAt,proto3" json:"updatedAt"`
+	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName"`
+	Description          string   `protobuf:"bytes,5,opt,name=description,proto3" json:"description"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -139,7 +139,7 @@ func (m *AppResponse) GetDescription() string {
 }
 
 type AppsResponse struct {
-	Apps                 []*AppResponse `protobuf:"bytes,1,rep,name=apps,proto3" json:"apps,omitempty"`
+	Apps                 []*AppResponse `protobuf:"bytes,1,rep,name=apps,proto3" json:"apps"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
@@ -178,9 +178,9 @@ func (m *AppsResponse) GetApps() []*AppResponse {
 }
 
 type ClusterRequest struct {
-	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName,omitempty"`
-	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName,omitempty"`
-	Description          string   `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty"`
+	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName"`
+	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName"`
+	Description          string   `protobuf:"bytes,6,opt,name=description,proto3" json:"description"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -233,12 +233,12 @@ func (m *ClusterRequest) GetDescription() string {
 }
 
 type ClusterResponse struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	CreatedAt            int64    `protobuf:"varint,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
-	UpdatedAt            int64    `protobuf:"varint,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
-	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName,omitempty"`
-	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName,omitempty"`
-	Description          string   `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty"`
+	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	CreatedAt            int64    `protobuf:"varint,2,opt,name=createdAt,proto3" json:"createdAt"`
+	UpdatedAt            int64    `protobuf:"varint,3,opt,name=updatedAt,proto3" json:"updatedAt"`
+	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName"`
+	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName"`
+	Description          string   `protobuf:"bytes,6,opt,name=description,proto3" json:"description"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -312,7 +312,7 @@ func (m *ClusterResponse) GetDescription() string {
 }
 
 type ClustersResponse struct {
-	Clusters             []*ClusterResponse `protobuf:"bytes,1,rep,name=clusters,proto3" json:"clusters,omitempty"`
+	Clusters             []*ClusterResponse `protobuf:"bytes,1,rep,name=clusters,proto3" json:"clusters"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
@@ -351,11 +351,11 @@ func (m *ClustersResponse) GetClusters() []*ClusterResponse {
 }
 
 type NamespaceRequest struct {
-	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName,omitempty"`
-	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName,omitempty"`
-	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName,omitempty"`
-	Format               string   `protobuf:"bytes,7,opt,name=format,proto3" json:"format,omitempty"`
-	Description          string   `protobuf:"bytes,10,opt,name=description,proto3" json:"description,omitempty"`
+	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName"`
+	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName"`
+	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName"`
+	Format               string   `protobuf:"bytes,7,opt,name=format,proto3" json:"format"`
+	Description          string   `protobuf:"bytes,10,opt,name=description,proto3" json:"description"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -422,17 +422,17 @@ func (m *NamespaceRequest) GetDescription() string {
 }
 
 type NamespaceResponse struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	CreatedAt            int64    `protobuf:"varint,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
-	UpdatedAt            int64    `protobuf:"varint,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
-	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName,omitempty"`
-	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName,omitempty"`
-	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName,omitempty"`
-	Format               string   `protobuf:"bytes,7,opt,name=format,proto3" json:"format,omitempty"`
-	Value                string   `protobuf:"bytes,8,opt,name=value,proto3" json:"value,omitempty"`
-	Released             bool     `protobuf:"varint,9,opt,name=released,proto3" json:"released,omitempty"`
-	EditValue            string   `protobuf:"bytes,10,opt,name=editValue,proto3" json:"editValue,omitempty"`
-	Description          string   `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`
+	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	CreatedAt            int64    `protobuf:"varint,2,opt,name=createdAt,proto3" json:"createdAt"`
+	UpdatedAt            int64    `protobuf:"varint,3,opt,name=updatedAt,proto3" json:"updatedAt"`
+	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName"`
+	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName"`
+	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName"`
+	Format               string   `protobuf:"bytes,7,opt,name=format,proto3" json:"format"`
+	Value                string   `protobuf:"bytes,8,opt,name=value,proto3" json:"value"`
+	Released             bool     `protobuf:"varint,9,opt,name=released,proto3" json:"released"`
+	EditValue            string   `protobuf:"bytes,10,opt,name=editValue,proto3" json:"editValue"`
+	Description          string   `protobuf:"bytes,11,opt,name=description,proto3" json:"description"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -541,7 +541,7 @@ func (m *NamespaceResponse) GetDescription() string {
 }
 
 type NamespacesResponse struct {
-	Namespaces           []*NamespaceResponse `protobuf:"bytes,1,rep,name=namespaces,proto3" json:"namespaces,omitempty"`
+	Namespaces           []*NamespaceResponse `protobuf:"bytes,1,rep,name=namespaces,proto3" json:"namespaces"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
 	XXX_unrecognized     []byte               `json:"-"`
 	XXX_sizecache        int32                `json:"-"`
@@ -580,10 +580,10 @@ func (m *NamespacesResponse) GetNamespaces() []*NamespaceResponse {
 }
 
 type UpdateConfigRequest struct {
-	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName,omitempty"`
-	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName,omitempty"`
-	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName,omitempty"`
-	Value                string   `protobuf:"bytes,8,opt,name=value,proto3" json:"value,omitempty"`
+	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName"`
+	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName"`
+	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName"`
+	Value                string   `protobuf:"bytes,8,opt,name=value,proto3" json:"value"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -643,9 +643,9 @@ func (m *UpdateConfigRequest) GetValue() string {
 }
 
 type QueryConfigRequest struct {
-	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName,omitempty"`
-	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName,omitempty"`
-	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName,omitempty"`
+	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName"`
+	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName"`
+	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -698,14 +698,14 @@ func (m *QueryConfigRequest) GetNamespaceName() string {
 }
 
 type ConfigResponse struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	CreatedAt            int64    `protobuf:"varint,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
-	UpdatedAt            int64    `protobuf:"varint,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
-	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName,omitempty"`
-	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName,omitempty"`
-	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName,omitempty"`
-	Format               string   `protobuf:"bytes,7,opt,name=format,proto3" json:"format,omitempty"`
-	Value                string   `protobuf:"bytes,8,opt,name=value,proto3" json:"value,omitempty"`
+	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	CreatedAt            int64    `protobuf:"varint,2,opt,name=createdAt,proto3" json:"createdAt"`
+	UpdatedAt            int64    `protobuf:"varint,3,opt,name=updatedAt,proto3" json:"updatedAt"`
+	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName"`
+	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName"`
+	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName"`
+	Format               string   `protobuf:"bytes,7,opt,name=format,proto3" json:"format"`
+	Value                string   `protobuf:"bytes,8,opt,name=value,proto3" json:"value"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -793,11 +793,11 @@ func (m *ConfigResponse) GetValue() string {
 }
 
 type ReleaseRequest struct {
-	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName,omitempty"`
-	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName,omitempty"`
-	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName,omitempty"`
-	Tag                  string   `protobuf:"bytes,7,opt,name=tag,proto3" json:"tag,omitempty"`
-	Comment              string   `protobuf:"bytes,9,opt,name=comment,proto3" json:"comment,omitempty"`
+	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName"`
+	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName"`
+	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName"`
+	Tag                  string   `protobuf:"bytes,7,opt,name=tag,proto3" json:"tag"`
+	Comment              string   `protobuf:"bytes,9,opt,name=comment,proto3" json:"comment"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -864,15 +864,15 @@ func (m *ReleaseRequest) GetComment() string {
 }
 
 type ReleaseResponse struct {
-	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	CreatedAt            int64    `protobuf:"varint,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
-	UpdatedAt            int64    `protobuf:"varint,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
-	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName,omitempty"`
-	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName,omitempty"`
-	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName,omitempty"`
-	Tag                  string   `protobuf:"bytes,7,opt,name=tag,proto3" json:"tag,omitempty"`
-	Value                string   `protobuf:"bytes,8,opt,name=value,proto3" json:"value,omitempty"`
-	Comment              string   `protobuf:"bytes,9,opt,name=comment,proto3" json:"comment,omitempty"`
+	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	CreatedAt            int64    `protobuf:"varint,2,opt,name=createdAt,proto3" json:"createdAt"`
+	UpdatedAt            int64    `protobuf:"varint,3,opt,name=updatedAt,proto3" json:"updatedAt"`
+	AppName              string   `protobuf:"bytes,4,opt,name=appName,proto3" json:"appName"`
+	ClusterName          string   `protobuf:"bytes,5,opt,name=clusterName,proto3" json:"clusterName"`
+	NamespaceName        string   `protobuf:"bytes,6,opt,name=namespaceName,proto3" json:"namespaceName"`
+	Tag                  string   `protobuf:"bytes,7,opt,name=tag,proto3" json:"tag"`
+	Value                string   `protobuf:"bytes,8,opt,name=value,proto3" json:"value"`
+	Comment              string   `protobuf:"bytes,9,opt,name=comment,proto3" json:"comment"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -967,7 +967,7 @@ func (m *ReleaseResponse) GetComment() string {
 }
 
 type ReleaseHistoryResponse struct {
-	ReleaseHistory       []*ReleaseResponse `protobuf:"bytes,1,rep,name=releaseHistory,proto3" json:"releaseHistory,omitempty"`
+	ReleaseHistory       []*ReleaseResponse `protobuf:"bytes,1,rep,name=releaseHistory,proto3" json:"releaseHistory"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
