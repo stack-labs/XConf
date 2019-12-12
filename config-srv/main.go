@@ -1,9 +1,12 @@
 package main
 
 import (
+	"errors"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/micro-in-cn/XConf/config-srv/broadcast"
 	"github.com/micro-in-cn/XConf/config-srv/broadcast/broker"
+	"github.com/micro-in-cn/XConf/config-srv/broadcast/database"
 	"github.com/micro-in-cn/XConf/config-srv/conf"
 	"github.com/micro-in-cn/XConf/config-srv/dao"
 	"github.com/micro-in-cn/XConf/config-srv/handler"
@@ -32,12 +35,19 @@ func main() {
 				Usage:  "database url",
 				EnvVar: "DATABASE_URL",
 				Value:  "root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local",
+			},
+			cli.StringFlag{
+				Name:   "broadcast",
+				Usage:  "broadcast (db/broker)",
+				EnvVar: "BROADCAST",
+				Value:  "db",
 			}),
 	)
 	service.Init(
 		micro.Action(func(c *cli.Context) {
 			config.DB.DriverName = c.String("database_driver")
 			config.DB.URL = c.String("database_url")
+			config.BroadcastType = c.String("broadcast")
 			log.Infof("database_driver: %s , database_url: %s\n", config.DB.DriverName, config.DB.URL)
 		}),
 		micro.BeforeStart(func() (err error) {
@@ -48,10 +58,20 @@ func main() {
 				return
 			}
 
-			// TODO database broadcast
-			bc, err := broker.New(service)
-			if err != nil {
-				return err
+			var bc broadcast.Broadcast
+			switch config.BroadcastType {
+			case "db":
+				bc, err = database.New()
+				if err != nil {
+					return err
+				}
+			case "broker":
+				bc, err = broker.New(service)
+				if err != nil {
+					return err
+				}
+			default:
+				return errors.New("broadcast： Invalid option")
 			}
 			broadcast.Init(bc)
 			return
