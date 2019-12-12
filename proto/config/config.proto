@@ -133,6 +133,7 @@ message ReleaseResponse {
     string tag = 7;
     string value = 8;
     string comment = 9;
+    string type = 10;
 }
 
 message ReleaseHistoryResponse {

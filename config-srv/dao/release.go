@@ -19,6 +19,7 @@ func (d *Dao) ReleaseConfig(appName, clusterName, namespaceName, tag, comment st
 		Tag:           tag,
 		Value:         releaseConfig.EditValue,
 		Comment:       comment,
+		Type:          "release",
 	}).Error; err != nil {
 		tx.Rollback()
 		return err
@@ -57,6 +58,19 @@ func (d *Dao) Rollback(appName, clusterName, namespaceName, tag string) error {
 		"value":      release.Value,
 		"released":   true,
 		"edit_value": release.Value,
+	}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := tx.Table("release").Create(&model.Release{
+		AppName:       release.AppName,
+		ClusterName:   release.ClusterName,
+		NamespaceName: release.NamespaceName,
+		Tag:           tag + "-rollback",
+		Value:         release.Value,
+		Comment:       "",
+		Type:          "rollback",
 	}).Error; err != nil {
 		tx.Rollback()
 		return err

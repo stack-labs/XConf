@@ -42,4 +42,5 @@ type Release struct {
 	Tag           string `gorm:"column:tag;             not null; unique_index:release_uindex; size:100" json:"tag"`
 	Value         string `gorm:"column:value;           type:longtext"      json:"value"`
 	Comment       string `gorm:"column:comment;         size:500"           json:"comment"`
+	Type          string `gorm:"column:type;            size:50"            json:"type"`
 }

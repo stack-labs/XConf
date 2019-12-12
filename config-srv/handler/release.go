@@ -53,6 +53,7 @@ func (c *Config) ListReleaseHistory(ctx context.Context, req *config.NamespaceRe
 			Tag:           release.Tag,
 			Value:         release.Value,
 			Comment:       release.Comment,
+			Type:          release.Type,
 		})
 	}
 	return nil
