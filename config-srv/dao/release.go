@@ -1,6 +1,9 @@
 package dao
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/micro-in-cn/XConf/config-srv/model"
 )
 
@@ -67,7 +70,7 @@ func (d *Dao) Rollback(appName, clusterName, namespaceName, tag string) error {
 		AppName:       release.AppName,
 		ClusterName:   release.ClusterName,
 		NamespaceName: release.NamespaceName,
-		Tag:           tag + "-rollback",
+		Tag:           fmt.Sprintf("%s-rollback-%s", tag, time.Now().Format("2006/01/02/15:04:05")),
 		Value:         release.Value,
 		Comment:       "",
 		Type:          "rollback",
