@@ -30,9 +30,10 @@
           <span>{{ scope.row.createdAt | parseTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="110" align="center">
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="success" @click="handleOpen(scope.$index, scope.row)">打开</el-button>
+          <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.$index, scope.row)" />
         </template>
       </el-table-column>
     </el-table>
@@ -55,7 +56,7 @@
 </template>
 
 <script>
-import { getApps, createApp } from '@/api/app'
+import { getApps, createApp, deleteApp } from '@/api/app'
 import router from '@/router'
 
 export default {
@@ -90,7 +91,17 @@ export default {
     handleOpen(index, row) {
       router.push({ name: 'app', params: { name: row.appName }})
     },
-
+    handleDelete(index, row) {
+      deleteApp(row.appName)
+        .then(response => {
+          console.log(response)
+          this.fetchData()
+          this.$message.success('删除成功')
+        })
+        .catch(() => {
+          this.$message.error('删除失败')
+        })
+    },
     submitForm(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
