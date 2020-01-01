@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-button style="float: right;" type="success" round>创建应用</el-button>
+    <el-button style="float: right;" type="success" round @click="dialogFormVisible = true">创建应用</el-button>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -32,15 +32,30 @@
       </el-table-column>
       <el-table-column label="操作" width="110" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="success" @click="handleDone(scope.$index, scope.row)">打开</el-button>
+          <el-button size="mini" type="success" @click="handleOpen(scope.$index, scope.row)">打开</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog title="创建新应用" :visible.sync="dialogFormVisible">
+      <el-form ref="form" :model="form" :rules="rules">
+        <el-form-item label="应用名称" prop="appName">
+          <el-input v-model="form.appName" />
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input v-model="form.description" />
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="cancelForm">取 消</el-button>
+          <el-button type="primary" @click="submitForm('form')">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getApps } from '@/api/app'
+import { getApps, createApp } from '@/api/app'
 import router from '@/router'
 
 export default {
@@ -48,7 +63,17 @@ export default {
   data() {
     return {
       list: null,
-      listLoading: true
+      listLoading: true,
+      dialogFormVisible: false,
+      form: {
+        appName: '',
+        description: ''
+      },
+      rules: {
+        appName: [
+          { required: true, message: '请输入', trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
@@ -62,8 +87,30 @@ export default {
         this.listLoading = false
       })
     },
-    handleDone(index, row) {
+    handleOpen(index, row) {
       router.push({ name: 'app', params: { name: row.appName }})
+    },
+
+    submitForm(form) {
+      this.$refs[form].validate(valid => {
+        if (valid) {
+          createApp(this.form)
+            .then(response => {
+              console.log(response)
+              this.cancelForm()
+              this.fetchData()
+              this.$message.success('创建成功')
+            })
+            .catch(() => {
+              this.$message.error('创建失败')
+            })
+        }
+      })
+    },
+    cancelForm() {
+      this.dialogFormVisible = false
+      this.form.name = ''
+      this.form.desc = ''
     }
   }
 }
