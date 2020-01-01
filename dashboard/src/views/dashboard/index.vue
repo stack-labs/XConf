@@ -92,7 +92,7 @@ export default {
       router.push({ name: 'app', params: { name: row.appName }})
     },
     handleDelete(index, row) {
-      deleteApp(row.appName)
+      deleteApp({ appName: row.appName })
         .then(response => {
           console.log(response)
           this.fetchData()
