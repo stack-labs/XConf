@@ -8,7 +8,7 @@ export function getNamespaces(params) {
   })
 }
 
-export function createNamespaces(data) {
+export function createNamespace(data) {
   return request({
     url: '/namespaces',
     method: 'post',
@@ -16,7 +16,7 @@ export function createNamespaces(data) {
   })
 }
 
-export function deleteNamespaces(data) {
+export function deleteNamespace(data) {
   return request({
     url: '/namespaces',
     method: 'delete',

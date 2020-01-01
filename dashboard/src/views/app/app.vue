@@ -13,7 +13,7 @@
     <el-tag v-if="currentCluster" type="info">{{ currentCluster.description }}</el-tag>
     <el-tag v-if="currentCluster" type="info">{{ currentCluster.createdAt | parseTime }}</el-tag>
 
-    <el-card class="box-card">
+    <el-card v-if="currentCluster" class="box-card">
       <div slot="header">
         <span>namespace</span>
         <el-button style="float: right;" type="primary" size="mini" round>新建namespace(配置)</el-button>
@@ -83,7 +83,10 @@ export default {
       console.log(index)
       this.currentCluster = this.clusters[index]
 
-      getNamespaces({ appName: this.currentCluster.appName, clusterName: this.currentCluster.clusterName }).then(response => {
+      getNamespaces({
+        appName: this.currentCluster.appName,
+        clusterName: this.currentCluster.clusterName
+      }).then(response => {
         this.namespaces = response.namespaces
       })
     }
