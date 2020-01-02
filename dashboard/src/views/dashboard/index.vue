@@ -120,8 +120,8 @@ export default {
     },
     cancelForm() {
       this.dialogFormVisible = false
-      this.form.name = ''
-      this.form.desc = ''
+      this.form.appName = ''
+      this.form.description = ''
     }
   }
 }

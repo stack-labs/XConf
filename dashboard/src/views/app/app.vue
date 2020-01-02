@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-button style="float: right;" type="primary" round>新建集群</el-button>
+    <el-button style="float: right;" type="primary" round @click="dialogClusterVisible = true">新建集群</el-button>
     <el-dropdown split-button type="success" @command="handleCommand">
       <span class="el-dropdown-link">
         {{ currentCluster ? currentCluster.clusterName : "(选择集群)" }}
@@ -49,12 +49,28 @@
         </el-collapse>
       </div>
     </el-card>
+
+    <el-dialog title="创建新集群" :visible.sync="dialogClusterVisible">
+      <el-tag>{{ appName }} </el-tag>
+      <el-form ref="form" :model="form" :rules="rules">
+        <el-form-item label="集群名称" prop="clusterName">
+          <el-input v-model="form.clusterName" />
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input v-model="form.description" />
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="cancelForm">取 消</el-button>
+          <el-button type="primary" @click="submitForm('form')">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getClusters } from '@/api/cluster'
-import { getNamespaces } from '../../api/namespace'
+import { getClusters, createCluster } from '@/api/cluster'
+import { getNamespaces } from '@/api/namespace'
 
 export default {
   name: 'App',
@@ -63,16 +79,27 @@ export default {
       clusters: null,
       appName: null,
       currentCluster: null,
-      namespaces: null
+      namespaces: null,
+      dialogClusterVisible: false,
+      form: {
+        appName: '',
+        clusterName: '',
+        description: ''
+      },
+      rules: {
+        clusterName: [
+          { required: true, message: '请输入', trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
     this.appName = this.$route.params.name
-    this.fetchData(this.appName)
+    this.fetchData()
   },
   methods: {
-    fetchData(name) {
-      getClusters({ appName: name }).then(response => {
+    fetchData() {
+      getClusters({ appName: this.appName }).then(response => {
         this.clusters = response.clusters
         // if (this.clusters.length > 0) {
         //   this.currentCluster = this.clusters[0]
@@ -89,6 +116,28 @@ export default {
       }).then(response => {
         this.namespaces = response.namespaces
       })
+    },
+    submitForm(form) {
+      this.$refs[form].validate(valid => {
+        if (valid) {
+          this.form.appName = this.appName
+          createCluster(this.form)
+            .then(response => {
+              console.log(response)
+              this.fetchData()
+              this.cancelForm()
+              this.$message.success('创建成功')
+            })
+            .catch(() => {
+              this.$message.error('创建失败')
+            })
+        }
+      })
+    },
+    cancelForm() {
+      this.dialogClusterVisible = false
+      this.form.clusterName = ''
+      this.form.description = ''
     }
   }
 }

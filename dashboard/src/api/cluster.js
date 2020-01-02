@@ -10,7 +10,7 @@ export function getClusters(params) {
 
 export function createCluster(data) {
   return request({
-    url: '/clusters',
+    url: '/cluster',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function createCluster(data) {
 
 export function deleteCluster(data) {
   return request({
-    url: '/clusters',
+    url: '/cluster',
     method: 'delete',
     data
   })
