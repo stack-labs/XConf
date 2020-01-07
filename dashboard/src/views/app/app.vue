@@ -44,7 +44,7 @@
             />
 
             <div align="right">
-              <el-button v-if="!namespace.released" type="primary" round @click="releaseNamespaceConfig(namespace)">发布</el-button>
+              <el-button v-if="!namespace.released" type="primary" round @click="handlerReleaseNamespaceConfig(namespace)">发布</el-button>
               <el-button type="info" round @click="updateNamespaceConfig(namespace)">保存</el-button>
             </div>
           </el-collapse-item>
@@ -87,6 +87,22 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <el-dialog v-if="currentCluster" title="发布配置" :visible.sync="dialogReleaseVisible">
+      <el-tag>{{ releaseForm.appName }} - {{ releaseForm.clusterName }} - {{ releaseForm.namespaceName }} </el-tag>
+      <el-form ref="form" :model="releaseForm" :rules="rules">
+        <el-form-item label="tag" prop="tag">
+          <el-input v-model="releaseForm.tag" />
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="releaseForm.comment" />
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="cancelRelease">取 消</el-button>
+          <el-button type="primary" @click="releaseConfig('form')">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -95,6 +111,7 @@ import { getClusters, createCluster, deleteCluster } from '@/api/cluster'
 import { getNamespaces } from '@/api/namespace'
 import { createNamespace, deleteNamespace } from '@/api/namespace'
 import { updateConfig } from '@/api/config'
+import { release } from '@/api/release'
 
 export default {
   name: 'App',
@@ -106,6 +123,7 @@ export default {
       namespaces: null,
       dialogClusterVisible: false,
       dialogNamespaceVisible: false,
+      dialogReleaseVisible: false,
       clusterForm: {
         appName: '',
         clusterName: '',
@@ -118,11 +136,21 @@ export default {
         format: 'json',
         description: ''
       },
+      releaseForm: {
+        appName: '',
+        clusterName: '',
+        namespaceName: '',
+        tag: '',
+        comment: ''
+      },
       rules: {
         clusterName: [
           { required: true, message: '请输入', trigger: 'blur' }
         ],
         namespaceName: [
+          { required: true, message: '请输入', trigger: 'blur' }
+        ],
+        tag: [
           { required: true, message: '请输入', trigger: 'blur' }
         ]
       }
@@ -254,8 +282,38 @@ export default {
           this.$message.error('保存失败')
         })
     },
-    releaseNamespaceConfig(namespace) {
+    handlerReleaseNamespaceConfig(namespace) {
+      this.releaseForm.appName = namespace.appName
+      this.releaseForm.clusterName = namespace.clusterName
+      this.releaseForm.namespaceName = namespace.namespaceName
 
+      this.dialogReleaseVisible = true
+    },
+    cancelRelease() {
+      this.releaseForm.appName = ''
+      this.releaseForm.clusterName = ''
+      this.releaseForm.namespaceName = ''
+      this.releaseForm.comment = ''
+      this.releaseForm.tag = ''
+
+      this.dialogReleaseVisible = false
+    },
+    releaseConfig(form) {
+      this.$refs[form].validate(valid => {
+        if (valid) {
+          release(this.releaseForm)
+            .then(response => {
+              console.log(response)
+              this.setNamespace()
+              this.dialogReleaseVisible = false
+
+              this.$message.success('发布成功')
+            })
+            .catch(() => {
+              this.$message.error('发布失败')
+            })
+        }
+      })
     }
   }
 }
