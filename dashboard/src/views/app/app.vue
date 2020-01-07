@@ -44,7 +44,7 @@
             />
 
             <div align="right">
-              <el-button type="primary" round @click="releaseNamespaceConfig(namespace)">发布</el-button>
+              <el-button v-if="!namespace.released" type="primary" round @click="releaseNamespaceConfig(namespace)">发布</el-button>
               <el-button type="info" round @click="updateNamespaceConfig(namespace)">保存</el-button>
             </div>
           </el-collapse-item>
