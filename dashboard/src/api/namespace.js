@@ -10,7 +10,7 @@ export function getNamespaces(params) {
 
 export function createNamespace(data) {
   return request({
-    url: '/namespaces',
+    url: '/namespace',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function createNamespace(data) {
 
 export function deleteNamespace(data) {
   return request({
-    url: '/namespaces',
+    url: '/namespace',
     method: 'delete',
     data
   })
