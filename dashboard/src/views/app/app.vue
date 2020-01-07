@@ -55,7 +55,7 @@
 
     <el-dialog title="创建新集群" :visible.sync="dialogClusterVisible">
       <el-tag>{{ appName }} </el-tag>
-      <el-form ref="form" :model="clusterForm" :rules="rules">
+      <el-form ref="clusterForm" :model="clusterForm" :rules="rules">
         <el-form-item label="集群名称" prop="clusterName">
           <el-input v-model="clusterForm.clusterName" />
         </el-form-item>
@@ -64,14 +64,14 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="cancelClusterForm">取 消</el-button>
-          <el-button type="primary" @click="submitClusterForm('form')">确 定</el-button>
+          <el-button type="primary" @click="submitClusterForm('clusterForm')">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
 
     <el-dialog v-if="currentCluster" title="创建新namespace" :visible.sync="dialogNamespaceVisible">
       <el-tag>{{ appName }} - {{ currentCluster.clusterName }} </el-tag>
-      <el-form ref="form" :model="namespaceForm" :rules="rules">
+      <el-form ref="namespaceForm" :model="namespaceForm" :rules="rules">
         <el-form-item label="namespace名称" prop="namespaceName">
           <el-input v-model="namespaceForm.namespaceName" />
         </el-form-item>
@@ -83,14 +83,14 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="cancelNamespaceForm">取 消</el-button>
-          <el-button type="primary" @click="submitNamespaceForm('form')">确 定</el-button>
+          <el-button type="primary" @click="submitNamespaceForm('namespaceForm')">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
 
     <el-dialog v-if="currentCluster" title="发布配置" :visible.sync="dialogReleaseVisible">
       <el-tag>{{ releaseForm.appName }} - {{ releaseForm.clusterName }} - {{ releaseForm.namespaceName }} </el-tag>
-      <el-form ref="form" :model="releaseForm" :rules="rules">
+      <el-form ref="releaseForm" :model="releaseForm" :rules="rules">
         <el-form-item label="tag" prop="tag">
           <el-input v-model="releaseForm.tag" />
         </el-form-item>
@@ -99,7 +99,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="cancelRelease">取 消</el-button>
-          <el-button type="primary" @click="releaseConfig('form')">确 定</el-button>
+          <el-button type="primary" @click="releaseConfig('releaseForm')">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
