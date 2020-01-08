@@ -12,7 +12,7 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="table-expand">
+          <el-form inline class="table-expand">
             <el-form-item label="value">
               <el-input
                 v-model="props.row.value"
@@ -52,7 +52,7 @@
 
 <script>
 import { listReleaseHistory } from '@/api/release'
-import { rollback } from '../../api/release'
+import { rollback } from '@/api/release'
 
 export default {
   name: 'App',
@@ -108,4 +108,16 @@ export default {
 </script>
 
 <style scoped>
+  .table-expand {
+    font-size: 0;
+  }
+  .table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 100%;
+  }
 </style>
