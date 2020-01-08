@@ -79,6 +79,20 @@ export const constantRoutes = [
     ]
   },
 
+  {
+    path: '/history',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: ':app/:cluster/:namespace',
+        name: 'history',
+        component: () => import('@/views/history/index'),
+        meta: { title: '发布历史', icon: 'form' }
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

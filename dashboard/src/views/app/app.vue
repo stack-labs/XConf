@@ -33,7 +33,7 @@
             <div>
               {{ namespace.description }}
               <el-button size="mini" style="float: right;" type="danger" round @click="deleteNamespace(namespace)">删除</el-button>
-              <el-button size="mini" style="float: right;" type="warning" round>历史版本</el-button>
+              <el-button size="mini" style="float: right;" type="warning" round @click="releaseHistory(namespace)">历史版本</el-button>
             </div>
 
             <el-input
@@ -112,6 +112,7 @@ import { getNamespaces } from '@/api/namespace'
 import { createNamespace, deleteNamespace } from '@/api/namespace'
 import { updateConfig } from '@/api/config'
 import { release } from '@/api/release'
+import router from '@/router'
 
 export default {
   name: 'App',
@@ -165,6 +166,13 @@ export default {
       getClusters({ appName: this.appName }).then(response => {
         this.clusters = response.clusters
       })
+    },
+    releaseHistory(row) {
+      router.push({ name: 'history', params: {
+        app: row.appName,
+        cluster: row.clusterName,
+        namespace: row.namespaceName
+      }})
     },
     setNamespace() {
       getNamespaces({
