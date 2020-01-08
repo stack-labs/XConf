@@ -25,9 +25,6 @@
             <el-form-item label="备注">
               <span>{{ props.row.comment }}</span>
             </el-form-item>
-            <el-form-item label="type">
-              <span>{{ props.row.type }}</span>
-            </el-form-item>
           </el-form>
         </template>
 
@@ -36,6 +33,7 @@
       <!--      <el-table-column label="应用" prop="appName" />-->
       <!--      <el-table-column label="集群" prop="clusterName" />-->
       <!--      <el-table-column label="namespace" prop="namespaceName" />-->
+      <el-table-column label="类型" prop="type" />
       <el-table-column label="创建时间" prop="createdAt" sortable />
 
       <el-table-column label="操作">
@@ -98,6 +96,7 @@ export default {
       })
         .then(response => {
           console.log(response)
+          this.fetchData()
           this.$message.success('回滚成功')
         })
         .catch(() => {
