@@ -33,17 +33,17 @@
       <!--      <el-table-column label="应用" prop="appName" />-->
       <!--      <el-table-column label="集群" prop="clusterName" />-->
       <!--      <el-table-column label="namespace" prop="namespaceName" />-->
-      <el-table-column label="类型" prop="type" />
       <el-table-column label="创建时间" prop="createdAt" sortable>
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ scope.row.createdAt | parseTime }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="类型" prop="type" />
 
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" type="warning" @click="rollback(scope.row)">回滚</el-button>
+          <el-button v-if="scope.row.type === 'release'" size="mini" type="warning" @click="rollback(scope.row)">回滚</el-button>
         </template>
       </el-table-column>
     </el-table>
