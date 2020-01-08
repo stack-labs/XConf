@@ -34,7 +34,12 @@
       <!--      <el-table-column label="集群" prop="clusterName" />-->
       <!--      <el-table-column label="namespace" prop="namespaceName" />-->
       <el-table-column label="类型" prop="type" />
-      <el-table-column label="创建时间" prop="createdAt" sortable />
+      <el-table-column label="创建时间" prop="createdAt" sortable>
+        <template slot-scope="scope">
+          <i class="el-icon-time" />
+          <span>{{ scope.row.createdAt | parseTime }}</span>
+        </template>
+      </el-table-column>
 
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -47,7 +52,6 @@
 
 <script>
 import { listReleaseHistory } from '@/api/release'
-import { parseTime } from '@/utils'
 import { rollback } from '../../api/release'
 
 export default {
@@ -79,10 +83,6 @@ export default {
       })
         .then(response => {
           console.log(response)
-          const len = response.releaseHistory.length
-          for (let i = 0; i < len; i++) {
-            response.releaseHistory[i].createdAt = parseTime(response.releaseHistory[i].createdAt)
-          }
           this.list = response.releaseHistory
           this.Loading = false
         })
