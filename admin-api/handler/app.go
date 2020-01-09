@@ -51,5 +51,9 @@ func ListApps(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, apps)
+	if apps.Apps == nil {
+		c.JSON(http.StatusOK, []interface{}{})
+	} else {
+		c.JSON(http.StatusOK, apps.Apps)
+	}
 }

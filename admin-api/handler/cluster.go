@@ -61,5 +61,9 @@ func ListClusters(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, clusters)
+	if clusters.Clusters == nil {
+		c.JSON(http.StatusOK, []interface{}{})
+	} else {
+		c.JSON(http.StatusOK, clusters.Clusters)
+	}
 }

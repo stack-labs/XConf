@@ -162,14 +162,12 @@ export default {
     const cluster = this.$route.params.cluster
 
     getClusters({ appName: this.appName }).then(response => {
-      this.clusters = response.clusters
-      if (this.clusters != null) {
-        for (let i = 0; i < this.clusters.length; i++) {
-          if (this.clusters[i].clusterName === cluster) {
-            this.currentCluster = this.clusters[i]
-            this.setNamespace()
-            break
-          }
+      this.clusters = response
+      for (let i = 0; i < this.clusters.length; i++) {
+        if (this.clusters[i].clusterName === cluster) {
+          this.currentCluster = this.clusters[i]
+          this.setNamespace()
+          break
         }
       }
     })
@@ -177,7 +175,7 @@ export default {
   methods: {
     setClusters() {
       getClusters({ appName: this.appName }).then(response => {
-        this.clusters = response.clusters
+        this.clusters = response
       })
     },
     releaseHistory(row) {
@@ -192,7 +190,7 @@ export default {
         appName: this.currentCluster.appName,
         clusterName: this.currentCluster.clusterName
       }).then(response => {
-        this.namespaces = response.namespaces
+        this.namespaces = response
       })
     },
     handleCommand(index) {

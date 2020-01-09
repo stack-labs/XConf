@@ -65,5 +65,9 @@ func ListNamespaces(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, namespaces)
+	if namespaces.Namespaces == nil {
+		c.JSON(http.StatusOK, []interface{}{})
+	} else {
+		c.JSON(http.StatusOK, namespaces.Namespaces)
+	}
 }
