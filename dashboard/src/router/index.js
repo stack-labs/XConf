@@ -71,10 +71,10 @@ export const constantRoutes = [
     hidden: true,
     children: [
       {
-        path: ':name',
+        path: ':app/:cluster',
         name: 'app',
         component: () => import('@/views/app/app'),
-        meta: { title: 'app', icon: 'link' }
+        meta: { title: '集群', icon: 'link' }
       }
     ]
   },

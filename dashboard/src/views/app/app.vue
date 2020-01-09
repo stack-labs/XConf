@@ -158,11 +158,24 @@ export default {
     }
   },
   created() {
-    this.appName = this.$route.params.name
-    this.fetchData()
+    this.appName = this.$route.params.app
+    const cluster = this.$route.params.cluster
+
+    getClusters({ appName: this.appName }).then(response => {
+      this.clusters = response.clusters
+      if (this.clusters != null) {
+        for (let i = 0; i < this.clusters.length; i++) {
+          if (this.clusters[i].clusterName === cluster) {
+            this.currentCluster = this.clusters[i]
+            this.setNamespace()
+            break
+          }
+        }
+      }
+    })
   },
   methods: {
-    fetchData() {
+    setClusters() {
       getClusters({ appName: this.appName }).then(response => {
         this.clusters = response.clusters
       })
@@ -183,10 +196,10 @@ export default {
       })
     },
     handleCommand(index) {
-      console.log(index)
-      this.currentCluster = this.clusters[index]
-
-      this.setNamespace()
+      router.push({ name: 'app', params: {
+        app: this.clusters[index].appName,
+        cluster: this.clusters[index].clusterName }
+      })
     },
     submitClusterForm(form) {
       this.$refs[form].validate(valid => {
@@ -199,7 +212,7 @@ export default {
           })
             .then(response => {
               console.log(response)
-              this.fetchData()
+              this.setClusters()
               this.cancelClusterForm()
               this.$message.success('创建成功')
             })
@@ -217,7 +230,7 @@ export default {
         .then(response => {
           console.log(response)
           this.currentCluster = null
-          this.fetchData()
+          this.setClusters()
           this.$message.success('删除成功')
         })
         .catch(() => {

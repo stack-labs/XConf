@@ -88,7 +88,10 @@ export default {
       })
     },
     handleOpen(index, row) {
-      router.push({ name: 'app', params: { name: row.appName }})
+      router.push({ name: 'app', params: {
+        app: row.appName,
+        cluster: 'null' }
+      })
     },
     handleDelete(index, row) {
       deleteApp({ appName: row.appName })
