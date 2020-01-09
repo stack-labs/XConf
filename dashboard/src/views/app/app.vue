@@ -223,18 +223,28 @@ export default {
       })
     },
     deleteCurrentCluster() {
-      deleteCluster({
-        appName: this.currentCluster.appName,
-        clusterName: this.currentCluster.clusterName
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
-        .then(response => {
-          console.log(response)
-          this.currentCluster = null
-          this.setClusters()
-          this.$message.success('删除成功')
+        .then(() => {
+          deleteCluster({
+            appName: this.currentCluster.appName,
+            clusterName: this.currentCluster.clusterName
+          })
+            .then(response => {
+              console.log(response)
+              this.currentCluster = null
+              this.setClusters()
+              this.$message.success('删除成功')
+            })
+            .catch(() => {
+              this.$message.error('删除失败')
+            })
         })
         .catch(() => {
-          this.$message.error('删除失败')
+          this.$message.info('已取消删除')
         })
     },
     cancelClusterForm() {
@@ -267,18 +277,28 @@ export default {
       })
     },
     deleteNamespace(namespace) {
-      deleteNamespace({
-        appName: namespace.appName,
-        clusterName: namespace.clusterName,
-        namespaceName: namespace.namespaceName
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
-        .then(response => {
-          console.log(response)
-          this.setNamespace()
-          this.$message.success('删除成功')
+        .then(() => {
+          deleteNamespace({
+            appName: namespace.appName,
+            clusterName: namespace.clusterName,
+            namespaceName: namespace.namespaceName
+          })
+            .then(response => {
+              console.log(response)
+              this.setNamespace()
+              this.$message.success('删除成功')
+            })
+            .catch(() => {
+              this.$message.error('删除失败')
+            })
         })
         .catch(() => {
-          this.$message.error('删除失败')
+          this.$message.info('已取消删除')
         })
     },
     cancelNamespaceForm() {
@@ -322,16 +342,26 @@ export default {
     releaseConfig(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
-          release(this.releaseForm)
-            .then(response => {
-              console.log(response)
-              this.setNamespace()
-              this.dialogReleaseVisible = false
+          this.$confirm('此操作将发布配置, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+            .then(() => {
+              release(this.releaseForm)
+                .then(response => {
+                  console.log(response)
+                  this.setNamespace()
+                  this.dialogReleaseVisible = false
 
-              this.$message.success('发布成功')
+                  this.$message.success('发布成功')
+                })
+                .catch(() => {
+                  this.$message.error('发布失败')
+                })
             })
             .catch(() => {
-              this.$message.error('发布失败')
+              this.$message.info('已取消发布')
             })
         }
       })

@@ -88,19 +88,29 @@ export default {
         })
     },
     rollback(row) {
-      rollback({
-        appName: this.appName,
-        clusterName: this.clusterName,
-        namespaceName: this.namespaceName,
-        tag: row.tag
+      this.$confirm('此操作将回滚配置, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
-        .then(response => {
-          console.log(response)
-          this.fetchData()
-          this.$message.success('回滚成功')
+        .then(() => {
+          rollback({
+            appName: this.appName,
+            clusterName: this.clusterName,
+            namespaceName: this.namespaceName,
+            tag: row.tag
+          })
+            .then(response => {
+              console.log(response)
+              this.fetchData()
+              this.$message.success('回滚成功')
+            })
+            .catch(() => {
+              this.$message.error('回滚失败')
+            })
         })
         .catch(() => {
-          this.$message.error('回滚失败')
+          this.$message.info('已取消回滚')
         })
     }
   }
