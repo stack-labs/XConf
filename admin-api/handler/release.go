@@ -46,7 +46,11 @@ func ListReleaseHistory(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, history)
+	if history.ReleaseHistory == nil {
+		c.JSON(http.StatusOK, []interface{}{})
+	} else {
+		c.JSON(http.StatusOK, history.ReleaseHistory)
+	}
 }
 
 func Rollback(c *gin.Context) {

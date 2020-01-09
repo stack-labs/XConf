@@ -83,7 +83,7 @@ export default {
       })
         .then(response => {
           console.log(response)
-          this.list = response.releaseHistory
+          this.list = response
           this.Loading = false
         })
     },
