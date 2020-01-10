@@ -30,6 +30,7 @@ func main() {
 
 func Router() *gin.Engine {
 	router := gin.Default()
+	router.Static("/admin/ui", "./dist")
 	r := router.Group("/admin/api/v1")
 	r.GET("/apps", handler.ListApps)
 	r.POST("/app", handler.CreateApp)
