@@ -1,6 +1,10 @@
 # XConf 分布式配置中心 dashboard
 
-doing
+## 本地运行
+
+```
+npm run dev  
+```
 
 ## 感谢
 
