@@ -82,7 +82,7 @@ UI： http://127.0.0.1:8080/admin/ui
 - agent-api
 
     ```bash
-    go agent-api
+    cd agent-api
     make run
     ```
 
@@ -97,6 +97,7 @@ UI： http://127.0.0.1:8080/admin/ui
 
     ```bash
     cd dashboard
+    npm install
     npm run dev
     ```
 
