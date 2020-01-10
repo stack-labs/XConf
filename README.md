@@ -22,78 +22,78 @@
 ![image](doc/design.png)
 
 - App
-    - Cluster 集群 （A区，B区，C区）
-        - Namespace 空间（可理解为一个个配置文件：db.json，db.toml）
-            - Value 配置内容
+  - Cluster 集群 （A区，B区，C区）
+    - Namespace 空间（可理解为一个个配置文件：db.json，db.toml）
+      - Value 配置内容
+
+## 目录结构
+
+```text
+.
+├── LICENSE
+├── README.md
+├── admin-api   // 配置管理 api 服务
+├── agent-api   // 配置获取，推送服务
+├── client      // micro config 客户端插件
+├── config-srv  // 配置管理服务
+├── dashboard   // 前端UI
+├── doc
+├── go.mod
+├── go.sum
+├── micro       // micro api 网关
+└── proto
+```
 
 ## 快速使用（开发版）
 
 ### 启动服务
 
-- 依赖： mysql
+- 依赖： mysql (root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local)
 
 - micro api 网关
-    ```
-    micro api --handler=http
+
+    ```bash
+    cd micro
+    make run
     ```
 
 - config-srv 
     >  --database_url value  database url (default: "root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local") [$DATABASE_URL]
-    
-    ```
+
+    ```bash
     cd config-srv
-    go run main.go --database_url="root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local"
+    make run
+    # go run main.go --database_url="root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local"
     ```
 
 - agent-api
-    ```
+
+    ```bash
     go agent-api
-    go run main.go
+    make run
     ```
 
 - admin-api
-    ```
+
+    ```bash
     cd admin-api
-    go run main.go
+    make run
+    ```
+
+- dashboard
+
+    ```bash
+    cd dashboard
+    npm run dev
     ```
 
 - client 适配 micro config 的 source 插件
     > micro config 只有在发布内容更改的情况下 watcher.Next 才会返回
 
-    ```
+    ```bash
     cd client/example
     go run main.go
     ```
-
-### 测试获取配置
-
-- 创建 app，cluster, namespace 和 更新配置
-```
-curl -X POST http://127.0.0.1:8080/admin/api/v1/app  -H 'Content-Type: application/json' -d '{ "appName":"app", "description": "测试app"}'
-curl -X POST http://127.0.0.1:8080/admin/api/v1/cluster  -H 'Content-Type: application/json' -d '{ "appName":"app", "clusterName": "dev", "description": "测试dev 集群"}'
-curl -X POST http://127.0.0.1:8080/admin/api/v1/namespace  -H 'Content-Type: application/json' -d '{ "appName": "app", "clusterName": "dev", "namespaceName": "test", "format": "json", "description": "测试app"}'
-
-curl -X POST http://127.0.0.1:8080/admin/api/v1/config  -H 'Content-Type: application/json' -d '{ "appName": "app", "clusterName": "dev", "namespaceName": "test", "value":  "{\"hosts\":{\"database\":{\"address\":\"11111\",\"port\":2}}}"}'
-```
-
-- 发布配置
-> 更新配置并不会触发客户端更新推送，只有 发布配置 操作才会推送更新。
-
-```
-curl -X POST http://127.0.0.1:8080/admin/api/v1/release  -H 'Content-Type: application/json' -d '{ "appName": "app", "clusterName": "dev",  "namespaceName": "test", "comment": "测试发布"}'
-```
-
-- Read ：立即返回
-
-```
-curl -X GET 'http://127.0.0.1:8080/agent/api/v1/config?appName=app&clusterName=dev&namespaceName=test' 
-```
-
-- Watch ：Http Long Polling 用以实现客户端配置实时推送
-
-```
-curl -X GET 'http://127.0.0.1:8080/agent/api/v1/watch?appName=app&clusterName=dev&namespaceName=test&updatedAt=1575559221'
-```
 
 ## 借鉴 Apollo
 
