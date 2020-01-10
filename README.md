@@ -46,9 +46,16 @@
 
 ## 快速使用（开发版）
 
-### 启动服务
-
 - 依赖： mysql (root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local)
+
+### all in one docker
+
+```
+docker run --name xconf  -it  --rm -p 8080:8080  -e DATABASE_URL="root:12345@(IP地址:3306)/xconf?charset=utf8&parseTime=true&loc=Local"  xconf-all
+```
+
+### 本地启动服务
+
 
 - micro api 网关
 
