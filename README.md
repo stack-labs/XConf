@@ -49,6 +49,7 @@
 - 依赖： mysql (root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local)
 
 ### all in one docker
+> 所有服务打包到一个容器中，仅仅作为快速预览使用，不可作为生产使用。
 
 ```bash
 docker pull xuxu123/xconf-all:latest
