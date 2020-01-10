@@ -10,11 +10,17 @@ RUN export GO111MODULE=on && CGO_ENABLED=0 GOOS=linux go build -o build/agent-ap
 RUN export GO111MODULE=on && CGO_ENABLED=0 GOOS=linux go build -o build/config-srv config-srv/main.go
 RUN export GO111MODULE=on && CGO_ENABLED=0 GOOS=linux go build -o build/micro micro/main.go
 
+FROM node:12-alpine as node-builder
+WORKDIR /root
+COPY dashboard .
+RUN npm rebuild node-sass && npm install && npm run build:prod
+
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root
 COPY --from=builder /root/build/* ./
+COPY --from=node-builder /root/dist dist
 COPY deployments/all-in-one/start.sh .
 ENV DATABASE_URL="root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local"
 
