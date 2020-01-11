@@ -18,7 +18,7 @@ jobs:
       run: ./golangci-lint run --skip-dirs=".git|.github|dashboard|doc" --timeout=5m
       
   test:
-#    needs: Lint
+    needs: Lint
     name: Unit Testing
     runs-on: ${{ matrix.os }}
     strategy:
@@ -36,3 +36,19 @@ jobs:
       run: go get -v -t -d ./...
     - name: Go Test
       run: go test -v ./...
+
+  docker:
+    needs: Unit Testing
+    name: docker build and push
+    runs-on: ubuntu-latest
+    steps:
+    - name: all in one
+      uses: azure/docker-login@v1
+      with:
+        login-server: index.docker.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+      run: |
+          make all-in-one
+          docker tag xconf-all:latest xuxu123/xconf-all
+          docker push xuxu123/xconf-all
