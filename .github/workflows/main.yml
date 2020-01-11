@@ -52,5 +52,5 @@ jobs:
     - name: all in one
       run: |
           make all-in-one
-#          docker tag xconf-all:latest ${{ secrets.REGISTRY_USERNAME }}/xconf-all
-#          docker push ${{ secrets.REGISTRY_USERNAME }}/xconf-all
+          docker tag xconf-all:latest ${{ secrets.REGISTRY_USERNAME }}/xconf-all
+          docker push ${{ secrets.REGISTRY_USERNAME }}/xconf-all
