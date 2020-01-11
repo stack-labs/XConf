@@ -49,6 +49,8 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - name: all in one
       run: |
+          pwd
+          ls -la
           make all-in-one
           docker tag xconf-all:latest xuxu123/xconf-all
           docker push xuxu123/xconf-all
