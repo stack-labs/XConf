@@ -18,7 +18,6 @@ jobs:
       run: ./golangci-lint run --skip-dirs=".git|.github|dashboard|doc" --timeout=5m
       
   test:
-    needs: Lint
     name: Unit Testing
     runs-on: ${{ matrix.os }}
     strategy:
@@ -38,7 +37,7 @@ jobs:
       run: go test -v ./...
 
   docker:
-    needs: Unit Testing
+    needs: [lint, test]
     name: docker build and push
     runs-on: ubuntu-latest
     steps:
