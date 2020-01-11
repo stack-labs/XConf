@@ -42,12 +42,13 @@ jobs:
     name: docker build and push
     runs-on: ubuntu-latest
     steps:
-    - name: all in one
+    - name: login
       uses: azure/docker-login@v1
       with:
         login-server: index.docker.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
+    - name: all in one
       run: |
           make all-in-one
           docker tag xconf-all:latest xuxu123/xconf-all
