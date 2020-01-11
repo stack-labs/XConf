@@ -43,14 +43,9 @@ jobs:
     steps:
     - name: Code
       uses: actions/checkout@v1
-    - name: login
-      uses: azure/docker-login@v1
-      with:
-        login-server: index.docker.io
-        username: ${{ secrets.REGISTRY_USERNAME }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
     - name: all in one
       run: |
           make all-in-one
+          docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
           docker tag xconf-all:latest ${{ secrets.REGISTRY_USERNAME }}/xconf-all
           docker push ${{ secrets.REGISTRY_USERNAME }}/xconf-all
