@@ -3,4 +3,13 @@ services:
   config-srv:
     build:
       context: ./config-srv
+  admin-api:
+    build:
+      context: ./admin-api
+  agent-api:
+    build:
+      context: ./agent-api
+  micro:
+    build:
+      context: ./micro
 

@@ -12,6 +12,6 @@ COPY --from=builder /root/build/* ./
 
 ENV MICRO_REGISTRY=${MICRO_REGISTRY} \
     MICRO_REGISTRY_ADDRESS=${MICRO_REGISTRY_ADDRESS} \
-    DB=${DB}
+    DATABASE_URL=${DATABASE_URL}
 
 ENTRYPOINT ["/root/exec"]
