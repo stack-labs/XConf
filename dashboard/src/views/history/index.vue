@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tag type="primary">{{ appName }} - {{ clusterName }} - {{ namespaceName }}</el-tag>
+    <span style="font-size: large; color: black; ">{{ appName }} / {{ clusterName }} / {{ namespaceName }}</span>
 
     <el-input v-model="search" placeholder="输入tag搜索" size="mini" align="right" />
     <el-table

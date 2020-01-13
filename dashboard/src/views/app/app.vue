@@ -12,8 +12,8 @@
       </el-dropdown-menu>
     </el-dropdown>
 
-    <el-tag v-if="currentCluster" type="info">{{ currentCluster.description }}</el-tag>
-    <el-tag v-if="currentCluster" type="info">{{ currentCluster.createdAt | parseTime }}</el-tag>
+    <el-tag v-if="currentCluster" type="info">{{ currentCluster.description ? currentCluster.description : "(无集群描述信息)" }}</el-tag>
+    <el-tag v-if="currentCluster" type="info">{{ currentCluster.updatedAt | parseTime }}</el-tag>
 
     <el-card v-if="currentCluster" class="box-card">
       <div slot="header">
@@ -25,13 +25,14 @@
           <el-collapse-item v-for="namespace in namespaces" :key="namespace.id">
             <template slot="title">
               <el-row :gutter="20">
-                <el-tag type="info" effect="plain">{{ namespace.namespaceName }}</el-tag>
+                <span style="font-size: medium; color: black; ">{{ namespace.namespaceName }}</span>
                 <el-tag type="success" size="small">{{ namespace.format }}</el-tag>
+                <el-tag type="info" size="small">{{ namespace.updatedAt | parseTime }}</el-tag>
                 <el-tag v-if="!namespace.released" type="danger" size="mini">当前未发布</el-tag>
               </el-row>
             </template>
             <div>
-              {{ namespace.description }}
+              <span style="font-size: small; color: gray; ">{{ namespace.description }}</span>
               <el-button size="mini" style="float: right;" type="danger" round @click="deleteNamespace(namespace)">删除</el-button>
               <el-button size="mini" style="float: right;" type="warning" round @click="releaseHistory(namespace)">历史版本</el-button>
             </div>
@@ -89,7 +90,7 @@
     </el-dialog>
 
     <el-dialog v-if="currentCluster" title="发布配置" :visible.sync="dialogReleaseVisible">
-      <el-tag>{{ releaseForm.appName }} - {{ releaseForm.clusterName }} - {{ releaseForm.namespaceName }} </el-tag>
+      <span style="font-size: large; color: black; ">{{ releaseForm.appName }} / {{ releaseForm.clusterName }} / {{ releaseForm.namespaceName }} </span>
       <el-form ref="releaseForm" :model="releaseForm" :rules="rules">
         <el-form-item label="tag" prop="tag">
           <el-input v-model="releaseForm.tag" />
