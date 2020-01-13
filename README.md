@@ -56,7 +56,7 @@ docker pull xuxu123/xconf-all:latest
 ```
 
 ```bash
-docker run --name xconf -it --rm -p 8080:8080 -e DATABASE_URL="root:12345@(IP地址:3306)/xconf?charset=utf8&parseTime=true&loc=Local" xuxu123/xconf-all
+docker run --name xconf -it --rm -p 8080:8080 -e BROADCAST=broker -e DATABASE_URL="root:12345@(IP地址:3306)/xconf?charset=utf8&parseTime=true&loc=Local" xuxu123/xconf-all
 ```
 
 UI： http://127.0.0.1:8080/admin/ui
