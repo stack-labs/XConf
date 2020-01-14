@@ -1,6 +1,11 @@
+FROM node:12-alpine as node-builder
+WORKDIR /root
+COPY ./dashboard ./
+RUN npm rebuild node-sass && npm install && npm run build:prod
+
 FROM golang:1.13-alpine as builder
 WORKDIR /root
-COPY ./ ./
+COPY ./admin-api ./
 RUN export GO111MODULE=on && CGO_ENABLED=0 GOOS=linux go build -o build/exec ./main.go
 
 FROM alpine:latest
@@ -8,6 +13,8 @@ WORKDIR /root
 
 RUN apk --no-cache add ca-certificates \
     && apk update
+
 COPY --from=builder /root/build/* ./
+COPY --from=node-builder /root/dist dist
 
 ENTRYPOINT ["/root/exec"]

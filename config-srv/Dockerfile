@@ -10,8 +10,4 @@ RUN apk --no-cache add ca-certificates \
     && apk update
 COPY --from=builder /root/build/* ./
 
-ENV MICRO_REGISTRY=${MICRO_REGISTRY} \
-    MICRO_REGISTRY_ADDRESS=${MICRO_REGISTRY_ADDRESS} \
-    DATABASE_URL=${DATABASE_URL}
-
 ENTRYPOINT ["/root/exec"]

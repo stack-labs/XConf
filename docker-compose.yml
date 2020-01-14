@@ -12,14 +12,18 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     networks:
       - backend
-  admin-api:
+
+  admin:
     build:
-      context: ./admin-api
+      context: .
+      dockerfile:
+        Dockerfile-admin
     environment:
       - MICRO_REGISTRY=${MICRO_REGISTRY}
       - MICRO_REGISTRY_ADDRESS=${MICRO_REGISTRY_ADDRESS}
     networks:
       - backend
+
   agent-api:
     build:
       context: ./agent-api
@@ -28,6 +32,7 @@ services:
       - MICRO_REGISTRY_ADDRESS=${MICRO_REGISTRY_ADDRESS}
     networks:
       - backend
+
   micro:
     build:
       context: ./micro
