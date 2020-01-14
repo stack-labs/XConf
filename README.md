@@ -60,7 +60,30 @@ docker run --name xconf -it --rm -p 8080:8080 -e BROADCAST=broker -e DATABASE_UR
 ```
 
 UI： http://127.0.0.1:8080/admin/ui
+### Docker Compose 示例
+复制配置文件模板到 .env 文件
+```shell script
+cp .env.example .env
+```
+根据自己情况配置 .env
 
+.env file:
+```shell script
+### Registry Config ###
+# Set registry provider
+MICRO_REGISTRY=etcd
+# Set registry address
+MICRO_REGISTRY_ADDRESS=192.168.123.172:2379
+#DATABASE_URL
+DATABASE_URL=root:root@(192.168.123.172:3306)/xconf?charset=utf8&parseTime=true&loc=Local
+```
+> 若使用 consul 作为注册中心，自行在各个服务中引入 micro/go-plugins/registry/consul
+
+启动全部服务
+```shell script
+docker-compose up 
+```
+访问 localhost:8080
 ### 本地启动服务
 
 
