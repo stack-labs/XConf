@@ -50,29 +50,29 @@ jobs:
           docker tag xconf-all:latest ${{ secrets.REGISTRY_USERNAME }}/xconf-all
           docker push ${{ secrets.REGISTRY_USERNAME }}/xconf-all
     - name: admin-api
-        run: |
-          make admin-api
-          docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
-          docker tag admin-api:latest ${{ secrets.REGISTRY_USERNAME }}/admin-api
-          docker push ${{ secrets.REGISTRY_USERNAME }}/admin-api
+      run: |
+        make admin-api
+        docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
+        docker tag admin-api:latest ${{ secrets.REGISTRY_USERNAME }}/admin-api
+        docker push ${{ secrets.REGISTRY_USERNAME }}/admin-api
     - name: agent-api
-        run: |
-          make agent-api
-          docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
-          docker tag agent-api:latest ${{ secrets.REGISTRY_USERNAME }}/agent-api
-          docker push ${{ secrets.REGISTRY_USERNAME }}/agent-api
+      run: |
+        make agent-api
+        docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
+        docker tag agent-api:latest ${{ secrets.REGISTRY_USERNAME }}/agent-api
+        docker push ${{ secrets.REGISTRY_USERNAME }}/agent-api
     - name: config-srv
-        run: |
-          make config-srv
-          docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
-          docker tag config-srv:latest ${{ secrets.REGISTRY_USERNAME }}/config-srv
-          docker push ${{ secrets.REGISTRY_USERNAME }}/config-srv
+      run: |
+        make config-srv
+        docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
+        docker tag config-srv:latest ${{ secrets.REGISTRY_USERNAME }}/config-srv
+        docker push ${{ secrets.REGISTRY_USERNAME }}/config-srv
     - name: micro
-        run: |
-          make micro
-          docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
-          docker tag micro:latest ${{ secrets.REGISTRY_USERNAME }}/micro
-          docker push ${{ secrets.REGISTRY_USERNAME }}/micro
+      run: |
+        make micro
+        docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
+        docker tag micro:latest ${{ secrets.REGISTRY_USERNAME }}/micro
+        docker push ${{ secrets.REGISTRY_USERNAME }}/micro
 
   deploy:
     needs: docker
