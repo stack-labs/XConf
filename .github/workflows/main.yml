@@ -1,5 +1,15 @@
 name: CI
-on: [push,pull_request]
+on:
+  push:
+    paths-ignore:
+    - 'README.md'
+    - 'dashboard/**'
+    - 'doc/**'
+  pull_request:
+    paths-ignore:
+    - 'README.md'
+    - 'dashboard/**'
+    - 'doc/**'
 jobs:
   lint:
     name: Lint
