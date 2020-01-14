@@ -8,7 +8,7 @@ import (
 )
 
 type ErrorResponse struct {
-	Error string
+	Error string `json:"error"`
 }
 
 func UpdateConfig(c *gin.Context) {

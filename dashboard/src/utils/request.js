@@ -48,7 +48,7 @@ service.interceptors.response.use(
   error => {
     Notification.error({
       title: '错误',
-      message: error.response.data.Error
+      message: error.response.data.error
     })
     return Promise.reject(error)
   }
