@@ -21,7 +21,7 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /root
 COPY --from=builder /root/build/* ./
 COPY --from=node-builder /root/dist dist
-COPY deployments/all-in-one/start.sh .
+COPY deployments/docker/all-in-one/start.sh .
 ENV DATABASE_URL="root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local"
 
 EXPOSE 8080
