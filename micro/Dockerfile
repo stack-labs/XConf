@@ -9,8 +9,6 @@ WORKDIR /root
 RUN apk --no-cache add ca-certificates \
     && apk update
 COPY --from=builder /root/build/* ./
-ENV MICRO_REGISTRY=${MICRO_REGISTRY} \
-    MICRO_REGISTRY_ADDRESS=${MICRO_REGISTRY_ADDRESS}
 
 EXPOSE 8080
-ENTRYPOINT ["/root/exec","--cors-allowed-headers=Content-Type,X-Token --cors-allowed-origins=* --cors-allowed-methods=OPTIONS,DELETE,GET,POST api --handler=http"]
+ENTRYPOINT /root/exec --cors-allowed-headers="Content-Type,X-Token" --cors-allowed-origins="*" --cors-allowed-methods="OPTIONS,DELETE,GET,POST" --api_handler=http api
