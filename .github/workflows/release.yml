@@ -45,47 +45,52 @@ jobs:
     steps:
       - name: Code
         uses: actions/checkout@v1
+      - name: Set env
+        run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
+      - name: tag
+        run: echo ${{ env.RELEASE_VERSION }}
       - name: all in one
         run: |
           make all-in-one
           docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
-          docker tag xconf-all:latest ${{ secrets.REGISTRY_USERNAME }}/xconf-all
-          docker push ${{ secrets.REGISTRY_USERNAME }}/xconf-all
+          docker tag xconf-all:latest ${{ secrets.REGISTRY_USERNAME }}/xconf-all:latest
+          docker tag xconf-all:latest ${{ secrets.REGISTRY_USERNAME }}/xconf-all:${{ env.RELEASE_VERSION }}
+
+          docker push ${{ secrets.REGISTRY_USERNAME }}/xconf-all:latest
+          docker push ${{ secrets.REGISTRY_USERNAME }}/xconf-all:${{ env.RELEASE_VERSION }}
       - name: admin-api
         run: |
           make admin-api
           docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
-          docker tag admin-api:latest ${{ secrets.REGISTRY_USERNAME }}/admin-api
-          docker push ${{ secrets.REGISTRY_USERNAME }}/admin-api
+          docker tag admin-api:latest ${{ secrets.REGISTRY_USERNAME }}/admin-api:latest
+          docker tag admin-api:latest ${{ secrets.REGISTRY_USERNAME }}/admin-api:${{ env.RELEASE_VERSION }}
+
+          docker push ${{ secrets.REGISTRY_USERNAME }}/admin-api:latest
+          docker push ${{ secrets.REGISTRY_USERNAME }}/admin-api:${{ env.RELEASE_VERSION }}
       - name: agent-api
         run: |
           make agent-api
           docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
-          docker tag agent-api:latest ${{ secrets.REGISTRY_USERNAME }}/agent-api
-          docker push ${{ secrets.REGISTRY_USERNAME }}/agent-api
+          docker tag agent-api:latest ${{ secrets.REGISTRY_USERNAME }}/agent-api:latest
+          docker tag agent-api:latest ${{ secrets.REGISTRY_USERNAME }}/agent-api:${{ env.RELEASE_VERSION }}
+
+          docker push ${{ secrets.REGISTRY_USERNAME }}/agent-api:latest
+          docker push ${{ secrets.REGISTRY_USERNAME }}/agent-api:${{ env.RELEASE_VERSION }}
       - name: config-srv
         run: |
           make config-srv
           docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
-          docker tag config-srv:latest ${{ secrets.REGISTRY_USERNAME }}/config-srv
-          docker push ${{ secrets.REGISTRY_USERNAME }}/config-srv
+          docker tag config-srv:latest ${{ secrets.REGISTRY_USERNAME }}/config-srv:latest
+          docker tag config-srv:latest ${{ secrets.REGISTRY_USERNAME }}/config-srv:${{ env.RELEASE_VERSION }}
+
+          docker push ${{ secrets.REGISTRY_USERNAME }}/config-srv:latest
+          docker push ${{ secrets.REGISTRY_USERNAME }}/config-srv:${{ env.RELEASE_VERSION }}
       - name: micro
         run: |
           make micro
           docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
-          docker tag micro:latest ${{ secrets.REGISTRY_USERNAME }}/micro
-          docker push ${{ secrets.REGISTRY_USERNAME }}/micro
+          docker tag micro:latest ${{ secrets.REGISTRY_USERNAME }}/micro:latest
+          docker tag micro:latest ${{ secrets.REGISTRY_USERNAME }}/micro:${{ env.RELEASE_VERSION }}
 
-  deploy:
-    needs: docker
-    name: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: deploy all in one demo
-        uses: appleboy/ssh-action@master
-        with:
-          host: xconf.mogutou.xyz
-          username: ${{ secrets.ECS_USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          script: ${{ secrets.DEPLOY_CMD }}
+          docker push ${{ secrets.REGISTRY_USERNAME }}/micro:latest
+          docker push ${{ secrets.REGISTRY_USERNAME }}/micro:${{ env.RELEASE_VERSION }}
