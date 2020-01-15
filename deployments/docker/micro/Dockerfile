@@ -13,4 +13,4 @@ ENV CORS_ALLOWED_ORIGINS="*"
 ENV CORS_ALLOWED_METHODS="OPTIONS,DELETE,GET,POST"
 
 EXPOSE 8080
-ENTRYPOINT ["/root/micro", "api", " --handler", "http"]
+ENTRYPOINT ["/root/micro", "api", "--handler=http"]
