@@ -12,3 +12,5 @@
 *.out
 
 .idea/
+
+deployments/docker-compose/.env
