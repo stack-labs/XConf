@@ -5,11 +5,13 @@ on:
     - 'README.md'
     - 'dashboard/**'
     - 'doc/**'
+    - 'deployments/**'
   pull_request:
     paths-ignore:
     - 'README.md'
     - 'dashboard/**'
     - 'doc/**'
+    - 'deployments/**'
 jobs:
   lint:
     name: Lint
