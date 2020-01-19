@@ -63,7 +63,7 @@ func WatchUpdate(c *gin.Context) {
 
 	value, err := w.Next()
 	if err != nil {
-		c.JSON(http.StatusNotModified, nil)
+		c.JSON(http.StatusNotModified, gin.H{})
 		return
 	}
 
