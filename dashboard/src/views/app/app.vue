@@ -311,6 +311,7 @@ export default {
         appName: namespace.appName,
         clusterName: namespace.clusterName,
         namespaceName: namespace.namespaceName,
+        format: namespace.format,
         value: namespace.editValue
       })
         .then(response => {
