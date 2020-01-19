@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
-    <span style="font-size: large; color: black; ">{{ appName }} / {{ clusterName }} / {{ namespaceName }}</span>
+    <div>
+      <el-button type="success" icon="el-icon-arrow-left" size="mini" round @click="previousPage" />
+      <span style="font-size: large; color: black; ">{{ appName }} / {{ clusterName }} / {{ namespaceName }}</span>
+    </div>
 
     <el-input v-model="search" placeholder="输入tag搜索" size="mini" align="right" />
     <el-table
@@ -53,6 +56,7 @@
 <script>
 import { listReleaseHistory } from '@/api/release'
 import { rollback } from '@/api/release'
+import router from '@/router'
 
 export default {
   name: 'App',
@@ -112,6 +116,12 @@ export default {
         .catch(() => {
           this.$message.info('已取消回滚')
         })
+    },
+    previousPage() {
+      router.push({ name: 'app', params: {
+        app: this.appName,
+        cluster: this.clusterName }
+      })
     }
   }
 }
