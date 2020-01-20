@@ -49,5 +49,7 @@ func Router() *gin.Engine {
 	r.POST("/rollback", handler.Rollback)
 	r.GET("/release/history", handler.ListReleaseHistory)
 
+	r.GET("/format", handler.ListSupportedFormat)
+
 	return router
 }
