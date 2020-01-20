@@ -7,3 +7,10 @@ export function updateConfig(data) {
     data
   })
 }
+
+export function supportedFormat() {
+  return request({
+    url: '/format',
+    method: 'get'
+  })
+}

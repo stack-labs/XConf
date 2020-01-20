@@ -77,7 +77,14 @@
           <el-input v-model="namespaceForm.namespaceName" />
         </el-form-item>
         <el-form-item label="格式">
-          <el-input v-model="namespaceForm.format" />
+          <el-select v-model="namespaceForm.format" placeholder="请选择">
+            <el-option
+              v-for="item in supportedFormat"
+              :key="item"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="namespaceForm.description" />
@@ -111,7 +118,7 @@
 import { getClusters, createCluster, deleteCluster } from '@/api/cluster'
 import { getNamespaces } from '@/api/namespace'
 import { createNamespace, deleteNamespace } from '@/api/namespace'
-import { updateConfig } from '@/api/config'
+import { updateConfig, supportedFormat } from '@/api/config'
 import { release } from '@/api/release'
 import router from '@/router'
 
@@ -119,6 +126,7 @@ export default {
   name: 'App',
   data() {
     return {
+      supportedFormat: [],
       clusters: null,
       appName: null,
       currentCluster: null,
@@ -161,6 +169,10 @@ export default {
   created() {
     this.appName = this.$route.params.app
     const cluster = this.$route.params.cluster
+
+    supportedFormat().then(response => {
+      this.supportedFormat = response
+    })
 
     getClusters({ appName: this.appName }).then(response => {
       this.clusters = response
