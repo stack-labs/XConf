@@ -5,13 +5,13 @@ on:
     - 'README.md'
     - 'dashboard/**'
     - 'doc/**'
-    - 'deployments/**'
+    - 'deployments/docker-compose/**'
   pull_request:
     paths-ignore:
     - 'README.md'
     - 'dashboard/**'
     - 'doc/**'
-    - 'deployments/**'
+    - 'deployments/docker-compose/**'
 jobs:
   lint:
     name: Lint
