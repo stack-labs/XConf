@@ -1,6 +1,6 @@
 FROM golang:1.13-alpine as builder
 WORKDIR /root
-COPY micro      micro
+COPY ./  ./
 RUN export GO111MODULE=on && CGO_ENABLED=0 GOOS=linux go build -o build/micro micro/main.go
 
 

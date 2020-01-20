@@ -1,9 +1,6 @@
 FROM golang:1.13-alpine as builder
 WORKDIR /root
-COPY admin-api  admin-api
-COPY agent-api  agent-api
-COPY config-srv config-srv
-COPY micro      micro
+COPY ./  ./
 
 RUN export GO111MODULE=on && CGO_ENABLED=0 GOOS=linux go build -o build/admin-api admin-api/main.go
 RUN export GO111MODULE=on && CGO_ENABLED=0 GOOS=linux go build -o build/agent-api agent-api/main.go
