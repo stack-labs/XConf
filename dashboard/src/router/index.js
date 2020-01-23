@@ -60,7 +60,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'https://github.com/micro-in-cn/XConf',
-        meta: { title: 'XConf 项目', icon: 'link' }
+        meta: { title: 'XConf 项目', icon: 'github' }
       }
     ]
   },
