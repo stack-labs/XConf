@@ -6,25 +6,18 @@ import (
 	"github.com/micro/go-micro/util/log"
 )
 
-type Config struct {
-	Hosts struct {
-		Database struct {
-			Address string
-			Port    int
-		}
-	}
-}
-
 func main() {
 	c := config.NewConfig(
 		config.WithSource(
-			source.NewSource("app", "dev", "test", source.WithURL("http://127.0.0.1:8080"))))
+			source.NewSource("app", "dev", "test", source.WithURL("http://xconf.mogutou.xyz"))))
 
-	var value Config
-	if err := c.Get().Scan(&value); err != nil {
-		panic(err)
-	}
-	log.Info("read:", value)
+	//var value Config
+	//if err := c.Get().Scan(&value); err != nil {
+	//	log.Error("Scan error:", err)
+	//	return
+	//}
+	log.Info("read: ", string(c.Get().Bytes()))
+	//log.Info("read:", value)
 
 	// Watch 返回前 micro config 会调用 Read 读一次配置
 	w, err := c.Watch()
@@ -39,9 +32,6 @@ func main() {
 			panic(err)
 		}
 
-		if err = v.Scan(&value); err != nil {
-			panic(err)
-		}
-		log.Info(value)
+		log.Info("watch: ", string(v.Bytes()))
 	}
 }

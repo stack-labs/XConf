@@ -52,6 +52,9 @@ func (x *xConf) Read() (*source.ChangeSet, error) {
 	if err != nil {
 		return nil, err
 	}
+	if rsp.StatusCode != http.StatusOK {
+		return nil, errors.New(string(b))
+	}
 
 	var n namespace
 	if err := json.Unmarshal(b, &n); err != nil {
