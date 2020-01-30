@@ -2,15 +2,17 @@ package main
 
 import (
 	"github.com/micro-in-cn/XConf/client/source"
-	"github.com/micro/go-micro/config"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2/config"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 func main() {
-	c := config.NewConfig(
+	c, err := config.NewConfig(
 		config.WithSource(
 			source.NewSource("app", "dev", "test", source.WithURL("http://xconf.mogutou.xyz"))))
-
+	if err != nil {
+		panic(err)
+	}
 	//var value Config
 	//if err := c.Get().Scan(&value); err != nil {
 	//	log.Error("Scan error:", err)

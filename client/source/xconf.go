@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/micro/go-micro/config/source"
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2/config/source"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 type xConf struct {
@@ -70,6 +70,10 @@ func (x *xConf) Read() (*source.ChangeSet, error) {
 	cs.Checksum = cs.Sum()
 
 	return cs, nil
+}
+
+func (x *xConf) Write(c *source.ChangeSet) error {
+	return nil
 }
 
 func (x *xConf) Watch() (source.Watcher, error) {
@@ -137,6 +141,9 @@ func (x *xConf) watchXConf(updateAt int64) (*source.ChangeSet, error) {
 	b, err := ioutil.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, err
+	}
+	if rsp.StatusCode != http.StatusOK {
+		return nil, errors.New(fmt.Sprintf("%d %s", rsp.StatusCode, string(b)))
 	}
 
 	var n namespace
