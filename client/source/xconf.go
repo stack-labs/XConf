@@ -143,7 +143,7 @@ func (x *xConf) watchXConf(updateAt int64) (*source.ChangeSet, error) {
 		return nil, err
 	}
 	if rsp.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("%d %s", rsp.StatusCode, string(b)))
+		return nil, fmt.Errorf("%d %s", rsp.StatusCode, string(b))
 	}
 
 	var n namespace
