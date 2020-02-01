@@ -13,13 +13,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	//var value Config
-	//if err := c.Get().Scan(&value); err != nil {
-	//	log.Error("Scan error:", err)
-	//	return
-	//}
 	log.Info("read: ", string(c.Get().Bytes()))
-	//log.Info("read:", value)
 
 	// Watch 返回前 micro config 会调用 Read 读一次配置
 	w, err := c.Watch()
