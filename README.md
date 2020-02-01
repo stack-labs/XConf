@@ -6,8 +6,6 @@
 [![LICENSE](https://img.shields.io/badge/LICENSE-MIT-blue)](https://github.com/micro-in-cn/XConf/blob/master/LICENSE)
 [![Code Size](https://img.shields.io/github/languages/code-size/micro-in-cn/XConf.svg?style=flat)](https://img.shields.io/github/languages/code-size/micro-in-cn/XConf.svg?style=flat)
 
-> 持续开发中
-
 `XConf` 基于 go-micro 构建的分布式配置中心，提供配置的管理与发布、实时推送.
 
 ## 特点
@@ -44,29 +42,61 @@
 └── proto
 ```
 
-## 快速使用（开发版）
+## 前端界面
 
-- 依赖： mysql (root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local)
+线上 demo - http://xconf.mogutou.xyz/admin/ui
 
-### all in one docker
+![image](doc/app.png)
+
+![image](doc/cluster.png)
+
+![image](doc/namespace.png)
+
+![image](doc/rollback.png)
+
+## 快速开始
+
+### 依赖
+
+- MySQL XConf 底层存储使用 mysql 数据库
+
+```sql
+CREATE DATABASE xconf
+```
+
+> root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local
+
+### docker 快速启动 all in one
+
 > 所有服务打包到一个容器中，仅仅作为快速预览使用，不可作为生产使用。
 
-```bash
+```shell script
 docker pull xuxu123/xconf-all:latest
 ```
 
-```bash
+```shell script
 docker run --name xconf -it --rm -p 8080:8080 -e BROADCAST=broker -e DATABASE_URL="root:12345@(IP地址:3306)/xconf?charset=utf8&parseTime=true&loc=Local" xuxu123/xconf-all
 ```
 
 UI： http://127.0.0.1:8080/admin/ui
 
-### 本地启动服务
+## 客户端
 
+- Golang  [client/example](client/example/main.go)
+    
+    ```shell script
+    git clone https://github.com/micro-in-cn/XConf.git
+    cd XConf/client/example
+    go run main.go 
+    ```
+
+    客户端支持读取配置，实时获取配置更新（页面上"发布"操作才能触发配置推送，"保存"操作仅是保存配置）
+    
+## 本地源码启动服务
 
 - micro api 网关
 
-    ```bash
+    ```shell script
     cd micro
     make run
     ```
@@ -74,7 +104,7 @@ UI： http://127.0.0.1:8080/admin/ui
 - config-srv 
     >  --database_url value  database url (default: "root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local") [$DATABASE_URL]
 
-    ```bash
+    ```shell script
     cd config-srv
     make run
     # go run main.go --database_url="root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local"
@@ -82,21 +112,21 @@ UI： http://127.0.0.1:8080/admin/ui
 
 - agent-api
 
-    ```bash
+    ```shell script
     cd agent-api
     make run
     ```
 
 - admin-api
 
-    ```bash
+    ```shell script
     cd admin-api
     make run
     ```
 
 - dashboard
 
-    ```bash
+    ```shell script
     cd dashboard
     npm install
     npm run dev
@@ -105,7 +135,7 @@ UI： http://127.0.0.1:8080/admin/ui
 - client 适配 micro config 的 source 插件
     > micro config 只有在发布内容更改的情况下 watcher.Next 才会返回
 
-    ```bash
+    ```shell script
     cd client/example
     go run main.go
     ```
