@@ -56,29 +56,29 @@
 
 ## 快速开始
 
-### 依赖
+- 依赖
+    
+    MySQL XConf 底层存储使用 mysql 数据库
 
-- MySQL XConf 底层存储使用 mysql 数据库
+    ```sql
+    CREATE DATABASE xconf
+    ```
+    
+    > root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local
 
-```sql
-CREATE DATABASE xconf
-```
-
-> root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local
-
-### docker 快速启动 all in one
-
-> 所有服务打包到一个容器中，仅仅作为快速预览使用，不可作为生产使用。
-
-```shell script
-docker pull xuxu123/xconf-all:latest
-```
-
-```shell script
-docker run --name xconf -it --rm -p 8080:8080 -e BROADCAST=broker -e DATABASE_URL="root:12345@(IP地址:3306)/xconf?charset=utf8&parseTime=true&loc=Local" xuxu123/xconf-all
-```
-
-UI： http://127.0.0.1:8080/admin/ui
+-  docker 快速启动 all in one
+    
+    > 所有服务打包到一个容器中，仅仅作为快速预览使用，不可作为生产使用。
+    
+    ```shell script
+    docker pull xuxu123/xconf-all:latest
+    ```
+    
+    ```shell script
+    docker run --name xconf -it --rm -p 8080:8080 -e BROADCAST=broker -e DATABASE_URL="root:12345@(IP地址:3306)/xconf?charset=utf8&parseTime=true&loc=Local" xuxu123/xconf-all
+    ```
+    
+    UI： http://127.0.0.1:8080/admin/ui
 
 ## 客户端
 
@@ -92,54 +92,12 @@ UI： http://127.0.0.1:8080/admin/ui
 
     客户端支持读取配置，实时获取配置更新（页面上"发布"操作才能触发配置推送，"保存"操作仅是保存配置）
     
-## 本地源码启动服务
+## 部署与构建
 
-- micro api 网关
+- [docker compose 部署](https://github.com/micro-in-cn/XConf/tree/master/deployments/docker-compose)
 
-    ```shell script
-    cd micro
-    make run
-    ```
+- [源码运行](https://github.com/micro-in-cn/XConf/tree/master/doc/build.md)
 
-- config-srv 
-    >  --database_url value  database url (default: "root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local") [$DATABASE_URL]
-
-    ```shell script
-    cd config-srv
-    make run
-    # go run main.go --database_url="root:12345@(127.0.0.1:3306)/xconf?charset=utf8&parseTime=true&loc=Local"
-    ```
-
-- agent-api
-
-    ```shell script
-    cd agent-api
-    make run
-    ```
-
-- admin-api
-
-    ```shell script
-    cd admin-api
-    make run
-    ```
-
-- dashboard
-
-    ```shell script
-    cd dashboard
-    npm install
-    npm run dev
-    ```
-
-- client 适配 micro config 的 source 插件
-    > micro config 只有在发布内容更改的情况下 watcher.Next 才会返回
-
-    ```shell script
-    cd client/example
-    go run main.go
-    ```
-
-## 借鉴 Apollo
+## 感谢
 
 XConf 参考了 Apollo 在业界成熟的设计方案。
