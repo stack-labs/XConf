@@ -32,6 +32,7 @@ func Router() *gin.Engine {
 	router := gin.Default()
 	r := router.Group("/agent/api/v1")
 	r.GET("/config", handler.ReadConfig)
+	r.GET("/config/raw", handler.ReadConfigRaw)
 	r.GET("/watch", handler.WatchUpdate)
 
 	return router
