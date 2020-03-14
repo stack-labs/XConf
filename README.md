@@ -43,7 +43,7 @@
 └── proto
 ```
 
-## 前端界面
+## 前端UI
 
 线上 demo - http://xconf.mogutou.xyz/admin/ui
 
