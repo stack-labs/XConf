@@ -1,4 +1,2 @@
-build/*.js
-src/assets
-public
-dist
+src/setupProxy.js
+src/serviceWorker.ts

@@ -1,0 +1,37 @@
+html,
+body,
+#root {
+  .ant-menu {
+    box-sizing: content-box;
+  }
+
+  .ant-layout {
+    margin-left: calc(100vw - 100%);
+    min-height: 100vh;
+  }
+
+  .ant-form-item {
+    margin-bottom: 12px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, 'Hiragino Sans GB', Arial, 'Segoe UI', Helvetica,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+ul,
+li {
+  padding: 0;
+  list-style: none;
+}
