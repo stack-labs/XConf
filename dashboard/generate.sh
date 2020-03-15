@@ -14,7 +14,9 @@ handler() {
     local ext=${f##*.}
 
     if [ -d "$dir/$f" -o $ext == 'ts' -o $ext == 'tsx' ]; then
-      echo "export * from './${filename}';" >>$entry
+      if [ $filename != 'index' ] && [[ ! $filename =~ '.test' ]]; then
+        echo "export * from './${filename}';" >>$entry
+      fi
     fi
 
     if [ -d "$dir/$f" ]; then
@@ -22,3 +24,9 @@ handler() {
     fi
   done
 }
+
+handler "./src/hooks"
+handler "./src/tools"
+handler "./src/stores"
+handler "./src/typings"
+handler "./src/services"

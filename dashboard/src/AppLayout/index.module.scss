@@ -1,0 +1,41 @@
+.layout {
+  .header {
+    background: white;
+    padding: 0;
+
+    .trigger {
+      font-size: 18px;
+      line-height: 64px;
+      padding: 0 24px;
+      cursor: pointer;
+      transition: color 0.3s;
+      &:hover {
+        color: #1890ff;
+      }
+    }
+  }
+
+  .sider {
+    .logo {
+      height: 64px;
+      line-height: 64px;
+      width: 100%;
+    }
+
+    .menus {
+      .menuItem {
+        font-size: 16px;
+
+        :global {
+          .anticon {
+            font-size: 16px;
+          }
+        }
+
+        > :first-child {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
