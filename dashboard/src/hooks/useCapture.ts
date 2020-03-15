@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { message } from 'antd';
 
 export enum CaptureStatus {
@@ -72,12 +72,14 @@ const createCapture = (globalOption?: CaptureOption) => {
     }
   };
 
-  const useCapture = <R = unknown, Q extends object = object>(opt: UseCapture<R, Q>) => {
-    const { fn, initialState = null, initialArgs = {}, showError = true, immediately = false, option } = opt;
+  const useCapture = <R = unknown, Q extends object = object>(
+    opt: UseCapture<R, Q>,
+  ): [CaptureState<R, Q>, Dispatch<SetStateAction<Q>>] => {
+    const { fn, initialState = null, initialArgs, showError = true, immediately = false, option } = opt;
     const firstly = useRef<boolean>(immediately);
     const _option = useMemo(() => (option ? { ...global, ...option } : global), [option]);
 
-    const [args, setArgs] = useState<Q>();
+    const [args, setArgs] = useState<Q>(initialArgs!);
     const [state, dispatch] = useReducer(reducerHandle, {
       loading: false,
       args: initialArgs,
@@ -116,7 +118,7 @@ const createCapture = (globalOption?: CaptureOption) => {
       };
     }, [_fn, _option, args, showError]);
 
-    return [state, setArgs];
+    return [state as CaptureState<R, Q>, setArgs];
   };
   return useCapture;
 };
