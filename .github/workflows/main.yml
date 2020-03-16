@@ -1,12 +1,16 @@
 name: CI
 on:
   push:
+    branches:
+      - master
     paths-ignore:
     - 'README.md'
     - 'dashboard/**'
     - 'doc/**'
     - 'deployments/docker-compose/**'
   pull_request:
+    branches:
+      - master
     paths-ignore:
     - 'README.md'
     - 'dashboard/**'
