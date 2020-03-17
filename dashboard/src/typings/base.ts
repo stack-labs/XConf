@@ -1,6 +1,8 @@
 export interface BaseModel {
+  id: number;
   creator: string;
-  createdAt: string;
+  createdAt: number;
+  updatedAt: number;
 }
 
 export interface AnyObject<T = any> {
