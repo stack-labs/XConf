@@ -34,6 +34,7 @@ func Router() *gin.Engine {
 	r.GET("/config", handler.ReadConfig)
 	r.GET("/config/raw", handler.ReadConfigRaw)
 	r.GET("/watch", handler.WatchUpdate)
+	r.GET("/watch/raw", handler.WatchUpdateRaw)
 
 	return router
 }
