@@ -26,6 +26,11 @@ func (d *Dao) CreateCluster(appName, clusterName, description string) (*model.Cl
 	return cluster, err
 }
 
+func (d *Dao) QueryCluster(appName, clusterName string) (cluster model.Cluster, err error) {
+	err = d.client.Table("cluster").First(&cluster, "app_name = ? and cluster_name = ?", appName, clusterName).Error
+	return
+}
+
 func (d *Dao) DeleteCluster(appName, clusterName string) error {
 	var err error
 	tx := d.client.Begin()

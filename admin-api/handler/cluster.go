@@ -27,6 +27,25 @@ func CreateCluster(c *gin.Context) {
 	c.JSON(http.StatusOK, cluster)
 }
 
+func QueryCluster(c *gin.Context) {
+	var req = struct {
+		AppName     string `form:"appName"        binding:"required"`
+		ClusterName string `form:"clusterName"    binding:"required"`
+	}{}
+	if err := c.Bind(&req); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	cluster, err := config.QueryCluster(req.AppName, req.ClusterName)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, cluster)
+}
+
 func DeleteCluster(c *gin.Context) {
 	var req = struct {
 		AppName     string `json:"appName"        binding:"required"`

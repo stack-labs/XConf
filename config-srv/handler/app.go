@@ -23,6 +23,21 @@ func (c *Config) CreateApp(ctx context.Context, req *config.AppRequest, rsp *con
 	return nil
 }
 
+func (c *Config) QueryApp(ctx context.Context, req *config.AppRequest, rsp *config.AppResponse) error {
+	app, err := dao.GetDao().QueryApp(req.GetAppName())
+	if err != nil {
+		log.Error("[QueryApp]", err)
+		return err
+	}
+
+	rsp.Id = int64(app.ID)
+	rsp.AppName = app.AppName
+	rsp.Description = app.Description
+	rsp.CreatedAt = app.CreatedAt.Unix()
+	rsp.UpdatedAt = app.UpdatedAt.Unix()
+	return nil
+}
+
 func (c *Config) DeleteApp(ctx context.Context, req *config.AppRequest, rsp *config.Response) (err error) {
 	err = dao.GetDao().DeleteApp(req.GetAppName())
 	if err != nil {
