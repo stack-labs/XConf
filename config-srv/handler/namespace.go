@@ -46,6 +46,10 @@ func (c *Config) QueryNamespace(ctx context.Context, req *config.NamespaceReques
 	rsp.ClusterName = namespace.ClusterName
 	rsp.NamespaceName = namespace.NamespaceName
 	rsp.Description = namespace.Description
+	rsp.Value = namespace.Value
+	rsp.Format = namespace.Format
+	rsp.EditValue = namespace.EditValue
+	rsp.Released = namespace.Released
 	rsp.CreatedAt = namespace.CreatedAt.Unix()
 	rsp.UpdatedAt = namespace.UpdatedAt.Unix()
 	return nil
