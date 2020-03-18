@@ -29,6 +29,12 @@ func (d *Dao) CreateNamespace(appName, clusterName, namespaceName, format, descr
 	return namespace, err
 }
 
+func (d *Dao) QueryNamespace(appName, clusterName, namespaceName string) (namespace model.Namespace, err error) {
+	err = d.client.Table("namespace").First(&namespace, "app_name = ? and cluster_name = ? and namespace_name = ?",
+		appName, clusterName, namespaceName).Error
+	return
+}
+
 func (d *Dao) DeleteNamespace(appName, clusterName, namespaceName string) error {
 	var err error
 	tx := d.client.Begin()

@@ -20,6 +20,11 @@ func (d *Dao) CreateApp(appName, description string) (*model.App, error) {
 	return app, err
 }
 
+func (d *Dao) QueryApp(appName string) (app model.App, err error) {
+	err = d.client.Table("app").First(&app, "app_name = ?", appName).Error
+	return
+}
+
 func (d *Dao) DeleteApp(appName string) error {
 	var err error
 	tx := d.client.Begin()
