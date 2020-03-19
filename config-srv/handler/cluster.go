@@ -24,6 +24,22 @@ func (c *Config) CreateCluster(ctx context.Context, req *config.ClusterRequest, 
 	return nil
 }
 
+func (c *Config) QueryCluster(ctx context.Context, req *config.ClusterRequest, rsp *config.ClusterResponse) error {
+	cluster, err := dao.GetDao().QueryCluster(req.GetAppName(), req.GetClusterName())
+	if err != nil {
+		log.Error("[QueryCluster]", err)
+		return err
+	}
+
+	rsp.Id = int64(cluster.ID)
+	rsp.AppName = cluster.AppName
+	rsp.ClusterName = cluster.ClusterName
+	rsp.Description = cluster.Description
+	rsp.CreatedAt = cluster.CreatedAt.Unix()
+	rsp.UpdatedAt = cluster.UpdatedAt.Unix()
+	return nil
+}
+
 func (c *Config) DeleteCluster(ctx context.Context, req *config.ClusterRequest, rsp *config.Response) (err error) {
 	err = dao.GetDao().DeleteCluster(req.GetAppName(), req.GetClusterName())
 	if err != nil {

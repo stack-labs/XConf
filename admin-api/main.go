@@ -33,14 +33,17 @@ func Router() *gin.Engine {
 	router.Static("/admin/ui", "./dist")
 	r := router.Group("/admin/api/v1")
 	r.GET("/apps", handler.ListApps)
+	r.GET("/app", handler.QueryApp)
 	r.POST("/app", handler.CreateApp)
 	r.DELETE("/app", handler.DeleteApp)
 
 	r.GET("/clusters", handler.ListClusters)
+	r.GET("/cluster", handler.QueryCluster)
 	r.POST("/cluster", handler.CreateCluster)
 	r.DELETE("/cluster", handler.DeleteCluster)
 
 	r.GET("/namespaces", handler.ListNamespaces)
+	r.GET("/namespace", handler.QueryNamespace)
 	r.POST("/namespace", handler.CreateNamespace)
 	r.DELETE("/namespace", handler.DeleteNamespace)
 

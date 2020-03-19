@@ -35,14 +35,16 @@ var _ server.Option
 
 type ConfigService interface {
 	CreateApp(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*AppResponse, error)
+	QueryApp(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*AppResponse, error)
 	DeleteApp(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*Response, error)
 	ListApps(ctx context.Context, in *Request, opts ...client.CallOption) (*AppsResponse, error)
 	CreateCluster(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*ClusterResponse, error)
+	QueryCluster(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*ClusterResponse, error)
 	DeleteCluster(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*Response, error)
 	ListClusters(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*ClustersResponse, error)
 	CreateNamespace(ctx context.Context, in *NamespaceRequest, opts ...client.CallOption) (*NamespaceResponse, error)
 	DeleteNamespace(ctx context.Context, in *NamespaceRequest, opts ...client.CallOption) (*Response, error)
-	//    rpc QueryNamespace(NamespaceRequest) returns (NamespaceResponse) {}
+	QueryNamespace(ctx context.Context, in *NamespaceRequest, opts ...client.CallOption) (*NamespaceResponse, error)
 	ListNamespaces(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*NamespacesResponse, error)
 	UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...client.CallOption) (*Response, error)
 	ReleaseConfig(ctx context.Context, in *ReleaseRequest, opts ...client.CallOption) (*Response, error)
@@ -80,6 +82,16 @@ func (c *configService) CreateApp(ctx context.Context, in *AppRequest, opts ...c
 	return out, nil
 }
 
+func (c *configService) QueryApp(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*AppResponse, error) {
+	req := c.c.NewRequest(c.name, "Config.QueryApp", in)
+	out := new(AppResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *configService) DeleteApp(ctx context.Context, in *AppRequest, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "Config.DeleteApp", in)
 	out := new(Response)
@@ -102,6 +114,16 @@ func (c *configService) ListApps(ctx context.Context, in *Request, opts ...clien
 
 func (c *configService) CreateCluster(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*ClusterResponse, error) {
 	req := c.c.NewRequest(c.name, "Config.CreateCluster", in)
+	out := new(ClusterResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *configService) QueryCluster(ctx context.Context, in *ClusterRequest, opts ...client.CallOption) (*ClusterResponse, error) {
+	req := c.c.NewRequest(c.name, "Config.QueryCluster", in)
 	out := new(ClusterResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -143,6 +165,16 @@ func (c *configService) CreateNamespace(ctx context.Context, in *NamespaceReques
 func (c *configService) DeleteNamespace(ctx context.Context, in *NamespaceRequest, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "Config.DeleteNamespace", in)
 	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *configService) QueryNamespace(ctx context.Context, in *NamespaceRequest, opts ...client.CallOption) (*NamespaceResponse, error) {
+	req := c.c.NewRequest(c.name, "Config.QueryNamespace", in)
+	out := new(NamespaceResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -258,14 +290,16 @@ func (x *configServiceWatch) Recv() (*ConfigResponse, error) {
 
 type ConfigHandler interface {
 	CreateApp(context.Context, *AppRequest, *AppResponse) error
+	QueryApp(context.Context, *AppRequest, *AppResponse) error
 	DeleteApp(context.Context, *AppRequest, *Response) error
 	ListApps(context.Context, *Request, *AppsResponse) error
 	CreateCluster(context.Context, *ClusterRequest, *ClusterResponse) error
+	QueryCluster(context.Context, *ClusterRequest, *ClusterResponse) error
 	DeleteCluster(context.Context, *ClusterRequest, *Response) error
 	ListClusters(context.Context, *AppRequest, *ClustersResponse) error
 	CreateNamespace(context.Context, *NamespaceRequest, *NamespaceResponse) error
 	DeleteNamespace(context.Context, *NamespaceRequest, *Response) error
-	//    rpc QueryNamespace(NamespaceRequest) returns (NamespaceResponse) {}
+	QueryNamespace(context.Context, *NamespaceRequest, *NamespaceResponse) error
 	ListNamespaces(context.Context, *ClusterRequest, *NamespacesResponse) error
 	UpdateConfig(context.Context, *UpdateConfigRequest, *Response) error
 	ReleaseConfig(context.Context, *ReleaseRequest, *Response) error
@@ -278,13 +312,16 @@ type ConfigHandler interface {
 func RegisterConfigHandler(s server.Server, hdlr ConfigHandler, opts ...server.HandlerOption) error {
 	type config interface {
 		CreateApp(ctx context.Context, in *AppRequest, out *AppResponse) error
+		QueryApp(ctx context.Context, in *AppRequest, out *AppResponse) error
 		DeleteApp(ctx context.Context, in *AppRequest, out *Response) error
 		ListApps(ctx context.Context, in *Request, out *AppsResponse) error
 		CreateCluster(ctx context.Context, in *ClusterRequest, out *ClusterResponse) error
+		QueryCluster(ctx context.Context, in *ClusterRequest, out *ClusterResponse) error
 		DeleteCluster(ctx context.Context, in *ClusterRequest, out *Response) error
 		ListClusters(ctx context.Context, in *AppRequest, out *ClustersResponse) error
 		CreateNamespace(ctx context.Context, in *NamespaceRequest, out *NamespaceResponse) error
 		DeleteNamespace(ctx context.Context, in *NamespaceRequest, out *Response) error
+		QueryNamespace(ctx context.Context, in *NamespaceRequest, out *NamespaceResponse) error
 		ListNamespaces(ctx context.Context, in *ClusterRequest, out *NamespacesResponse) error
 		UpdateConfig(ctx context.Context, in *UpdateConfigRequest, out *Response) error
 		ReleaseConfig(ctx context.Context, in *ReleaseRequest, out *Response) error
@@ -308,6 +345,10 @@ func (h *configHandler) CreateApp(ctx context.Context, in *AppRequest, out *AppR
 	return h.ConfigHandler.CreateApp(ctx, in, out)
 }
 
+func (h *configHandler) QueryApp(ctx context.Context, in *AppRequest, out *AppResponse) error {
+	return h.ConfigHandler.QueryApp(ctx, in, out)
+}
+
 func (h *configHandler) DeleteApp(ctx context.Context, in *AppRequest, out *Response) error {
 	return h.ConfigHandler.DeleteApp(ctx, in, out)
 }
@@ -318,6 +359,10 @@ func (h *configHandler) ListApps(ctx context.Context, in *Request, out *AppsResp
 
 func (h *configHandler) CreateCluster(ctx context.Context, in *ClusterRequest, out *ClusterResponse) error {
 	return h.ConfigHandler.CreateCluster(ctx, in, out)
+}
+
+func (h *configHandler) QueryCluster(ctx context.Context, in *ClusterRequest, out *ClusterResponse) error {
+	return h.ConfigHandler.QueryCluster(ctx, in, out)
 }
 
 func (h *configHandler) DeleteCluster(ctx context.Context, in *ClusterRequest, out *Response) error {
@@ -334,6 +379,10 @@ func (h *configHandler) CreateNamespace(ctx context.Context, in *NamespaceReques
 
 func (h *configHandler) DeleteNamespace(ctx context.Context, in *NamespaceRequest, out *Response) error {
 	return h.ConfigHandler.DeleteNamespace(ctx, in, out)
+}
+
+func (h *configHandler) QueryNamespace(ctx context.Context, in *NamespaceRequest, out *NamespaceResponse) error {
+	return h.ConfigHandler.QueryNamespace(ctx, in, out)
 }
 
 func (h *configHandler) ListNamespaces(ctx context.Context, in *ClusterRequest, out *NamespacesResponse) error {

@@ -19,6 +19,12 @@ func CreateApp(appName, description string) (*config.AppResponse, error) {
 	})
 }
 
+func QueryApp(appName string) (*config.AppResponse, error) {
+	return configServiceClient.QueryApp(context.Background(), &config.AppRequest{
+		AppName: appName,
+	})
+}
+
 func DeleteApp(appName string) error {
 	_, err := configServiceClient.DeleteApp(context.Background(), &config.AppRequest{
 		AppName: appName,
@@ -36,6 +42,13 @@ func CreateCluster(appName, clusterName, description string) (*config.ClusterRes
 		AppName:     appName,
 		ClusterName: clusterName,
 		Description: description,
+	})
+}
+
+func QueryCluster(appName, clusterName string) (*config.ClusterResponse, error) {
+	return configServiceClient.QueryCluster(context.Background(), &config.ClusterRequest{
+		AppName:     appName,
+		ClusterName: clusterName,
 	})
 }
 
@@ -60,6 +73,14 @@ func CreateNamespace(appName, clusterName, namespaceName, format, description st
 		NamespaceName: namespaceName,
 		Format:        format,
 		Description:   description,
+	})
+}
+
+func QueryNamespace(appName, clusterName, namespaceName string) (*config.NamespaceResponse, error) {
+	return configServiceClient.QueryNamespace(context.Background(), &config.NamespaceRequest{
+		AppName:       appName,
+		ClusterName:   clusterName,
+		NamespaceName: namespaceName,
 	})
 }
 
