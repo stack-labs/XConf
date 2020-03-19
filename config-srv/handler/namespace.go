@@ -35,7 +35,7 @@ func (c *Config) CreateNamespace(ctx context.Context, req *config.NamespaceReque
 }
 
 func (c *Config) QueryNamespace(ctx context.Context, req *config.NamespaceRequest, rsp *config.NamespaceResponse) error {
-	namespace, err := dao.GetDao().QueryNamespace(req.GetAppName(), req.ClusterName, req.NamespaceName)
+	namespace, err := dao.GetDao().QueryNamespace(req.GetAppName(), req.GetClusterName(), req.GetNamespaceName())
 	if err != nil {
 		log.Error("[QueryNamespace]", err)
 		return err
