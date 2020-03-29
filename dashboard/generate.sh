@@ -25,6 +25,7 @@ handler() {
   done
 }
 
+handler "./src/hoc"
 handler "./src/hooks"
 handler "./src/tools"
 handler "./src/stores"

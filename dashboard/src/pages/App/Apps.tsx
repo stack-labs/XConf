@@ -3,6 +3,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Card, Divider } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 
+import AppCreation from './AppCreate';
 import ITable from '@src/components/ITable';
 
 import { formatDate } from '@src/tools';
@@ -14,7 +15,12 @@ export interface AppsProps extends RouteComponentProps {}
 
 const Apps: FC<AppsProps> = () => {
   const [key, setKey] = useState<string>('');
-  const [appsState] = useCapture<App[], any>({ fn: fetchApps, initialArgs: {}, initialState: [], immediately: true });
+  const [appsState, getApps] = useCapture<App[], { version: number }>({
+    fn: fetchApps,
+    initialArgs: { version: 0 },
+    initialState: [],
+    immediately: true,
+  });
 
   const columns: ColumnProps<App>[] = [
     {
@@ -48,7 +54,9 @@ const Apps: FC<AppsProps> = () => {
         columns={columns}
         dataSource={appsState.data}
         loading={appsState.loading}
-        onCreate={() => {}}
+        onCreate={() =>
+          AppCreation({ title: '创建新应用', onOk: () => getApps(state => ({ version: state.version++ })) })
+        }
       />
     </Card>
   );
