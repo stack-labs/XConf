@@ -34,7 +34,7 @@ func (c *configFile) Update(content []byte) error {
 	}
 
 	tmpFile := fmt.Sprintf("%s_tmp", c.filePath)
-	if err := ioutil.WriteFile(tmpFile, content, 0600); err != nil {
+	if err := ioutil.WriteFile(tmpFile, content, 0755); err != nil {
 		log.Error("write file error:", err)
 		return err
 	}

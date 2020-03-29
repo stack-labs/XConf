@@ -13,7 +13,7 @@ func CopyFile(source string, dest string) error {
 	}
 	defer src.Close()
 
-	err = os.MkdirAll(filepath.Dir(dest), 0666)
+	err = os.MkdirAll(filepath.Dir(dest), 0755)
 	if err != nil {
 		return err
 	}
