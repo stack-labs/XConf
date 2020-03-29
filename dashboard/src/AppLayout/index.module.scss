@@ -45,3 +45,41 @@
     }
   }
 }
+
+:global {
+  .link-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    color: #1890ff;
+
+    &.normal {
+      color: inherit;
+    }
+
+    &:link,
+    &:visited,
+    &:focus,
+    &:hover,
+    &:active {
+      border: none;
+      outline: none;
+    }
+  }
+
+  .clear-float {
+    zoom: 1;
+
+    &::after {
+      display: block;
+      clear: both;
+      content: ' ';
+      visibility: hidden;
+      height: 0;
+    }
+  }
+}

@@ -1,7 +1,10 @@
 import { BaseModel } from '@src/typings';
 
-export interface Cluster extends BaseModel {
+export interface ClusterQuery {
   appName: string;
   clusterName: string;
+}
+
+export interface Cluster extends ClusterQuery, BaseModel {
   description?: string;
 }

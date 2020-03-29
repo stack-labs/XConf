@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Card } from 'antd';
+import { Card, Divider } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 
 import ITable from '@src/components/ITable';
@@ -21,12 +21,24 @@ const Apps: FC<AppsProps> = () => {
       title: '应用',
       key: 'appName',
       dataIndex: 'appName',
-      render: (appName, _) => <Link to={`/apps/${_.id}`}>{appName}</Link>,
+      render: appName => <Link to={`/apps/${appName}`}>{appName}</Link>,
     },
+    { title: '描述', key: 'description', dataIndex: 'description' },
     { title: '创建人', key: 'creator', dataIndex: 'creator' },
     { title: '创建时间', key: 'createdAt', dataIndex: 'createdAt', width: 160, render: formatDate },
     { title: '更新时间', key: 'updatedAt', dataIndex: 'updatedAt', width: 160, render: formatDate },
-    { title: '操作', key: 'control' },
+    {
+      title: '操作',
+      key: 'control',
+      width: 120,
+      render: (_, app) => (
+        <div>
+          <Link to={`/apps/${app.appName}`}>查看</Link>
+          <Divider type="vertical" />
+          <button className="link-button">删除</button>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -36,6 +48,7 @@ const Apps: FC<AppsProps> = () => {
         columns={columns}
         dataSource={appsState.data}
         loading={appsState.loading}
+        onCreate={() => {}}
       />
     </Card>
   );

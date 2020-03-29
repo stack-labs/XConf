@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 
-export interface AppProps {}
+export interface AppProps extends RouteComponentProps<any> {}
 
 const App: FC<AppProps> = () => {
-  return <div>App</div>;
+  return <div></div>;
 };
 
 export default App;
