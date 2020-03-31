@@ -10,6 +10,7 @@ import { formatDate } from '@src/tools';
 import { useCapture } from '@src/hooks';
 import { fetchApps } from '@src/services';
 import { App } from '@src/typings';
+import { renderDeleteWithLinkButton } from '@src/renders';
 
 export interface AppsProps extends RouteComponentProps {}
 
@@ -31,8 +32,8 @@ const Apps: FC<AppsProps> = () => {
     },
     { title: '描述', key: 'description', dataIndex: 'description' },
     { title: '创建人', key: 'creator', dataIndex: 'creator' },
-    { title: '创建时间', key: 'createdAt', dataIndex: 'createdAt', width: 160, render: formatDate },
-    { title: '更新时间', key: 'updatedAt', dataIndex: 'updatedAt', width: 160, render: formatDate },
+    { title: '创建时间', key: 'createdAt', dataIndex: 'createdAt', width: 180, render: formatDate },
+    { title: '更新时间', key: 'updatedAt', dataIndex: 'updatedAt', width: 180, render: formatDate },
     {
       title: '操作',
       key: 'control',
@@ -41,7 +42,11 @@ const Apps: FC<AppsProps> = () => {
         <div>
           <Link to={`/apps/${app.appName}`}>查看</Link>
           <Divider type="vertical" />
-          <button className="link-button">删除</button>
+          {renderDeleteWithLinkButton({
+            label: '删除',
+            popLabel: '确认删除应用?',
+            onDelete: () => {},
+          })}
         </div>
       ),
     },
@@ -54,9 +59,11 @@ const Apps: FC<AppsProps> = () => {
         columns={columns}
         dataSource={appsState.data}
         loading={appsState.loading}
-        onCreate={() =>
-          AppCreation({ title: '创建新应用', onOk: () => getApps(state => ({ version: state.version++ })) })
-        }
+        showCreate={{
+          label: '创建新应用',
+          onCreate: () =>
+            AppCreation({ title: '创建新应用', onOk: () => getApps(state => ({ version: state.version++ })) }),
+        }}
       />
     </Card>
   );

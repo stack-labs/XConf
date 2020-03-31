@@ -14,7 +14,7 @@ const routeAndMenuArray: RouteAndMenu[] = [
     menu: { menuKey: 'app_list', menuLink: '/apps', menuLabel: '应用列表', menuIcon: <AppstoreOutlined /> },
     route: { path: '/apps', component: React.lazy(() => import('./App/Apps')) },
   },
-  { route: { path: '/apps/:appID', component: React.lazy(() => import('./App/App')) } },
+  { route: { path: '/apps/:appName/:clusterName?', order: 10, component: React.lazy(() => import('./App/App')) } },
 ];
 
 const routes: RouteItem[] = [];

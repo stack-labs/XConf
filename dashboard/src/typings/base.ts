@@ -5,6 +5,13 @@ export interface BaseModel {
   updatedAt: number;
 }
 
+export const defaultBaseModel: BaseModel = {
+  id: 0,
+  creator: '',
+  createdAt: 0,
+  updatedAt: 0,
+};
+
 export interface AnyObject<T = any> {
   [key: string]: T;
 }

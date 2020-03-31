@@ -6,5 +6,5 @@ export const formatDate = (date: number | string | Date | Moment) => {
     if ((date + '').length === 10) d = date * 1000;
   }
   const m = moment(d);
-  return m.format('YY-MM-DD HH:mm:ss');
+  return m.format('YYYY-MM-DD HH:mm:ss');
 };

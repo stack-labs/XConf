@@ -5,7 +5,7 @@ export interface LoadingProps {}
 
 const Loading: FC<LoadingProps> = () => {
   return (
-    <div style={{ minHeight: 300, width: '100%', textAlign: 'center' }}>
+    <div style={{ minHeight: 300, lineHeight: 300, width: '100%', textAlign: 'center' }}>
       <Spin spinning tip="努力加载中捏. 💪" />
     </div>
   );

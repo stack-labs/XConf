@@ -89,9 +89,8 @@ const createCapture = (globalOption?: CaptureOption) => {
 
     const _fn = useCallback(fn, []);
     useEffect(() => {
-      if (args === undefined) return;
       // * Called when the hooks is firstly mounted
-      if (!firstly.current) {
+      if (args === undefined || !firstly.current) {
         firstly.current = true;
         return;
       }
