@@ -11,20 +11,20 @@ type Model struct {
 
 type App struct {
 	Model
-	AppName     string `gorm:"column:app_name; not null; unique_index:app_uindex; size:500" json:"appName"`
+	AppName     string `gorm:"column:app_name; not null; unique_index:app_uindex; size:100" json:"appName"`
 	Description string `gorm:"column:description;                                 size:500" json:"description"`
 }
 
 type Cluster struct {
 	Model
-	AppName     string `gorm:"column:app_name;      not null; unique_index:cluster_uindex; size:500" json:"appName"`
+	AppName     string `gorm:"column:app_name;      not null; unique_index:cluster_uindex; size:100" json:"appName"`
 	ClusterName string `gorm:"column:cluster_name;  not null; unique_index:cluster_uindex; size:100" json:"clusterName"`
 	Description string `gorm:"column:description;                                          size:500" json:"description"`
 }
 
 type Namespace struct {
 	Model
-	AppName       string `gorm:"column:app_name;        not null; unique_index:namespace_uindex; size:500" json:"appName"`
+	AppName       string `gorm:"column:app_name;        not null; unique_index:namespace_uindex; size:100" json:"appName"`
 	ClusterName   string `gorm:"column:cluster_name;    not null; unique_index:namespace_uindex; size:100" json:"clusterName"`
 	NamespaceName string `gorm:"column:namespace_name;  not null; unique_index:namespace_uindex; size:100" json:"namespaceName"`
 	Format        string `gorm:"column:format"                                                             json:"format"`
@@ -36,7 +36,7 @@ type Namespace struct {
 
 type Release struct {
 	Model
-	AppName       string `gorm:"column:app_name;        not null; unique_index:release_uindex; size:500" json:"appName"`
+	AppName       string `gorm:"column:app_name;        not null; unique_index:release_uindex; size:100" json:"appName"`
 	ClusterName   string `gorm:"column:cluster_name;    not null; unique_index:release_uindex; size:100" json:"clusterName"`
 	NamespaceName string `gorm:"column:namespace_name;  not null; unique_index:release_uindex; size:100" json:"namespaceName"`
 	Tag           string `gorm:"column:tag;             not null; unique_index:release_uindex; size:100" json:"tag"`
