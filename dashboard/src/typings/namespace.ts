@@ -10,5 +10,8 @@ export interface NamespacesQuery {
 export interface Namespace extends BaseModel, NamespacesQuery {
   namespaceName: string;
   format: NamespaceExtension;
+  value: string;
+  released: boolean;
+  editValue: string;
   description?: string;
 }

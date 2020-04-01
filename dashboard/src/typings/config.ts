@@ -5,6 +5,5 @@ export interface Config extends BaseModel {
   clusterName: string;
   namespaceName: string;
   format: NamespaceExtension;
-  Value: string;
   description?: string;
 }

@@ -1,14 +1,16 @@
 import React, { FC, useCallback, useEffect, useMemo } from 'react';
-import { Card, Divider, Tag } from 'antd';
+import { Link } from 'react-router-dom';
+import { Card, Divider } from 'antd';
+import { ColumnProps } from 'antd/lib/table';
+
+import NamespaceInfo from './NamespaceInfo';
+import ITable from '@src/components/ITable';
 
 import { useCapture } from '@src/hooks';
+import { formatDate } from '@src/tools';
+import { renderDeleteWithLinkButton, renderNamespaceRelease } from '@src/renders';
 import { fetchCluster, fetchNamespaces } from '@src/services';
 import { ClusterQuery, Cluster as ClusterType, Namespace, NamespacesQuery, defaultBaseModel } from '@src/typings';
-import ITable from '@src/components/ITable';
-import { ColumnProps } from 'antd/lib/table';
-import { Link } from 'react-router-dom';
-import { formatDate } from '@src/tools';
-import { renderDeleteWithLinkButton } from '@src/renders';
 
 export interface ClusterProps extends ClusterQuery {}
 
@@ -39,9 +41,8 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
         render: namespaceName => <Link to={`/apps/${appName}/${clusterName}/${namespaceName}`}>{namespaceName}</Link>,
       },
       { title: '描述', key: 'description', dataIndex: 'description' },
-      { title: '数据格式', key: 'format', dataIndex: 'format', render: format => <Tag color="#108ee9">{format}</Tag> },
       { title: '创建日期', key: 'createdAt', dataIndex: 'createdAt', width: 200, render: formatDate },
-      { title: '状态', key: 'release', dataIndex: 'release', render: release => (release ? '已发布' : '未发布') },
+      { title: '状态', key: 'release', width: 100, render: (_, namespace) => renderNamespaceRelease(namespace) },
       {
         title: '操作',
         key: 'control',
@@ -74,6 +75,7 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
         loading={namespacesState.loading}
         dataSource={namespacesState.data}
         showSearch={{ onFilter: onFilterKey }}
+        expandedRowRender={namespace => <NamespaceInfo namespace={namespace} />}
       />
     </Card>
   );
