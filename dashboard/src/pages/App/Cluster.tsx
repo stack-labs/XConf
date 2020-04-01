@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useMemo } from 'react';
-import { Card } from 'antd';
+import { Card, Divider, Tag } from 'antd';
 
 import { useCapture } from '@src/hooks';
 import { fetchCluster, fetchNamespaces } from '@src/services';
@@ -39,14 +39,20 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
         render: namespaceName => <Link to={`/apps/${appName}/${clusterName}/${namespaceName}`}>{namespaceName}</Link>,
       },
       { title: '描述', key: 'description', dataIndex: 'description' },
+      { title: '数据格式', key: 'format', dataIndex: 'format', render: format => <Tag color="#108ee9">{format}</Tag> },
       { title: '创建日期', key: 'createdAt', dataIndex: 'createdAt', width: 200, render: formatDate },
+      { title: '状态', key: 'release', dataIndex: 'release', render: release => (release ? '已发布' : '未发布') },
       {
         title: '操作',
         key: 'control',
-        width: 100,
+        width: 160,
         render: (_, cluster) => {
           return (
-            <div>{renderDeleteWithLinkButton({ label: '删除', popLabel: '确认删除空间', onDelete: () => {} })}</div>
+            <div>
+              <Link to={`/`}>历史版本</Link>
+              <Divider type="vertical" />
+              {renderDeleteWithLinkButton({ label: '删除', popLabel: '确认删除空间', onDelete: () => {} })}
+            </div>
           );
         },
       },
@@ -59,7 +65,7 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
   }, []);
 
   return (
-    <Card title={clusterName} className="containerLayout">
+    <Card title={`集群: ${clusterName}`} className="containerLayout">
       <ITable<Namespace>
         rowKey="id"
         bordered={false}

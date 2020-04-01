@@ -1,7 +1,8 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Collapse } from 'antd';
+import { Collapse, PageHeader, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
+import { Route as BreadcrumbItem } from 'antd/lib/breadcrumb/Breadcrumb';
 
 import ClusterCard from './Cluster';
 import ITable from '@src/components/ITable';
@@ -9,7 +10,7 @@ import ITable from '@src/components/ITable';
 import { useCapture } from '@src/hooks';
 import { formatDate } from '@src/tools';
 import { fetchApp, fetchClusters } from '@src/services';
-import { renderDeleteWithLinkButton } from '@src/renders';
+import { renderBreadcrumbItem, renderDeleteWithLinkButton } from '@src/renders';
 import { AppQuery, App as AppType, Cluster, defaultBaseModel } from '@src/typings';
 
 export interface AppProps extends RouteComponentProps<{ appName: string; clusterName?: string }> {}
@@ -19,8 +20,7 @@ const App: FC<AppProps> = ({ match }) => {
   const [appName, setAppName] = useState<string>('');
   const [clusterName, setClusterName] = useState<string>();
 
-  // TODO: appState
-  const [, getApps] = useCapture<AppType, AppQuery>({
+  const [appState, getApps] = useCapture<AppType, AppQuery>({
     fn: fetchApp,
     initialState: { ...defaultBaseModel, appName: '' },
   });
@@ -32,6 +32,9 @@ const App: FC<AppProps> = ({ match }) => {
     if (clusterName) {
       setClusterName(clusterName);
       setCollapseKey('');
+    } else {
+      setClusterName('');
+      setCollapseKey('clusters');
     }
   }, [match.params]);
 
@@ -72,6 +75,21 @@ const App: FC<AppProps> = ({ match }) => {
 
   return (
     <div>
+      <PageHeader
+        title={`应用: ${appName}`}
+        ghost={false}
+        breadcrumb={{
+          routes: [
+            { path: '/apps', breadcrumbName: '应用列表' },
+            appName && { path: `/apps/${appName}`, breadcrumbName: appName },
+            appName && clusterName && { path: `/apps/${appName}/${clusterName}`, breadcrumbName: clusterName },
+          ].filter(item => !!item) as BreadcrumbItem[],
+          itemRender: renderBreadcrumbItem,
+        }}
+        onBack={() => window.history.back()}
+      >
+        <Typography.Paragraph>{appState.data.description || '暂无描述'}</Typography.Paragraph>
+      </PageHeader>
       <Collapse
         className="containerLayout"
         accordion
