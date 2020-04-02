@@ -34,6 +34,27 @@ func (c *Config) CreateNamespace(ctx context.Context, req *config.NamespaceReque
 	return nil
 }
 
+func (c *Config) QueryNamespace(ctx context.Context, req *config.NamespaceRequest, rsp *config.NamespaceResponse) error {
+	namespace, err := dao.GetDao().QueryNamespace(req.GetAppName(), req.GetClusterName(), req.GetNamespaceName())
+	if err != nil {
+		log.Error("[QueryNamespace]", err)
+		return err
+	}
+
+	rsp.Id = int64(namespace.ID)
+	rsp.AppName = namespace.AppName
+	rsp.ClusterName = namespace.ClusterName
+	rsp.NamespaceName = namespace.NamespaceName
+	rsp.Description = namespace.Description
+	rsp.Value = namespace.Value
+	rsp.Format = namespace.Format
+	rsp.EditValue = namespace.EditValue
+	rsp.Released = namespace.Released
+	rsp.CreatedAt = namespace.CreatedAt.Unix()
+	rsp.UpdatedAt = namespace.UpdatedAt.Unix()
+	return nil
+}
+
 func (c *Config) DeleteNamespace(ctx context.Context, req *config.NamespaceRequest, rsp *config.Response) (err error) {
 	err = dao.GetDao().DeleteNamespace(req.GetAppName(), req.GetClusterName(), req.GetNamespaceName())
 	if err != nil {

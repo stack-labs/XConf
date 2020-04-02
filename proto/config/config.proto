@@ -2,16 +2,18 @@ syntax = "proto3";
 
 service Config {
     rpc CreateApp (AppRequest) returns (AppResponse) {}
+    rpc QueryApp (AppRequest) returns (AppResponse) {}
     rpc DeleteApp (AppRequest) returns (Response) {}
     rpc ListApps (Request) returns (AppsResponse) {}
 
     rpc CreateCluster (ClusterRequest) returns (ClusterResponse) {}
+    rpc QueryCluster (ClusterRequest) returns (ClusterResponse) {}
     rpc DeleteCluster (ClusterRequest) returns (Response) {}
     rpc ListClusters (AppRequest) returns (ClustersResponse) {}
 
     rpc CreateNamespace (NamespaceRequest) returns (NamespaceResponse) {}
     rpc DeleteNamespace(NamespaceRequest) returns (Response) {}
-//    rpc QueryNamespace(NamespaceRequest) returns (NamespaceResponse) {}
+    rpc QueryNamespace (NamespaceRequest) returns (NamespaceResponse) {}
     rpc ListNamespaces(ClusterRequest)returns (NamespacesResponse){}
 
     rpc UpdateConfig (UpdateConfigRequest) returns (Response) {}
