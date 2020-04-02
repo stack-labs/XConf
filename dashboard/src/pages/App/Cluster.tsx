@@ -47,10 +47,10 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
         title: '操作',
         key: 'control',
         width: 160,
-        render: (_, cluster) => {
+        render: (_, namespace) => {
           return (
             <div>
-              <Link to={`/`}>历史版本</Link>
+              <Link to={`/apps/${appName}/${clusterName}/${namespace.namespaceName}/histories`}>历史版本</Link>
               <Divider type="vertical" />
               {renderDeleteWithLinkButton({ label: '删除', popLabel: '确认删除空间', onDelete: () => {} })}
             </div>

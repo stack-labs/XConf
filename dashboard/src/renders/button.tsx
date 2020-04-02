@@ -1,8 +1,21 @@
 import React from 'react';
-import { AnyObject } from '@src/typings';
 import { Popconfirm } from 'antd';
+import { AnyObject } from '@src/typings';
+import { PopconfirmProps } from 'antd/lib/popconfirm';
 
-export const renderPopconfirm = () => {};
+export interface RenderPopconfirmProps {
+  label: string;
+  popLabel: string;
+  popProps?: Partial<PopconfirmProps>;
+}
+
+export const renderPopconfirm = ({ label, popLabel, popProps }: RenderPopconfirmProps) => {
+  return (
+    <Popconfirm {...popProps} title={popLabel}>
+      <button className="link-button">{label}</button>
+    </Popconfirm>
+  );
+};
 
 export interface RenderDeleteButtonProps {
   label: string;
@@ -12,13 +25,9 @@ export interface RenderDeleteButtonProps {
 }
 
 export const renderDeleteWithLinkButton = ({ label, popLabel, dataSet, onDelete }: RenderDeleteButtonProps) => {
-  return (
-    <Popconfirm
-      title={popLabel}
-      okButtonProps={{ type: 'danger' }}
-      onConfirm={dataSet ? onDelete.bind(dataSet) : onDelete}
-    >
-      <button className="link-button">{label}</button>
-    </Popconfirm>
-  );
+  return renderPopconfirm({
+    label,
+    popLabel,
+    popProps: { okButtonProps: { type: 'danger' }, onConfirm: dataSet ? onDelete.bind(dataSet) : onDelete },
+  });
 };

@@ -15,6 +15,13 @@ const routeAndMenuArray: RouteAndMenu[] = [
     route: { path: '/apps', component: React.lazy(() => import('./App/Apps')) },
   },
   { route: { path: '/apps/:appName/:clusterName?', order: 10, component: React.lazy(() => import('./App/App')) } },
+  {
+    route: {
+      path: '/apps/:appName/:clusterName/:namespaceName/histories',
+      order: 11,
+      component: React.lazy(() => import('./App/NamespaceHistory')),
+    },
+  },
 ];
 
 const routes: RouteItem[] = [];
