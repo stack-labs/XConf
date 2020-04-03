@@ -2,6 +2,7 @@ package source
 
 import (
 	"container/list"
+	"errors"
 	"fmt"
 	"net/http"
 	"sync"
@@ -39,6 +40,9 @@ func (s *httpSource) Read() ([]byte, error) {
 	resp, err := s.client.R().Get(s.readURL)
 	if err != nil {
 		return nil, err
+	}
+	if resp.StatusCode() != http.StatusOK {
+		return nil, errors.New(resp.String())
 	}
 	return resp.Body(), nil
 }
