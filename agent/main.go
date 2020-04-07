@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/micro-in-cn/XConf/agent/configfile"
-	"github.com/micro-in-cn/XConf/agent/file"
-	"github.com/micro-in-cn/XConf/agent/source"
+	"github.com/micro-in-cn/XConf/agent/config"
+	"github.com/micro-in-cn/XConf/agent/server"
 	"github.com/micro/cli"
 )
 
@@ -88,13 +87,12 @@ func main() {
 		return
 	}
 
-	configFile := file.New(filePath)
-	client := source.New(baseURL, appName, clusterName, namespaceName)
-	s := configfile.New(configFile, client)
-	if err := s.Init(); err != nil {
+	c := config.New(filePath, baseURL, appName, clusterName, namespaceName)
+
+	s := server.New()
+	if err := s.Init(c); err != nil {
 		panic(err)
 	}
-	if err := s.Sync(); err != nil {
-		panic(err)
-	}
+
+	s.Run()
 }

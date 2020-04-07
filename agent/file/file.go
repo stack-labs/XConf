@@ -18,7 +18,9 @@ type configFile struct {
 }
 
 func New(filePatch string) ConfigFile {
-	return &configFile{filePath: filePatch}
+	return &configFile{
+		filePath: filePatch,
+	}
 }
 
 func (c *configFile) Update(content []byte) error {

@@ -1,4 +1,4 @@
-package configfile
+package config
 
 import (
 	"errors"
@@ -10,22 +10,22 @@ import (
 
 var ErrStopped = errors.New("config file stopped")
 
-type ConfigFile struct {
+type Config struct {
 	file    file.ConfigFile
 	source  source.Source
 	watcher source.Watcher
 	exit    chan interface{}
 }
 
-func New(file file.ConfigFile, source source.Source) *ConfigFile {
-	return &ConfigFile{
-		file:   file,
-		source: source,
+func New(filePatch string, url, appName, clusterName, namespaceName string) *Config {
+	return &Config{
+		file:   file.New(filePatch),
+		source: source.New(url, appName, clusterName, namespaceName),
 		exit:   make(chan interface{}),
 	}
 }
 
-func (s *ConfigFile) Init() error {
+func (s *Config) Init() error {
 	b, err := s.source.Read()
 	if err != nil {
 		return err
@@ -43,7 +43,7 @@ func (s *ConfigFile) Init() error {
 	return nil
 }
 
-func (s *ConfigFile) Sync() (err error) {
+func (s *Config) Sync() (err error) {
 	if s.watcher == nil {
 		return errors.New("Init function is not called ")
 	}
@@ -72,7 +72,7 @@ func (s *ConfigFile) Sync() (err error) {
 	}
 }
 
-func (s *ConfigFile) Stop() {
+func (s *Config) Stop() {
 	select {
 	case <-s.exit:
 	default:
