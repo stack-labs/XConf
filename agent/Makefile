@@ -1,3 +1,3 @@
 
 run:
-	go run main.go  -u http://xconf.mogutou.xyz -a test -c dev -n test
+	go run main.go  -u http://xconf.mogutou.xyz -a test -c dev

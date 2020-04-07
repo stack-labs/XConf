@@ -3,7 +3,6 @@ package file
 import (
 	"io"
 	"os"
-	"path/filepath"
 )
 
 func CopyFile(source string, dest string) error {
@@ -12,11 +11,6 @@ func CopyFile(source string, dest string) error {
 		return err
 	}
 	defer src.Close()
-
-	err = os.MkdirAll(filepath.Dir(dest), 0755)
-	if err != nil {
-		return err
-	}
 
 	dst, err := os.Create(dest)
 	if err != nil {

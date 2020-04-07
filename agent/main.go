@@ -5,18 +5,16 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/micro-in-cn/XConf/agent/config"
 	"github.com/micro-in-cn/XConf/agent/server"
 	"github.com/micro/cli"
 )
 
 func main() {
 	var (
-		baseURL       string
-		appName       string
-		clusterName   string
-		namespaceName string
-		filePath      string
+		baseURL     string
+		appName     string
+		clusterName string
+		dir         string
 	)
 
 	app := cli.NewApp()
@@ -47,18 +45,11 @@ func main() {
 			Destination: &clusterName,
 		},
 		cli.StringFlag{
-			Name:        "namespace, n",
-			Value:       "",
-			Usage:       "namespace name",
-			EnvVar:      "XCONF_NAMESPACE_NAME",
-			Destination: &namespaceName,
-		},
-		cli.StringFlag{
-			Name:        "file, f",
-			Value:       "./config.json",
-			Usage:       "file path",
-			EnvVar:      "XCONF_FILE",
-			Destination: &filePath,
+			Name:        "dir, d",
+			Value:       "/tmp",
+			Usage:       "directory",
+			EnvVar:      "XCONF_DIR",
+			Destination: &dir,
 		},
 	}
 
@@ -73,11 +64,8 @@ func main() {
 		if len(clusterName) <= 0 {
 			return errors.New("cluster name cannot be empty")
 		}
-		if len(namespaceName) <= 0 {
-			return errors.New("namespace name cannot be empty")
-		}
-		if len(filePath) <= 0 {
-			return errors.New("file path cannot be empty")
+		if len(dir) <= 0 {
+			return errors.New("dir path cannot be empty")
 		}
 		return nil
 	}
@@ -87,12 +75,12 @@ func main() {
 		return
 	}
 
-	c := config.New(filePath, baseURL, appName, clusterName, namespaceName)
-
-	s := server.New()
-	if err := s.Init(c); err != nil {
+	s := server.New(dir, baseURL, appName, clusterName)
+	if err := s.Init(); err != nil {
 		panic(err)
 	}
 
-	s.Run()
+	if err := s.Run(); err != nil {
+		panic(err)
+	}
 }

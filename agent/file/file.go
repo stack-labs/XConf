@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/micro/go-micro/util/log"
 )
@@ -24,6 +25,9 @@ func New(filePatch string) ConfigFile {
 }
 
 func (c *configFile) Update(content []byte) error {
+	if err := os.MkdirAll(filepath.Dir(c.filePath), 0755); err != nil {
+		return err
+	}
 	// create backup file
 	exist, err := ExistFile(c.filePath)
 	if err != nil {
