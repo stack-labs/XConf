@@ -77,10 +77,12 @@ func main() {
 
 	s := server.New(dir, baseURL, appName, clusterName)
 	if err := s.Init(); err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 
 	if err := s.Run(); err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 }
