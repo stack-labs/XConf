@@ -54,7 +54,6 @@ func main() {
 	}
 
 	app.Action = func(c *cli.Context) error {
-		//fmt.Println(baseURL, appName, clusterName, namespaceName, filePath)
 		if len(baseURL) <= 0 {
 			return errors.New("base url cannot be empty")
 		}
@@ -81,6 +80,7 @@ func main() {
 		return
 	}
 
+	fmt.Println(s.Dir(), s.HostURL(), s.AppName(), s.ClusterName())
 	if err := s.Run(); err != nil {
 		fmt.Println(err)
 		return
