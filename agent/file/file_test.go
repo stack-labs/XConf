@@ -19,7 +19,7 @@ func TestConfigFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if bytes.Compare(content, b) != 0 {
+	if !bytes.Equal(content, b) {
 		t.Fatal()
 	}
 }
