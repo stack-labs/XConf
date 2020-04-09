@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/micro-in-cn/XConf/agent/file"
 	"github.com/micro-in-cn/XConf/agent/source"
@@ -15,6 +16,7 @@ type Config struct {
 	source  source.Source
 	watcher source.Watcher
 	exit    chan interface{}
+	name    string
 }
 
 func New(filePatch string, url, appName, clusterName, namespaceName string) *Config {
@@ -22,6 +24,7 @@ func New(filePatch string, url, appName, clusterName, namespaceName string) *Con
 		file:   file.New(filePatch),
 		source: source.New(url, appName, clusterName, namespaceName),
 		exit:   make(chan interface{}),
+		name:   fmt.Sprintf("host:%s app:%s cluster:%s", url, appName, namespaceName),
 	}
 }
 
@@ -48,6 +51,7 @@ func (s *Config) Sync() (err error) {
 		return errors.New("Init function is not called ")
 	}
 
+	log.Info("Start watch ", s.name)
 	for {
 		select {
 		case <-s.exit:

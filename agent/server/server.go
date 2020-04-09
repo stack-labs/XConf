@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"path"
 
+	"github.com/Allenxuxu/toolkit/sync"
 	"github.com/micro-in-cn/XConf/agent/config"
+	"github.com/micro/go-micro/util/log"
 )
 
 type Server struct {
@@ -14,6 +16,7 @@ type Server struct {
 	clusterName string
 	basePath    string
 	configFiles []*config.Config
+	sw          sync.WaitGroupWrapper
 }
 
 func New(basePath string, hostURL, appName, clusterName string) *Server {
@@ -46,13 +49,17 @@ func (s *Server) Init() error {
 	return nil
 }
 
-func (s *Server) Run() error {
+func (s *Server) Run() {
 	for _, v := range s.configFiles {
-		if err := v.Sync(); err != nil {
-			return err
-		}
+		cf := v
+		s.sw.AddAndRun(func() {
+			if err := cf.Sync(); err != nil {
+				log.Error(err)
+			}
+		})
 	}
-	return nil
+
+	s.sw.Wait()
 }
 
 func (s *Server) Stop() {

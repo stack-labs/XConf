@@ -81,8 +81,5 @@ func main() {
 	}
 
 	fmt.Println(s.Dir(), s.HostURL(), s.AppName(), s.ClusterName())
-	if err := s.Run(); err != nil {
-		fmt.Println(err)
-		return
-	}
+	s.Run()
 }
