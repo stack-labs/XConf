@@ -17,3 +17,7 @@ config-srv:
 .PHONY: micro
 micro:
 	docker build -f deployments/docker/micro/Dockerfile . -t micro
+
+.PHONY: agent
+agent:
+	docker build -f deployments/docker/agent/Dockerfile . -t agent

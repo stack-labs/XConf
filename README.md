@@ -81,6 +81,37 @@
     
     UI： http://127.0.0.1:8080/admin/ui
 
+- agent
+
+    agent 负责实时获取指定 应用/集群 下的所有配置文件到指定文件夹中
+
+    ```text
+    NAME:
+       agent - XConf agent client
+
+    USAGE:
+       main [global options] command [command options] [arguments...]
+
+    VERSION:
+       0.0.1
+
+    COMMANDS:
+         help, h  Shows a list of commands or help for one command
+
+    GLOBAL OPTIONS:
+       --url value, -u value      base url (default: "127.0.0.1:8080") [$XCONF_BASE_URL]
+       --app value, -a value      app name [$XCONF_APP_NAME]
+       --cluster value, -c value  cluster name [$XCONF_CLUSTER_NAME]
+       --dir value, -d value      directory (default: "/tmp") [$XCONF_DIR]
+       --help, -h                 show help
+       --version, -v              print the version
+
+    ```
+
+    ```shell script
+    docker run --name agent -v /tmp/docker-xconf:/tmp  -d  xuxu123/agent  -u http://xconf.mogutou.xyz -a test -c dev -d /tmp
+    ```
+
 ## 客户端
 
 - Golang  [client/example](client/example/main.go)
