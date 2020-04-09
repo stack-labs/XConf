@@ -19,12 +19,12 @@ type Config struct {
 	name    string
 }
 
-func New(filePatch string, url, appName, clusterName, namespaceName string) *Config {
+func New(filePatch string, url, appName, clusterName, namespaceName, format string) *Config {
 	return &Config{
 		file:   file.New(filePatch),
 		source: source.New(url, appName, clusterName, namespaceName),
 		exit:   make(chan interface{}),
-		name:   fmt.Sprintf("host:%s app:%s cluster:%s", url, appName, namespaceName),
+		name:   fmt.Sprintf("host:%s app:%s cluster:%s namespace:%s.%s", url, appName, clusterName, namespaceName, format),
 	}
 }
 

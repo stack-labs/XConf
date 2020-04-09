@@ -39,7 +39,7 @@ func (s *Server) Init() error {
 	}
 
 	for _, v := range namespaces {
-		c := config.New(s.filePath(v.NamespaceName, v.Format), s.hostURL, s.appName, s.clusterName, v.NamespaceName)
+		c := config.New(s.filePath(v.NamespaceName, v.Format), s.hostURL, s.appName, s.clusterName, v.NamespaceName, v.Format)
 		if err := c.Init(); err != nil {
 			return err
 		}
