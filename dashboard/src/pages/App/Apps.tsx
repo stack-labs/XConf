@@ -57,7 +57,7 @@ const Apps: FC<AppsProps> = () => {
       <ITable
         showSearch={{ value: key, onChange: setKey }}
         columns={columns}
-        dataSource={appsState.data}
+        dataSource={appsState.data.filter(item => item.appName.includes(key))}
         loading={appsState.loading}
         showCreate={{
           label: '创建新应用',
