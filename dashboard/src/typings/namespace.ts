@@ -1,10 +1,16 @@
 import { BaseModel } from '@src/typings';
 
-export enum NamespaceExtension {}
+export enum NamespaceFormat {
+  JSON = 'json',
+  YAML = 'yaml',
+  TOML = 'toml',
+  CUSTOM = 'custom',
+}
 
 export interface NamespacesQuery {
   appName: string;
   clusterName: string;
+  version?: number;
 }
 
 export interface NamespaceHistoryQuery extends NamespacesQuery {
@@ -12,7 +18,7 @@ export interface NamespaceHistoryQuery extends NamespacesQuery {
 }
 
 export interface Namespace extends BaseModel, NamespaceHistoryQuery {
-  format: NamespaceExtension;
+  format: NamespaceFormat;
   value: string;
   released: boolean;
   editValue: string;
@@ -24,4 +30,10 @@ export interface NamespaceHistoryItem extends BaseModel, NamespaceHistoryQuery {
   comment: string;
   released: boolean;
   tag: string;
+}
+
+export interface NamespaceCreation extends NamespacesQuery {
+  format: NamespaceFormat;
+  namespaceName: string;
+  description?: string;
 }

@@ -12,6 +12,7 @@ import { formatDate } from '@src/tools';
 import { fetchApp, fetchClusters } from '@src/services';
 import { renderBreadcrumbItem, renderDeleteWithLinkButton } from '@src/renders';
 import { AppQuery, App as AppType, Cluster, defaultBaseModel } from '@src/typings';
+import ClusterCreate from '@src/pages/App/ClusterCreate';
 
 export interface AppProps extends RouteComponentProps<{ appName: string; clusterName?: string }> {}
 
@@ -20,7 +21,7 @@ const App: FC<AppProps> = ({ match }) => {
   const [appName, setAppName] = useState<string>('');
   const [clusterName, setClusterName] = useState<string>();
 
-  const [appState, getApps] = useCapture<AppType, AppQuery>({
+  const [appState, getApp] = useCapture<AppType, AppQuery>({
     fn: fetchApp,
     initialState: { ...defaultBaseModel, appName: '' },
   });
@@ -40,10 +41,10 @@ const App: FC<AppProps> = ({ match }) => {
 
   useEffect(() => {
     if (appName) {
-      getApps({ appName });
+      getApp({ appName });
       getClusters({ appName });
     }
-  }, [appName, getApps, getClusters]);
+  }, [appName, getApp, getClusters]);
 
   const columns = useMemo(() => {
     const columns: ColumnProps<Cluster>[] = [
@@ -104,6 +105,15 @@ const App: FC<AppProps> = ({ match }) => {
             dataSource={clustersState.data}
             columns={columns}
             pagination={false}
+            showCreate={{
+              label: '创建新集群',
+              onCreate: () =>
+                ClusterCreate({
+                  appName,
+                  title: '创建新集群',
+                  onOk: () => getClusters(state => ({ ...state, version: (state.version ?? 0) + 1 })),
+                }),
+            }}
             showSearch={{ onFilter: onFilterKey }}
           />
         </Collapse.Panel>

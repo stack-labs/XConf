@@ -11,7 +11,7 @@ import { fetchNamespaceHistories } from '@src/services';
 import { renderBreadcrumbItem, renderPopconfirm } from '@src/renders';
 import { NamespaceHistoryItem, NamespaceHistoryQuery } from '@src/typings';
 
-export interface NamespaceHistoryProps extends RouteComponentProps<NamespaceHistoryQuery> {}
+export interface NamespaceHistoryProps extends RouteComponentProps<Omit<NamespaceHistoryQuery, 'version'>> {}
 
 const NamespaceHistory: FC<NamespaceHistoryProps> = ({ match }) => {
   const [historiesState, getHistories] = useCapture<NamespaceHistoryItem[], NamespaceHistoryQuery>({

@@ -1,5 +1,11 @@
 import IFetch from '@src/utils/request';
-import { Namespace, NamespaceHistoryItem, NamespaceHistoryQuery, NamespacesQuery } from '@src/typings';
+import {
+  Namespace,
+  NamespaceCreation,
+  NamespaceHistoryItem,
+  NamespaceHistoryQuery,
+  NamespacesQuery,
+} from '@src/typings';
 
 const _ = new IFetch('/admin/api/v1');
 
@@ -9,4 +15,8 @@ export const fetchNamespaces = (query: NamespacesQuery): Promise<Namespace[]> =>
 
 export const fetchNamespaceHistories = (query: NamespaceHistoryQuery): Promise<NamespaceHistoryItem[]> => {
   return _.get('/release/history', query);
+};
+
+export const createNamespace = (data: NamespaceCreation) => {
+  return _.post('/cluster', data);
 };

@@ -11,11 +11,11 @@ import { formatDate } from '@src/tools';
 import { renderDeleteWithLinkButton, renderNamespaceRelease } from '@src/renders';
 import { fetchCluster, fetchNamespaces } from '@src/services';
 import { ClusterQuery, Cluster as ClusterType, Namespace, NamespacesQuery, defaultBaseModel } from '@src/typings';
+import NamespaceCreate from '@src/pages/App/NamespaceCreate';
 
 export interface ClusterProps extends ClusterQuery {}
 
 const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
-  // TODO: clusterState
   const [, getCluster] = useCapture<ClusterType, ClusterQuery>({
     fn: fetchCluster,
     initialState: { ...defaultBaseModel, appName: '', clusterName: '' },
@@ -74,6 +74,16 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
         columns={columns}
         loading={namespacesState.loading}
         dataSource={namespacesState.data}
+        showCreate={{
+          label: '创建新配置',
+          onCreate: () =>
+            NamespaceCreate({
+              appName,
+              clusterName,
+              title: '创建新配置',
+              onOk: () => getNamespaces(state => ({ ...state, version: (state.version ?? 0) + 1 })),
+            }),
+        }}
         showSearch={{ onFilter: onFilterKey }}
         expandedRowRender={namespace => <NamespaceInfo namespace={namespace} />}
       />
