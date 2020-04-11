@@ -17,4 +17,5 @@ require (
 	github.com/micro/go-micro/v2 v2.0.0
 	github.com/micro/go-plugins v1.5.1
 	github.com/micro/micro v1.18.0
+	gopkg.in/resty.v1 v1.12.0
 )

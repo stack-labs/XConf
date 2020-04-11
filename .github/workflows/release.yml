@@ -96,3 +96,12 @@ jobs:
 
           docker push ${{ secrets.REGISTRY_USERNAME }}/micro:latest
           docker push ${{ secrets.REGISTRY_USERNAME }}/micro:${{ env.RELEASE_VERSION }}
+      - name: agent
+        run: |
+          make agent
+          docker login docker.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
+          docker tag agent:latest ${{ secrets.REGISTRY_USERNAME }}/agent:latest
+          docker tag agent:latest ${{ secrets.REGISTRY_USERNAME }}/agent:${{ env.RELEASE_VERSION }}
+
+          docker push ${{ secrets.REGISTRY_USERNAME }}/agent:latest
+          docker push ${{ secrets.REGISTRY_USERNAME }}/agent:${{ env.RELEASE_VERSION }}

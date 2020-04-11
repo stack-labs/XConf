@@ -14,3 +14,4 @@
 .idea/
 
 deployments/docker-compose/.env
+agent/config.json*
