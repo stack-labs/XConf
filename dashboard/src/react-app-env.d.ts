@@ -4,6 +4,8 @@ interface Promise<T> {
   abort?: Function;
 }
 
+declare var toml: any;
+
 declare var jsyaml: any;
 declare module 'js-yaml';
 
