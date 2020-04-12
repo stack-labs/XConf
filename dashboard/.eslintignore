@@ -1,2 +1,3 @@
+src/*.d.ts
 src/setupProxy.js
 src/serviceWorker.ts

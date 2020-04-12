@@ -3,8 +3,8 @@ import { Button, Col, Form, Input, Modal, Row, Select, message } from 'antd';
 import { ModalProps } from 'antd/lib/modal';
 
 import { withModal } from '@src/hoc';
-import { createCluster } from '@src/services';
-import { ClusterCreation, NamespaceFormat } from '@src/typings';
+import { createNamespace } from '@src/services';
+import { NamespaceCreation, NamespaceFormat } from '@src/typings';
 
 const halfFormLayout = { labelCol: { span: 8 }, wrapperCol: { span: 16 } };
 
@@ -27,13 +27,13 @@ const NamespaceCreate: FC<NamespaceCreateProps> = ({ appName, clusterName, onOk,
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 20 }}
         initialValues={{ appName, clusterName, format: formats[0] || '' }}
-        onFinish={values =>
-          createCluster(values as ClusterCreation)
+        onFinish={(values) =>
+          createNamespace(values as NamespaceCreation)
             .then(() => {
               onOk && onOk();
               props.onCancel && props.onCancel();
             })
-            .catch(err => message.error(`创建配置失败: ${err}`))
+            .catch((err) => message.error(`创建配置失败: ${err}`))
         }
       >
         <Row gutter={16}>
@@ -57,7 +57,7 @@ const NamespaceCreate: FC<NamespaceCreateProps> = ({ appName, clusterName, onOk,
         </Form.Item>
         <Form.Item label="格式" name="format" rules={[{ required: true, message: '格式不能为空' }]}>
           <Select>
-            {formats.map(value => (
+            {formats.map((value) => (
               <Select.Option key={value} value={value}>
                 {value}
               </Select.Option>

@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
-import { Col, Form, Input, Row, Tag } from 'antd';
+import { Col, Form, Row, Tag } from 'antd';
 import { renderNamespaceRelease } from '@src/renders';
 import { Namespace } from '@src/typings';
+import Editor from '@src/components/Editor';
 
 export interface NamespaceInfoProps {
   namespace: Namespace;
@@ -23,11 +24,10 @@ const NamespaceInfo: FC<NamespaceInfoProps> = ({ namespace }) => {
         </Col>
       </Row>
       <Form.Item label="配置" labelCol={{ span: 2 }} wrapperCol={{ span: 22 }}>
-        {/* // TODO Richer Editor */}
-        <Input.TextArea
-          rows={8}
-          readOnly={namespace.released}
-          value={namespace.released ? namespace.value : namespace.editValue}
+        <Editor
+          format={namespace.format}
+          readonly={namespace.released}
+          initialValue={namespace.released ? namespace.value : namespace.editValue}
         />
       </Form.Item>
     </Form>

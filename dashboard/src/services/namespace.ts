@@ -18,5 +18,5 @@ export const fetchNamespaceHistories = (query: NamespaceHistoryQuery): Promise<N
 };
 
 export const createNamespace = (data: NamespaceCreation) => {
-  return _.post('/cluster', data);
+  return _.post('/namespace', data);
 };
