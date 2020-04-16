@@ -9,10 +9,11 @@ import ReleaseModel from '@src/pages/App/ReleaseModel';
 
 export interface NamespaceInfoProps {
   namespace: Namespace;
+  canControl?: boolean;
   callback?: Function;
 }
 
-const NamespaceInfo: FC<NamespaceInfoProps> = ({ namespace, callback }) => {
+const NamespaceInfo: FC<NamespaceInfoProps> = ({ namespace, canControl, callback }) => {
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
 
@@ -32,6 +33,7 @@ const NamespaceInfo: FC<NamespaceInfoProps> = ({ namespace, callback }) => {
       </Row>
       <Form.Item name="configuration" label="配置" labelCol={{ span: 2 }} wrapperCol={{ span: 22 }}>
         <Editor
+          canControl={canControl}
           format={namespace.format}
           initialValue={namespace.released ? namespace.value : namespace.editValue}
           onSave={(value: string, format: NamespaceFormat) => {

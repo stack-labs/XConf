@@ -29,3 +29,7 @@ export interface ReleaseForm {
 export const releaseConfig = (data: ReleaseForm) => {
   return _.post('/release', data);
 };
+
+export const rollbackConfig = (data: ReleaseForm) => {
+  return _.post('/rollback', data);
+};

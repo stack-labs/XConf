@@ -86,7 +86,7 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
         }}
         showSearch={{ onFilter: onFilterKey }}
         expandedRowRender={(namespace) => (
-          <NamespaceInfo namespace={namespace} callback={() => getNamespaces((state) => ({ ...state }))} />
+          <NamespaceInfo canControl namespace={namespace} callback={() => getNamespaces((state) => ({ ...state }))} />
         )}
       />
     </Card>

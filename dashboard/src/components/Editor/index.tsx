@@ -32,6 +32,7 @@ export const validateFormat = (value: string, format: NamespaceFormat): [boolean
 };
 
 export interface EditorProps extends Omit<CodeEditorProps, 'mode'> {
+  canControl?: boolean;
   format: NamespaceFormat;
   value?: string;
 
@@ -39,7 +40,10 @@ export interface EditorProps extends Omit<CodeEditorProps, 'mode'> {
   onRelease?: (value: string, format: NamespaceFormat) => void;
 }
 
-const Editor: ForwardRefRenderFunction<any, EditorProps> = ({ format, value, onSave, onRelease, ...props }, ref) => {
+const Editor: ForwardRefRenderFunction<any, EditorProps> = (
+  { canControl, format, value, onSave, onRelease, ...props },
+  ref,
+) => {
   const renderEditor = () => {
     if (format === NamespaceFormat.CUSTOM)
       return (
@@ -62,30 +66,32 @@ const Editor: ForwardRefRenderFunction<any, EditorProps> = ({ format, value, onS
   return (
     <div>
       {renderEditor()}
-      <div className={styles.buttonLayout}>
-        <Button
-          type="primary"
-          onClick={() => {
-            const v = value || '';
-            const [result, msg] = validateFormat(v, format);
-            if (result) onSave && onSave(v, format);
-            else message.error(`格式错误: ${msg}`);
-          }}
-        >
-          保存
-        </Button>
-        <Button
-          type="danger"
-          onClick={() => {
-            const v = value || '';
-            const [result, msg] = validateFormat(v, format);
-            if (result) onRelease && onRelease(v, format);
-            else message.error(`格式错误: ${msg}`);
-          }}
-        >
-          发布
-        </Button>
-      </div>
+      {canControl && (
+        <div className={styles.buttonLayout}>
+          <Button
+            type="primary"
+            onClick={() => {
+              const v = value || '';
+              const [result, msg] = validateFormat(v, format);
+              if (result) onSave && onSave(v, format);
+              else message.error(`格式错误: ${msg}`);
+            }}
+          >
+            保存
+          </Button>
+          <Button
+            type="danger"
+            onClick={() => {
+              const v = value || '';
+              const [result, msg] = validateFormat(v, format);
+              if (result) onRelease && onRelease(v, format);
+              else message.error(`格式错误: ${msg}`);
+            }}
+          >
+            发布
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
