@@ -28,7 +28,7 @@ const Apps: FC<AppsProps> = () => {
       title: '应用',
       key: 'appName',
       dataIndex: 'appName',
-      render: appName => <Link to={`/apps/${appName}`}>{appName}</Link>,
+      render: (appName) => <Link to={`/apps/${appName}`}>{appName}</Link>,
     },
     { title: '描述', key: 'description', dataIndex: 'description' },
     { title: '创建人', key: 'creator', dataIndex: 'creator' },
@@ -57,12 +57,12 @@ const Apps: FC<AppsProps> = () => {
       <ITable
         showSearch={{ value: key, onChange: setKey }}
         columns={columns}
-        dataSource={appsState.data.filter(item => item.appName.includes(key))}
+        dataSource={appsState.data.filter((item) => item.appName.includes(key))}
         loading={appsState.loading}
         showCreate={{
           label: '创建新应用',
           onCreate: () =>
-            AppCreation({ title: '创建新应用', onOk: () => getApps(state => ({ version: state.version++ })) }),
+            AppCreation({ title: '创建新应用', onOk: () => getApps((state) => ({ version: state.version++ })) }),
         }}
       />
     </Card>

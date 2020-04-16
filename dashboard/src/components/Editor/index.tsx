@@ -1,5 +1,5 @@
 import React, { ForwardRefRenderFunction, forwardRef } from 'react';
-import { Button, Input } from 'antd';
+import { Button, Input, message } from 'antd';
 import CodeMirror from 'codemirror';
 import { CodeEditorProps } from '@src/components/Editor/Editor';
 import { NamespaceFormat } from '@src/typings';
@@ -16,12 +16,30 @@ export { default as JsonEditor } from './JsonEditor';
 export { default as YamlEditor } from './YamlEditor';
 export { default as TomlEditor } from './TomlEditor';
 
+export const validateFormat = (value: string, format: NamespaceFormat): [boolean, string?] => {
+  if (format === NamespaceFormat.CUSTOM) return [true];
+  let validator;
+  if (format === NamespaceFormat.JSON) validator = window.jsyaml;
+  if (format === NamespaceFormat.YAML) validator = window.jsyaml;
+  if (format === NamespaceFormat.TOML) validator = window.toml;
+
+  try {
+    validator.parse(value);
+    return [true];
+  } catch (e) {
+    return [false, e.message];
+  }
+};
+
 export interface EditorProps extends Omit<CodeEditorProps, 'mode'> {
   format: NamespaceFormat;
   value?: string;
+
+  onSave?: (value: string, format: NamespaceFormat) => void;
+  onRelease?: (value: string, format: NamespaceFormat) => void;
 }
 
-const Editor: ForwardRefRenderFunction<any, EditorProps> = ({ format, value, ...props }, ref) => {
+const Editor: ForwardRefRenderFunction<any, EditorProps> = ({ format, value, onSave, onRelease, ...props }, ref) => {
   const renderEditor = () => {
     if (format === NamespaceFormat.CUSTOM)
       return (
@@ -45,8 +63,28 @@ const Editor: ForwardRefRenderFunction<any, EditorProps> = ({ format, value, ...
     <div>
       {renderEditor()}
       <div className={styles.buttonLayout}>
-        <Button type="primary">保存</Button>
-        <Button type="danger">发布</Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            const v = value || '';
+            const [result, msg] = validateFormat(v, format);
+            if (result) onSave && onSave(v, format);
+            else message.error(`格式错误: ${msg}`);
+          }}
+        >
+          保存
+        </Button>
+        <Button
+          type="danger"
+          onClick={() => {
+            const v = value || '';
+            const [result, msg] = validateFormat(v, format);
+            if (result) onRelease && onRelease(v, format);
+            else message.error(`格式错误: ${msg}`);
+          }}
+        >
+          发布
+        </Button>
       </div>
     </div>
   );

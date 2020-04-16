@@ -61,14 +61,14 @@ export const handleResult = (data: any) => {
 };
 
 export const handleJson = (status: number, response: Response) => {
-  return response.json().then(data => {
+  return response.json().then((data) => {
     if (isStatusSuccess(status)) return Promise.resolve(data);
     throw new Error(getErrorMessage(data) || response.statusText || '未知错误');
   });
 };
 
 export const handleText = (status: number, response: Response) => {
-  return response.text().then(text => {
+  return response.text().then((text) => {
     if (isStatusSuccess(status)) return Promise.resolve(text);
     throw new Error(text || response.statusText || '未知错误');
   });
@@ -113,7 +113,7 @@ class IFetch {
     }
     queue.push(
       fetch(this.baseUrl + url, opt)
-        .catch(err => {
+        .catch((err) => {
           if (err.name === 'TypeError') throw new Error(`当前网络异常, 请稍后重试: ${err.message}`);
           throw new Error(`请求发送失败: ${err.message}`);
         })
@@ -125,7 +125,7 @@ class IFetch {
     return new Proxy(
       { promise },
       {
-        get: function(obj: AnyObject, key: string) {
+        get: function (obj: AnyObject, key: string) {
           if (key === 'abort') return abort;
           if (key === 'then') return obj.promise.then.bind(obj.promise);
           if (key === 'catch') return obj.promise.catch.bind(obj.promise);

@@ -7,7 +7,7 @@ export const debounce = (fn: Function, wait: number, option?: { immediately?: bo
     timer = null;
   };
 
-  const _debounce = function(this: any, ..._args: any[]) {
+  const _debounce = function (this: any, ..._args: any[]) {
     self = this as any;
     args = _args;
 
@@ -21,7 +21,7 @@ export const debounce = (fn: Function, wait: number, option?: { immediately?: bo
     timer = setTimeout(callback, wait);
   };
 
-  _debounce.cancel = function() {
+  _debounce.cancel = function () {
     if (timer) clearTimeout(timer);
     timer = null;
   };
@@ -34,7 +34,7 @@ export const throttle = (fn: Function, interval: number, option?: { heading?: bo
   const heading = option?.heading ?? true;
   const trailing = option?.trailing ?? true;
 
-  const _throttle = function(this: any, ..._args: any[]) {
+  const _throttle = function (this: any, ..._args: any[]) {
     self = this;
     args = _args;
 

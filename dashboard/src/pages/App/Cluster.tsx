@@ -38,7 +38,7 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
         title: '空间名',
         key: 'namespaceName',
         dataIndex: 'namespaceName',
-        render: namespaceName => <Link to={`/apps/${appName}/${clusterName}/${namespaceName}`}>{namespaceName}</Link>,
+        render: (namespaceName) => <Link to={`/apps/${appName}/${clusterName}/${namespaceName}`}>{namespaceName}</Link>,
       },
       { title: '描述', key: 'description', dataIndex: 'description' },
       { title: '创建日期', key: 'createdAt', dataIndex: 'createdAt', width: 200, render: formatDate },
@@ -81,11 +81,13 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
               appName,
               clusterName,
               title: '创建新配置',
-              onOk: () => getNamespaces(state => ({ ...state, version: (state.version ?? 0) + 1 })),
+              onOk: () => getNamespaces((state) => ({ ...state, version: (state.version ?? 0) + 1 })),
             }),
         }}
         showSearch={{ onFilter: onFilterKey }}
-        expandedRowRender={namespace => <NamespaceInfo namespace={namespace} />}
+        expandedRowRender={(namespace) => (
+          <NamespaceInfo namespace={namespace} callback={() => getNamespaces((state) => ({ ...state }))} />
+        )}
       />
     </Card>
   );

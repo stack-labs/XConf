@@ -22,13 +22,13 @@ const AppCreate: FC<AppCreateProps> = ({ onOk, ...props }) => {
       <Form
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 20 }}
-        onFinish={values =>
+        onFinish={(values) =>
           createApp(values as AppCreation)
             .then(() => {
               onOk && onOk();
               props.onCancel && props.onCancel();
             })
-            .catch(err => message.error(`创建应用失败: ${err}`))
+            .catch((err) => message.error(`创建应用失败: ${err}`))
         }
       >
         <Form.Item

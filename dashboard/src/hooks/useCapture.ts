@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { message } from 'antd';
 
 export enum CaptureStatus {
@@ -77,7 +77,8 @@ const createCapture = (globalOption?: CaptureOption) => {
   ): [CaptureState<R, Q>, Dispatch<SetStateAction<Q>>] => {
     const { fn, initialState = null, initialArgs, showError = true, immediately = false, option } = opt;
     const firstly = useRef<boolean>(immediately);
-    const _option = useMemo(() => (option ? { ...global, ...option } : global), [option]);
+    const _option = useRef<CaptureOption>(global);
+    _option.current = option ? { ...global, ...option } : global;
 
     const [args, setArgs] = useState<Q>(initialArgs!);
     const [state, dispatch] = useReducer(reducerHandle, {
@@ -97,18 +98,19 @@ const createCapture = (globalOption?: CaptureOption) => {
 
       dispatch({ type: CaptureAction.start, data: { args: args } });
       const promise: Promise<R> = _fn.call(null, args);
+      const { onSuccess, onError, catchError, errorPrompt, callback } = _option.current;
       promise
-        .then(data => {
+        .then((data) => {
           dispatch({ type: CaptureAction.success, data: { data } });
-          if (_option.onSuccess) _option.onSuccess(data);
+          if (onSuccess) onSuccess(data);
         })
-        .catch(err => {
-          if (showError) _option.errorPrompt && _option.errorPrompt(err);
+        .catch((err) => {
+          if (showError) errorPrompt && errorPrompt(err);
           dispatch({ type: CaptureAction.failure, data: {} });
-          if (_option.onError) _option.onError(err);
-          if (!_option.catchError) throw err;
+          if (onError) onError(err);
+          if (!catchError) throw err;
         })
-        .finally(_option.callback);
+        .finally(callback);
       return () => {
         if (promise.abort) {
           promise.abort();
@@ -123,6 +125,6 @@ const createCapture = (globalOption?: CaptureOption) => {
 };
 
 export const useCapture = createCapture({
-  errorPrompt: err => message.error(err.message),
-  onError: err => console.error('err:', err),
+  errorPrompt: (err) => message.error(err.message),
+  onError: (err) => console.error('err:', err),
 });

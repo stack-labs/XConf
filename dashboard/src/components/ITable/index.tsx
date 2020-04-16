@@ -28,7 +28,7 @@ const ITable = <T extends object = any>({ showCreate, showSearch, ...props }: IT
   useEffect(() => {
     if (showSearch?.onFilter !== undefined) {
       const data: T[] = key
-        ? ((props.dataSource || []) as T[])?.filter(item => {
+        ? ((props.dataSource || []) as T[])?.filter((item) => {
             return showSearch?.onFilter && showSearch?.onFilter(key, item);
           })
         : props.dataSource || [];
@@ -44,7 +44,7 @@ const ITable = <T extends object = any>({ showCreate, showSearch, ...props }: IT
             <label>关键字过滤: </label>
             <Input
               value={key}
-              onChange={e => setKey(e.target.value)}
+              onChange={(e) => setKey(e.target.value)}
               style={{ marginLeft: 12, width: 300 }}
               placeholder="输入关键字过滤"
               addonAfter={

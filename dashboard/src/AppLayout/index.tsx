@@ -46,13 +46,13 @@ const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
   useEffect(() => {
     const menu = BFS<MenuItem>({
       dataSource: menus,
-      isTarget: item => {
+      isTarget: (item) => {
         if (!item.matchPath) return false;
         const match = matchPath(pathname, item.matchPath);
         return !!(match && match.isExact);
       },
     });
-    setOpenKeys(arr => {
+    setOpenKeys((arr) => {
       if (!menu?.parent || arr.includes(menu.parent)) return arr;
       const openMenus: string[] = [];
       menu.parent
@@ -65,7 +65,7 @@ const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
         }, '');
       return openMenus;
     });
-    setSelectedKeys(arr => {
+    setSelectedKeys((arr) => {
       if (arr[0] === menu?.menuKey) return arr;
       return menu ? [menu.menuKey] : [];
     });
@@ -83,7 +83,7 @@ const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
         <Layout.Header className={styles.header}>
           {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
             className: styles.trigger,
-            onClick: () => toggle(prev => !prev),
+            onClick: () => toggle((prev) => !prev),
           })}
         </Layout.Header>
         <Layout.Content>{children}</Layout.Content>

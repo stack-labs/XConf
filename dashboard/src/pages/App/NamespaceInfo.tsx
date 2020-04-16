@@ -1,14 +1,21 @@
-import React, { FC } from 'react';
-import { Col, Form, Row, Tag } from 'antd';
-import { renderNamespaceRelease } from '@src/renders';
-import { Namespace } from '@src/typings';
+import React, { FC, useRef } from 'react';
+import { Col, Form, Row, Tag, message } from 'antd';
+
 import Editor from '@src/components/Editor';
+import { renderNamespaceRelease } from '@src/renders';
+import { saveConfig } from '@src/services';
+import { Namespace, NamespaceFormat } from '@src/typings';
+import ReleaseModel from '@src/pages/App/ReleaseModel';
 
 export interface NamespaceInfoProps {
   namespace: Namespace;
+  callback?: Function;
 }
 
-const NamespaceInfo: FC<NamespaceInfoProps> = ({ namespace }) => {
+const NamespaceInfo: FC<NamespaceInfoProps> = ({ namespace, callback }) => {
+  const callbackRef = useRef(callback);
+  callbackRef.current = callback;
+
   return (
     <Form>
       <Row>
@@ -23,11 +30,37 @@ const NamespaceInfo: FC<NamespaceInfoProps> = ({ namespace }) => {
           </Form.Item>
         </Col>
       </Row>
-      <Form.Item label="配置" labelCol={{ span: 2 }} wrapperCol={{ span: 22 }}>
+      <Form.Item name="configuration" label="配置" labelCol={{ span: 2 }} wrapperCol={{ span: 22 }}>
         <Editor
           format={namespace.format}
-          readonly={namespace.released}
           initialValue={namespace.released ? namespace.value : namespace.editValue}
+          onSave={(value: string, format: NamespaceFormat) => {
+            saveConfig({
+              appName: namespace.appName,
+              clusterName: namespace.clusterName,
+              namespaceName: namespace.namespaceName,
+              format,
+              value,
+            })
+              .then(() => {
+                const callback = callbackRef.current;
+                callback && callback();
+                message.success('配置保存成功');
+              })
+              .catch((e) => message.error('保存失败:', e.message));
+          }}
+          onRelease={() => {
+            ReleaseModel({
+              appName: namespace.appName,
+              clusterName: namespace.clusterName,
+              namespaceName: namespace.namespaceName,
+              onOk: () => {
+                message.success('配置发布成功');
+                const callback = callbackRef.current;
+                callback && callback();
+              },
+            });
+          }}
         />
       </Form.Item>
     </Form>

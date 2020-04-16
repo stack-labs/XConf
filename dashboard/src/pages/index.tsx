@@ -27,7 +27,7 @@ const routeAndMenuArray: RouteAndMenu[] = [
 const routes: RouteItem[] = [];
 const parseRouteAndMenuArray = (array: RouteAndMenu[], parent: string = ''): MenuItem[] => {
   const menus: MenuItem[] = [];
-  array.forEach(item => {
+  array.forEach((item) => {
     if (item.route) {
       routes.push(item.route);
       if (item.menu) item.menu.matchPath = item.route.path;

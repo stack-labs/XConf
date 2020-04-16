@@ -18,7 +18,7 @@ function App() {
         <AppLayout menus={menus}>
           <Suspense fallback={<Loading />}>
             <Switch>
-              {routes.map(r => (
+              {routes.map((r) => (
                 <Route key={r.path} exact path={r.path} component={r.component} />
               ))}
               <Redirect to="/apps" />

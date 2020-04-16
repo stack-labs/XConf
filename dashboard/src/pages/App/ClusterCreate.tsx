@@ -24,13 +24,13 @@ const ClusterCreate: FC<ClusterCreateProps> = ({ appName, onOk, ...props }) => {
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 20 }}
         initialValues={{ appName }}
-        onFinish={values =>
+        onFinish={(values) =>
           createCluster(values as ClusterCreation)
             .then(() => {
               onOk && onOk();
               props.onCancel && props.onCancel();
             })
-            .catch(err => message.error(`创建集群失败: ${err}`))
+            .catch((err) => message.error(`创建集群失败: ${err}`))
         }
       >
         <Form.Item label="应用名" name="appName">

@@ -52,7 +52,7 @@ const App: FC<AppProps> = ({ match }) => {
         title: '集群名',
         key: 'clusterName',
         dataIndex: 'clusterName',
-        render: clusterName => <Link to={`/apps/${appName}/${clusterName}`}>{clusterName}</Link>,
+        render: (clusterName) => <Link to={`/apps/${appName}/${clusterName}`}>{clusterName}</Link>,
       },
       { title: '描述', key: 'description', dataIndex: 'description' },
       { title: '创建日期', key: 'createdAt', dataIndex: 'createdAt', width: 200, render: formatDate },
@@ -84,7 +84,7 @@ const App: FC<AppProps> = ({ match }) => {
             { path: '/apps', breadcrumbName: '应用列表' },
             appName && { path: `/apps/${appName}`, breadcrumbName: appName },
             appName && clusterName && { path: `/apps/${appName}/${clusterName}`, breadcrumbName: clusterName },
-          ].filter(item => !!item) as BreadcrumbItem[],
+          ].filter((item) => !!item) as BreadcrumbItem[],
           itemRender: renderBreadcrumbItem,
         }}
         onBack={() => window.history.back()}
@@ -111,7 +111,7 @@ const App: FC<AppProps> = ({ match }) => {
                 ClusterCreate({
                   appName,
                   title: '创建新集群',
-                  onOk: () => getClusters(state => ({ ...state, version: (state.version ?? 0) + 1 })),
+                  onOk: () => getClusters((state) => ({ ...state, version: (state.version ?? 0) + 1 })),
                 }),
             }}
             showSearch={{ onFilter: onFilterKey }}
