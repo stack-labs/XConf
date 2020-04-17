@@ -1,17 +1,50 @@
 import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Divider } from 'antd';
+import { Card, Divider, message } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 
+import NamespaceCreate from './NamespaceCreate';
 import NamespaceInfo from './NamespaceInfo';
+import { validateFormat } from '@src/components/Editor';
 import ITable from '@src/components/ITable';
 
 import { useCapture } from '@src/hooks';
-import { formatDate } from '@src/tools';
+import { downloadFile, formatDate, readFile, uploadFile } from '@src/tools';
 import { renderDeleteWithLinkButton, renderNamespaceRelease } from '@src/renders';
-import { fetchCluster, fetchNamespaces } from '@src/services';
+import { fetchCluster, fetchNamespaces, saveConfig } from '@src/services';
 import { ClusterQuery, Cluster as ClusterType, Namespace, NamespacesQuery, defaultBaseModel } from '@src/typings';
-import NamespaceCreate from '@src/pages/App/NamespaceCreate';
+
+const getFunction = (namespace: Namespace, callback: () => void) => {
+  const uploadConfig = (content: string) => {
+    saveConfig({
+      appName: namespace.appName,
+      clusterName: namespace.clusterName,
+      namespaceName: namespace.namespaceName,
+      format: namespace.format,
+      value: content,
+    })
+      .then(() => {
+        message.success('配置保存成功');
+        callback();
+      })
+      .catch((e) => message.error('保存失败:', e.message));
+  };
+
+  const getContent = (file: File) => {
+    readFile(file, (value) => {
+      const [res, msg] = validateFormat(value, namespace.format);
+      if (res) uploadConfig(value);
+      else message.error(`导入文件失败: ${msg}`);
+    });
+  };
+
+  return () => {
+    uploadFile((files) => {
+      const file = files[0];
+      file && getContent(file);
+    }, namespace.format);
+  };
+};
 
 export interface ClusterProps extends ClusterQuery {}
 
@@ -46,11 +79,25 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
       {
         title: '操作',
         key: 'control',
-        width: 160,
+        width: 230,
         render: (_, namespace) => {
           return (
             <div>
               <Link to={`/apps/${appName}/${clusterName}/${namespace.namespaceName}/histories`}>历史版本</Link>
+              <Divider type="vertical" />
+              <button
+                className="link-button"
+                onClick={getFunction(namespace, () => getNamespaces((state) => ({ ...state })))}
+              >
+                导入
+              </button>
+              <Divider type="vertical" />
+              <button
+                className="link-button"
+                onClick={() => downloadFile(namespace.namespaceName, namespace.value, namespace.format)}
+              >
+                导出
+              </button>
               <Divider type="vertical" />
               {renderDeleteWithLinkButton({ label: '删除', popLabel: '确认删除空间', onDelete: () => {} })}
             </div>
@@ -59,7 +106,7 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
       },
     ];
     return columns;
-  }, [appName, clusterName]);
+  }, [appName, clusterName, getNamespaces]);
 
   const onFilterKey = useCallback((key: string, item: Namespace) => {
     return item.namespaceName.includes(key);
