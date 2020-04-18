@@ -67,7 +67,7 @@ Create the name of the service account to use
 Environments
 */}}
 {{- define "micro.env" -}}
-- name: MICRO_SERVER_ADDRESS
+- name: MICRO_API_ADDRESS
   value: 0.0.0.0:{{ .Values.service.port -}}
 {{- range .Values.global.env }}
 - name: {{ .name }}

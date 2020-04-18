@@ -227,7 +227,7 @@ spec:
           limits:
             cpu: "25m"
         env:
-          - name: MICRO_SERVER_ADDRESS
+          - name: MICRO_API_ADDRESS
             value: 0.0.0.0:80
           - name: MICRO_REGISTRY
             value: etcd
