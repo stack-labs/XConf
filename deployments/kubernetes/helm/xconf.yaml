@@ -1,0 +1,260 @@
+---
+# Source: xconf/templates/namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: xconf
+---
+# Source: xconf/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: xconf
+  name: xconf
+  labels:
+    helm.sh/chart: xconf-0.1.0
+    app.kubernetes.io/name: xconf
+    app.kubernetes.io/instance: xconf
+    app.kubernetes.io/version: "v0.1.3"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: xconf/charts/micro-api/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: xconf
+  name: xconf-gateway
+  labels:
+    name: xconf-gateway
+    helm.sh/chart: micro-api-0.1.0
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/instance: xconf
+    app.kubernetes.io/version: "v0.1.3"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+  # the port that this service should serve on
+  - name: http
+    port: 80
+    targetPort: 80
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/instance: xconf
+---
+# Source: xconf/charts/admin-api/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: xconf
+  name: xconf-admin-api
+  labels:
+    helm.sh/chart: admin-api-0.1.0
+    app.kubernetes.io/name: admin-api
+    app.kubernetes.io/instance: xconf
+    app.kubernetes.io/version: "v0.1.3"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: admin-api
+      app.kubernetes.io/instance: xconf
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: admin-api
+        app.kubernetes.io/instance: xconf
+    spec:
+      serviceAccountName: xconf
+      containers:
+      - name: api
+        image: "xuxu123/admin-api:v0.1.3"
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "25m"
+        env:
+          - name: MICRO_SERVER_ADDRESS
+            value: 0.0.0.0:80
+          - name: MICRO_REGISTRY
+            value: etcd
+          - name: MICRO_REGISTRY_ADDRESS
+            value: $MICRO_REGISTRY_ADDRESS
+        ports:
+        - containerPort: 80
+          name: service-port
+---
+# Source: xconf/charts/agent-api/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: xconf
+  name: xconf-agent-api
+  labels:
+    helm.sh/chart: agent-api-0.1.0
+    app.kubernetes.io/name: agent-api
+    app.kubernetes.io/instance: xconf
+    app.kubernetes.io/version: "v0.1.3"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: agent-api
+      app.kubernetes.io/instance: xconf
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: agent-api
+        app.kubernetes.io/instance: xconf
+    spec:
+      serviceAccountName: xconf
+      containers:
+      - name: api
+        image: "xuxu123/agent-api:v0.1.3"
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "25m"
+        env:
+          - name: MICRO_SERVER_ADDRESS
+            value: 0.0.0.0:80
+          - name: MICRO_REGISTRY
+            value: etcd
+          - name: MICRO_REGISTRY_ADDRESS
+            value: $MICRO_REGISTRY_ADDRESS
+        ports:
+        - containerPort: 80
+          name: service-port
+---
+# Source: xconf/charts/config-srv/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: xconf
+  name: xconf-config-srv
+  labels:
+    helm.sh/chart: config-srv-0.1.0
+    app.kubernetes.io/name: config-srv
+    app.kubernetes.io/instance: xconf
+    app.kubernetes.io/version: "v0.1.3"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: config-srv
+      app.kubernetes.io/instance: xconf
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: config-srv
+        app.kubernetes.io/instance: xconf
+    spec:
+      serviceAccountName: xconf
+      containers:
+      - name: api
+        image: "xuxu123/config-srv:v0.1.3"
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "25m"
+        env:
+          - name: MICRO_SERVER_ADDRESS
+            value: 0.0.0.0:80
+          - name: MICRO_REGISTRY
+            value: etcd
+          - name: MICRO_REGISTRY_ADDRESS
+            value: $MICRO_REGISTRY_ADDRESS
+          - name: DATABASE_URL
+            value: $DATABASE_URL
+        ports:
+        - containerPort: 80
+          name: service-port
+---
+# Source: xconf/charts/micro-api/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: xconf
+  name: xconf-gateway
+  labels:
+    helm.sh/chart: micro-api-0.1.0
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/instance: xconf
+    app.kubernetes.io/version: "v0.1.3"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gateway
+      app.kubernetes.io/instance: xconf
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gateway
+        app.kubernetes.io/instance: xconf
+    spec:
+      serviceAccountName: xconf
+      containers:
+      - name: micro
+        image: "xuxu123/micro:v0.1.3"
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "25m"
+        env:
+          - name: MICRO_SERVER_ADDRESS
+            value: 0.0.0.0:80
+          - name: MICRO_REGISTRY
+            value: etcd
+          - name: MICRO_REGISTRY_ADDRESS
+            value: $MICRO_REGISTRY_ADDRESS
+        ports:
+        - containerPort: 80
+          name: micro-port
+---
+# Source: xconf/charts/micro-api/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  namespace: xconf
+  name: xconf-gateway
+  labels:
+    helm.sh/chart: micro-api-0.1.0
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/instance: xconf
+    app.kubernetes.io/version: "v0.1.3"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  rules:
+    - host: "xconf.local"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: xconf-gateway
+              servicePort: 80
