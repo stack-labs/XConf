@@ -26,7 +26,7 @@ const routeAndMenuArray: RouteAndMenu[] = [
     menu: {
       menuKey: 'Github',
       menuLink: 'https://github.com/micro-in-cn/XConf',
-      menuLabel: '代码仓库',
+      menuLabel: '项目地址',
       menuIcon: <GithubFilled />,
     },
   },
