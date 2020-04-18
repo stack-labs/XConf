@@ -1,0 +1,85 @@
+.layout {
+  .header {
+    background: white;
+    padding: 0;
+
+    .trigger {
+      font-size: 18px;
+      line-height: 64px;
+      padding: 0 24px;
+      cursor: pointer;
+      transition: color 0.3s;
+      &:hover {
+        color: #1890ff;
+      }
+    }
+  }
+
+  .sider {
+    .logo {
+      height: 64px;
+      line-height: 64px;
+      width: 100%;
+    }
+
+    .menus {
+      .menuItem {
+        font-size: 16px;
+
+        :global {
+          .anticon {
+            font-size: 16px;
+          }
+        }
+
+        > :first-child {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  :global {
+    .containerLayout {
+      margin: 18px;
+    }
+  }
+}
+
+:global {
+  .link-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    color: #1890ff;
+
+    &.normal {
+      color: inherit;
+    }
+
+    &:link,
+    &:visited,
+    &:focus,
+    &:hover,
+    &:active {
+      border: none;
+      outline: none;
+    }
+  }
+
+  .clear-float {
+    zoom: 1;
+
+    &::after {
+      display: block;
+      clear: both;
+      content: ' ';
+      visibility: hidden;
+      height: 0;
+    }
+  }
+}
