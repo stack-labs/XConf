@@ -18,13 +18,13 @@ export { default as TomlEditor } from './TomlEditor';
 
 export const validateFormat = (value: string, format: NamespaceFormat): [boolean, string?] => {
   if (format === NamespaceFormat.CUSTOM) return [true];
-  let validator;
-  if (format === NamespaceFormat.JSON) validator = window.jsyaml;
-  if (format === NamespaceFormat.YAML) validator = window.jsyaml;
-  if (format === NamespaceFormat.TOML) validator = window.toml;
+  let validate;
+  if (format === NamespaceFormat.JSON) validate = window.jsonlint.parse;
+  else if (format === NamespaceFormat.YAML) validate = window.jsyaml.loadAll;
+  else if (format === NamespaceFormat.TOML) validate = window.toml.parse;
 
   try {
-    validator.parse(value);
+    validate(value);
     return [true];
   } catch (e) {
     return [false, e.message];

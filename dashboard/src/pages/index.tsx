@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppstoreOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, GithubFilled } from '@ant-design/icons';
 import { MenuItem, RouteItem } from '@src/typings';
 import { isNotEmptyArray } from '@src/tools';
 
@@ -20,6 +20,14 @@ const routeAndMenuArray: RouteAndMenu[] = [
       path: '/apps/:appName/:clusterName/:namespaceName/histories',
       order: 11,
       component: React.lazy(() => import('./App/NamespaceHistory')),
+    },
+  },
+  {
+    menu: {
+      menuKey: 'Github',
+      menuLink: 'https://github.com/micro-in-cn/XConf',
+      menuLabel: '代码仓库',
+      menuIcon: <GithubFilled />,
     },
   },
 ];

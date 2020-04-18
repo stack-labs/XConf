@@ -9,18 +9,27 @@ import { MenuItem } from '@src/typings';
 import styles from './index.module.scss';
 
 const renderMenuItem = (menuItem: MenuItem): React.ReactElement => {
-  const renderLabel = () =>
-    menuItem.menuLink ? (
-      <Link className={styles.menuItem} to={menuItem.menuLink}>
-        {menuItem.menuIcon}
-        <span>{menuItem.menuLabel}</span>
-      </Link>
+  const renderLabel = () => {
+    const link = menuItem.menuLink;
+    return link ? (
+      link.startsWith('http') ? (
+        <a className={styles.menuItem} href={link} target="_blank" rel="noopener noreferrer">
+          {menuItem.menuIcon}
+          <span>{menuItem.menuLabel}</span>
+        </a>
+      ) : (
+        <Link className={styles.menuItem} to={link}>
+          {menuItem.menuIcon}
+          <span>{menuItem.menuLabel}</span>
+        </Link>
+      )
     ) : (
       <span className={styles.menuItem}>
         {menuItem.menuIcon}
         <span>{menuItem.menuLabel}</span>
       </span>
     );
+  };
   if (Array.isArray(menuItem.subMenus) && menuItem.subMenus.length) {
     return (
       <Menu.SubMenu key={menuItem.menuKey} title={<span>{renderLabel()}</span>} className={styles.menuItem}>
