@@ -5,7 +5,6 @@ on:
       - master
     paths-ignore:
     - 'README.md'
-    - 'dashboard/**'
     - 'doc/**'
     - 'deployments/docker-compose/**'
   pull_request:
@@ -13,7 +12,6 @@ on:
       - master
     paths-ignore:
     - 'README.md'
-    - 'dashboard/**'
     - 'doc/**'
     - 'deployments/docker-compose/**'
 jobs:
