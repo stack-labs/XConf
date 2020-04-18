@@ -67,12 +67,7 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
 
   const columns = useMemo(() => {
     const columns: ColumnProps<Namespace>[] = [
-      {
-        title: '空间名',
-        key: 'namespaceName',
-        dataIndex: 'namespaceName',
-        render: (namespaceName) => <Link to={`/apps/${appName}/${clusterName}/${namespaceName}`}>{namespaceName}</Link>,
-      },
+      { title: '空间名', key: 'namespaceName', dataIndex: 'namespaceName' },
       { title: '描述', key: 'description', dataIndex: 'description' },
       { title: '创建日期', key: 'createdAt', dataIndex: 'createdAt', width: 200, render: formatDate },
       { title: '状态', key: 'release', width: 100, render: (_, namespace) => renderNamespaceRelease(namespace) },
