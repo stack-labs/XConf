@@ -1,0 +1,77 @@
+# Default values for xconf.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  # appVersion is all image's default tag, can be override with image.tag
+  appVersion: "v0.1.3"
+
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: xconf
+    rbac:
+      # When go-micro use kubernetes registry must k8sRegistry, and serviceAccount.name must be set or use default (create=false)
+      k8sRegistry: false
+
+  env:
+    - name: MICRO_REGISTRY
+      value: "etcd"
+    - name: MICRO_REGISTRY_ADDRESS
+      value: $MICRO_REGISTRY_ADDRESS
+
+# Gateway
+micro-api:
+  enabled: true
+  nameOverride: gateway
+  image:
+    image: "xuxu123/micro"
+    tag:
+  env:
+  # Use load balancer
+  #service:
+  #  type: LoadBalancer
+  #  port: 80
+  # Use Ingress
+  service:
+    type: ClusterIP
+    port: 80
+    nodePort:
+  ingress:
+    enabled: true
+    hosts:
+      - host: xconf.local
+        paths: ["/"]
+
+# Services
+config-srv:
+  enabled: true
+  image:
+    repository: "xuxu123/config-srv"
+    tag:
+  env:
+    - name: DATABASE_URL
+      value: $DATABASE_URL
+    # Use secret config env
+    #- name: DATABASE_URL
+    #  valueFrom:
+    #    secretKeyRef:
+    #      name: db_mysql_secret
+    #      key: db_url_key
+
+
+admin-api:
+  enabled: true
+  env:
+  image:
+    repository: "xuxu123/admin-api"
+    tag:
+
+agent-api:
+  enabled: true
+  env:
+  image:
+    repository: "xuxu123/agent-api"
+    tag:

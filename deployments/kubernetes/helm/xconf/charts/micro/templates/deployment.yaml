@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ include "micro.fullname" . }}
+  labels:
+    {{- include "micro.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+  selector:
+    matchLabels:
+      {{- include "micro.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "micro.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "micro.serviceAccountName" . }}
+      containers:
+      - name: micro
+{{- if .Values.image.tag }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+{{- else }}
+        image: "{{ .Values.image.repository }}:{{ .Values.global.appVersion }}"
+{{- end }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        resources:
+          limits:
+            cpu: "25m"
+        env:
+          {{- include "micro.env" . | nindent 10 }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+          name: micro-port
