@@ -1,5 +1,5 @@
 import React, { Suspense, useMemo } from 'react';
-import { Redirect, Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Redirect, Route, HashRouter as Router, Switch } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 
 import ZH_CN from 'antd/es/locale/zh_CN';
