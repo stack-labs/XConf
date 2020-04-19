@@ -114,11 +114,11 @@
 
 ## 客户端
 
-- Golang  [client/example](client/example/main.go)
+- Golang  [pkg/client/example](pkg/client/example/main.go)
     
     ```shell script
     git clone https://github.com/micro-in-cn/XConf.git
-    cd XConf/client/example
+    cd XConf/pkg/client/example
     go run main.go 
     ```
 
