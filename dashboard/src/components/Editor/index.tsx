@@ -17,6 +17,7 @@ export { default as YamlEditor } from './YamlEditor';
 export { default as TomlEditor } from './TomlEditor';
 
 export const validateFormat = (value: string, format: NamespaceFormat): [boolean, string?] => {
+  if (!value) return [false, '配置不能为空'];
   if (format === NamespaceFormat.CUSTOM) return [true];
   let validate;
   if (format === NamespaceFormat.JSON) validate = window.jsonlint.parse;
@@ -35,13 +36,14 @@ export interface EditorProps extends Omit<CodeEditorProps, 'mode'> {
   canControl?: boolean;
   format: NamespaceFormat;
   value?: string;
+  released: boolean;
 
   onSave?: (value: string, format: NamespaceFormat) => void;
   onRelease?: (value: string, format: NamespaceFormat) => void;
 }
 
 const Editor: ForwardRefRenderFunction<any, EditorProps> = (
-  { canControl, format, value, onSave, onRelease, ...props },
+  { canControl, format, value, released, onSave, onRelease, ...props },
   ref,
 ) => {
   const renderEditor = () => {
@@ -81,6 +83,7 @@ const Editor: ForwardRefRenderFunction<any, EditorProps> = (
           </Button>
           <Button
             type="danger"
+            disabled={released}
             onClick={() => {
               const v = value || '';
               const [result, msg] = validateFormat(v, format);

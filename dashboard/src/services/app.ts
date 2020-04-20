@@ -12,8 +12,9 @@ export const fetchApp = (query: AppQuery): Promise<App> => {
 };
 
 export const createApp = (data: AppCreation) => {
-  // TODO Use /apps instead of /app
   return _.post('/app', data);
 };
 
-export const deleteApp = () => {};
+export const deleteApp = (query: AppQuery) => {
+  return _.del('/app', query);
+};

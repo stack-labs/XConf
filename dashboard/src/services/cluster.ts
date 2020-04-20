@@ -14,3 +14,7 @@ export const fetchCluster = (query: ClusterQuery): Promise<Cluster> => {
 export const createCluster = (data: ClusterCreation) => {
   return _.post('/cluster', data);
 };
+
+export const deleteCluster = (query: ClusterQuery) => {
+  return _.del('/cluster', query);
+};

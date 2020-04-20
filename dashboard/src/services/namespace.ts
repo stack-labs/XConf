@@ -4,6 +4,7 @@ import {
   NamespaceCreation,
   NamespaceHistoryItem,
   NamespaceHistoryQuery,
+  NamespaceQuery,
   NamespacesQuery,
 } from '@src/typings';
 
@@ -19,4 +20,8 @@ export const fetchNamespaceHistories = (query: NamespaceHistoryQuery): Promise<N
 
 export const createNamespace = (data: NamespaceCreation) => {
   return _.post('/namespace', data);
+};
+
+export const deleteNamespace = (query: NamespaceQuery) => {
+  return _.del('/namespace', query);
 };

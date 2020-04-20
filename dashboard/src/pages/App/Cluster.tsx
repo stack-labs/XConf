@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Divider, message } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
@@ -11,7 +11,7 @@ import ITable from '@src/components/ITable';
 import { useCapture } from '@src/hooks';
 import { downloadFile, formatDate, readFile, uploadFile } from '@src/tools';
 import { renderDeleteWithLinkButton, renderNamespaceRelease } from '@src/renders';
-import { fetchCluster, fetchNamespaces, saveConfig } from '@src/services';
+import { deleteNamespace, fetchCluster, fetchNamespaces, saveConfig } from '@src/services';
 import { ClusterQuery, Cluster as ClusterType, Namespace, NamespacesQuery, defaultBaseModel } from '@src/typings';
 
 const getFunction = (namespace: Namespace, callback: () => void) => {
@@ -58,6 +58,8 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
     initialState: [],
   });
 
+  const [expandedRowKeys, setExpandedRowKeys] = useState<number[]>([]);
+
   useEffect(() => {
     if (appName && clusterName) {
       getCluster({ appName, clusterName });
@@ -94,7 +96,21 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
                 导出
               </button>
               <Divider type="vertical" />
-              {renderDeleteWithLinkButton({ label: '删除', popLabel: '确认删除空间', onDelete: () => {} })}
+              {renderDeleteWithLinkButton({
+                label: '删除',
+                popLabel: '确认删除空间',
+                onDelete: () =>
+                  deleteNamespace({
+                    appName: namespace.appName,
+                    clusterName: namespace.clusterName,
+                    namespaceName: namespace.namespaceName,
+                  })
+                    .then(() => {
+                      message.success(`删除应用 ${namespace.appName} 成功`);
+                      getNamespaces((query) => ({ ...query }));
+                    })
+                    .catch(message.error),
+              })}
             </div>
           );
         },
@@ -116,6 +132,7 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
         columns={columns}
         loading={namespacesState.loading}
         dataSource={namespacesState.data}
+        showSearch={{ onFilter: onFilterKey }}
         showCreate={{
           label: '创建新配置',
           onCreate: () =>
@@ -126,10 +143,14 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
               onOk: () => getNamespaces((state) => ({ ...state, version: (state.version ?? 0) + 1 })),
             }),
         }}
-        showSearch={{ onFilter: onFilterKey }}
-        expandedRowRender={(namespace) => (
-          <NamespaceInfo canControl namespace={namespace} callback={() => getNamespaces((state) => ({ ...state }))} />
-        )}
+        expandable={{
+          expandedRowKeys,
+          expandRowByClick: true,
+          onExpand: (expanded, row) => setExpandedRowKeys(expanded ? [row.id] : []),
+          expandedRowRender: (namespace) => (
+            <NamespaceInfo canControl namespace={namespace} callback={() => getNamespaces((state) => ({ ...state }))} />
+          ),
+        }}
       />
     </Card>
   );

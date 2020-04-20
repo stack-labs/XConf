@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Card, Divider } from 'antd';
+import { Card, Divider, message } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 
 import AppCreation from './AppCreate';
@@ -8,7 +8,7 @@ import ITable from '@src/components/ITable';
 
 import { formatDate } from '@src/tools';
 import { useCapture } from '@src/hooks';
-import { fetchApps } from '@src/services';
+import { deleteApp, fetchApps } from '@src/services';
 import { App } from '@src/typings';
 import { renderDeleteWithLinkButton } from '@src/renders';
 
@@ -45,7 +45,13 @@ const Apps: FC<AppsProps> = () => {
           {renderDeleteWithLinkButton({
             label: '删除',
             popLabel: '确认删除应用?',
-            onDelete: () => {},
+            onDelete: () =>
+              deleteApp({ appName: app.appName })
+                .then(() => {
+                  message.success(`删除应用 ${app.appName} 成功`);
+                  getApps((query) => ({ ...query }));
+                })
+                .catch(message.error),
           })}
         </div>
       ),

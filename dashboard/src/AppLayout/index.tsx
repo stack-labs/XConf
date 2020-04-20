@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Link, matchPath, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { GithubOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
 import { BFS } from '@src/tools';
 
@@ -96,7 +96,13 @@ const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
           })}
         </Layout.Header>
         <Layout.Content>{children}</Layout.Content>
-        <Layout.Footer></Layout.Footer>
+        <Layout.Footer style={{ textAlign: 'center' }}>
+          <div>
+            <span>Platform Web</span>
+            <GithubOutlined style={{ marginLeft: 36 }} />
+          </div>
+          <div>Copyright © 2020 Micro China开源技术出品</div>
+        </Layout.Footer>
       </Layout>
     </Layout>
   );

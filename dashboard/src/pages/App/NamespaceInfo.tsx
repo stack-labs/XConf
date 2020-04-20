@@ -35,6 +35,7 @@ const NamespaceInfo: FC<NamespaceInfoProps> = ({ namespace, canControl, callback
         <Editor
           canControl={canControl}
           format={namespace.format}
+          released={namespace.released}
           initialValue={namespace.released ? namespace.value : namespace.editValue}
           onSave={(value: string, format: NamespaceFormat) => {
             saveConfig({
