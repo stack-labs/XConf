@@ -35,13 +35,14 @@ export interface EditorProps extends Omit<CodeEditorProps, 'mode'> {
   canControl?: boolean;
   format: NamespaceFormat;
   value?: string;
+  released: boolean;
 
   onSave?: (value: string, format: NamespaceFormat) => void;
   onRelease?: (value: string, format: NamespaceFormat) => void;
 }
 
 const Editor: ForwardRefRenderFunction<any, EditorProps> = (
-  { canControl, format, value, onSave, onRelease, ...props },
+  { canControl, format, value, released, onSave, onRelease, ...props },
   ref,
 ) => {
   const renderEditor = () => {
@@ -81,6 +82,7 @@ const Editor: ForwardRefRenderFunction<any, EditorProps> = (
           </Button>
           <Button
             type="danger"
+            disabled={released}
             onClick={() => {
               const v = value || '';
               const [result, msg] = validateFormat(v, format);
