@@ -36,6 +36,7 @@ export interface NamespaceHistoryItem extends BaseModel, NamespaceHistoryQuery {
   comment: string;
   released: boolean;
   tag: string;
+  type: 'release' | 'rollback';
 }
 
 export interface NamespaceCreation extends NamespacesQuery {

@@ -36,24 +36,28 @@ const NamespaceHistory: FC<NamespaceHistoryProps> = ({ match }) => {
         key: 'control',
         width: 100,
         render: (_, item) =>
-          renderPopconfirm({
-            label: '回滚',
-            popLabel: '确认回滚',
-            popProps: {
-              onConfirm: () =>
-                rollbackConfig({
-                  appName: item.appName,
-                  clusterName: item.clusterName,
-                  namespaceName: item.namespaceName,
-                  tag: item.tag,
-                })
-                  .then((res) => {
-                    message.success('回滚成功');
-                    getHistories((state) => ({ ...state }));
+          item.type === 'rollback' ? (
+            <span style={{ cursor: 'not-allowed' }}>回滚</span>
+          ) : (
+            renderPopconfirm({
+              label: '回滚',
+              popLabel: '确认回滚',
+              popProps: {
+                onConfirm: () =>
+                  rollbackConfig({
+                    appName: item.appName,
+                    clusterName: item.clusterName,
+                    namespaceName: item.namespaceName,
+                    tag: item.tag,
                   })
-                  .catch((err) => message.error(`回滚失败: ${err.message}`)),
-            },
-          }),
+                    .then(() => {
+                      message.success('回滚成功');
+                      getHistories((state) => ({ ...state }));
+                    })
+                    .catch((err) => message.error(`回滚失败: ${err.message}`)),
+              },
+            })
+          ),
       },
     ];
     return columns;
