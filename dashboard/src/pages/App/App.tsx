@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Collapse, PageHeader, Typography } from 'antd';
+import { Collapse, PageHeader, Typography, message } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { Route as BreadcrumbItem } from 'antd/lib/breadcrumb/Breadcrumb';
 
@@ -9,7 +9,7 @@ import ITable from '@src/components/ITable';
 
 import { useCapture } from '@src/hooks';
 import { formatDate } from '@src/tools';
-import { fetchApp, fetchClusters } from '@src/services';
+import { deleteCluster, fetchApp, fetchClusters } from '@src/services';
 import { renderBreadcrumbItem, renderDeleteWithLinkButton } from '@src/renders';
 import { AppQuery, App as AppType, Cluster, defaultBaseModel } from '@src/typings';
 import ClusterCreate from '@src/pages/App/ClusterCreate';
@@ -61,14 +61,22 @@ const App: FC<AppProps> = ({ match }) => {
         key: 'control',
         width: 100,
         render: (_, cluster) => {
-          return (
-            <div>{renderDeleteWithLinkButton({ label: '删除', popLabel: '确认删除集群', onDelete: () => {} })}</div>
-          );
+          return renderDeleteWithLinkButton({
+            label: '删除',
+            popLabel: '确认删除集群',
+            onDelete: () =>
+              deleteCluster({ appName: cluster.appName, clusterName: cluster.clusterName })
+                .then(() => {
+                  message.success(`删除集群 ${cluster.appName} 成功`);
+                  getClusters((query) => ({ ...query }));
+                })
+                .catch(message.error),
+          });
         },
       },
     ];
     return columns;
-  }, [appName]);
+  }, [appName, getClusters]);
 
   const onFilterKey = useCallback((key: string, item: Cluster) => {
     return item.clusterName.includes(key);

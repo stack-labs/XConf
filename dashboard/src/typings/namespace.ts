@@ -7,6 +7,12 @@ export enum NamespaceFormat {
   CUSTOM = 'custom',
 }
 
+export interface NamespaceQuery {
+  appName: string;
+  clusterName: string;
+  namespaceName: string;
+}
+
 export interface NamespacesQuery {
   appName: string;
   clusterName: string;

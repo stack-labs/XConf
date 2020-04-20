@@ -11,7 +11,7 @@ import ITable from '@src/components/ITable';
 import { useCapture } from '@src/hooks';
 import { downloadFile, formatDate, readFile, uploadFile } from '@src/tools';
 import { renderDeleteWithLinkButton, renderNamespaceRelease } from '@src/renders';
-import { fetchCluster, fetchNamespaces, saveConfig } from '@src/services';
+import { deleteNamespace, fetchCluster, fetchNamespaces, saveConfig } from '@src/services';
 import { ClusterQuery, Cluster as ClusterType, Namespace, NamespacesQuery, defaultBaseModel } from '@src/typings';
 
 const getFunction = (namespace: Namespace, callback: () => void) => {
@@ -94,7 +94,21 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
                 导出
               </button>
               <Divider type="vertical" />
-              {renderDeleteWithLinkButton({ label: '删除', popLabel: '确认删除空间', onDelete: () => {} })}
+              {renderDeleteWithLinkButton({
+                label: '删除',
+                popLabel: '确认删除空间',
+                onDelete: () =>
+                  deleteNamespace({
+                    appName: namespace.appName,
+                    clusterName: namespace.clusterName,
+                    namespaceName: namespace.namespaceName,
+                  })
+                    .then(() => {
+                      message.success(`删除应用 ${namespace.appName} 成功`);
+                      getNamespaces((query) => ({ ...query }));
+                    })
+                    .catch(message.error),
+              })}
             </div>
           );
         },
