@@ -98,7 +98,7 @@ const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
         <Layout.Content>{children}</Layout.Content>
         <Layout.Footer style={{ textAlign: 'center' }}>
           <div>
-            <span>Platform Web</span>
+            <span>XConf 分布式配置中心</span>
             <GithubOutlined style={{ marginLeft: 36 }} />
           </div>
           <div>Copyright © 2020 Micro China开源技术出品</div>
