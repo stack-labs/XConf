@@ -37,7 +37,7 @@ const NamespaceHistory: FC<NamespaceHistoryProps> = ({ match }) => {
         width: 100,
         render: (_, item) =>
           item.type === 'rollback' ? (
-            <span style={{ cursor: 'not-allowed' }}>回滚</span>
+            <span style={{ cursor: 'not-allowed' }}> </span>
           ) : (
             renderPopconfirm({
               label: '回滚',
