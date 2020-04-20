@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Divider, message } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
@@ -57,6 +57,8 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
     fn: fetchNamespaces,
     initialState: [],
   });
+
+  const [expandedRowKeys, setExpandedRowKeys] = useState<number[]>([]);
 
   useEffect(() => {
     if (appName && clusterName) {
@@ -130,6 +132,7 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
         columns={columns}
         loading={namespacesState.loading}
         dataSource={namespacesState.data}
+        showSearch={{ onFilter: onFilterKey }}
         showCreate={{
           label: '创建新配置',
           onCreate: () =>
@@ -140,10 +143,14 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
               onOk: () => getNamespaces((state) => ({ ...state, version: (state.version ?? 0) + 1 })),
             }),
         }}
-        showSearch={{ onFilter: onFilterKey }}
-        expandedRowRender={(namespace) => (
-          <NamespaceInfo canControl namespace={namespace} callback={() => getNamespaces((state) => ({ ...state }))} />
-        )}
+        expandable={{
+          expandedRowKeys,
+          expandRowByClick: true,
+          onExpand: (expanded, row) => setExpandedRowKeys(expanded ? [row.id] : []),
+          expandedRowRender: (namespace) => (
+            <NamespaceInfo canControl namespace={namespace} callback={() => getNamespaces((state) => ({ ...state }))} />
+          ),
+        }}
       />
     </Card>
   );

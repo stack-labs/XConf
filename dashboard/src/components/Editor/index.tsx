@@ -17,6 +17,7 @@ export { default as YamlEditor } from './YamlEditor';
 export { default as TomlEditor } from './TomlEditor';
 
 export const validateFormat = (value: string, format: NamespaceFormat): [boolean, string?] => {
+  if (!value) return [false, '配置不能为空'];
   if (format === NamespaceFormat.CUSTOM) return [true];
   let validate;
   if (format === NamespaceFormat.JSON) validate = window.jsonlint.parse;
