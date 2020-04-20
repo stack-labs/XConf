@@ -24,7 +24,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: MICRO_SERVER_ADDRESS
-              value: 0.0.0.0:8000
+              value: 0.0.0.0:8080
             - name: DATABASE_URL
               value: $DATABASE_URL
             - name: MICRO_REGISTRY
@@ -32,16 +32,4 @@ spec:
             - name: MICRO_REGISTRY_ADDRESS
               value: $MICRO_REGISTRY_ADDRESS
           ports:
-            - containerPort: 8000
----
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: xconf
-  name: config-srv
-spec:
-  ports:
-    - port: 8000
-      targetPort: 8000
-  selector:
-    app: config-srv
+            - containerPort: 8080

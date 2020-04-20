@@ -24,7 +24,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: MICRO_SERVER_ADDRESS
-              value: 0.0.0.0:8002
+              value: 0.0.0.0:8080
             - name: XCONF_CACHE_SIZE
               value: "1048576"
             - name: MICRO_REGISTRY
@@ -32,16 +32,4 @@ spec:
             - name: MICRO_REGISTRY_ADDRESS
               value: $MICRO_REGISTRY_ADDRESS
           ports:
-            - containerPort: 8002
----
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: xconf
-  name: agent-api
-spec:
-  ports:
-    - port: 8002
-      targetPort: 8002
-  selector:
-    app: agent-api
+            - containerPort: 8080
