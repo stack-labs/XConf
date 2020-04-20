@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ include "micro.fullname" . }}
+  labels:
+    name: {{ include "micro.fullname" . }}
+    {{- include "micro.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  # the port that this service should serve on
+  - name: http
+    port: {{ .Values.service.port }}
+    targetPort: {{ .Values.service.port }}
+{{- if .Values.service.nodePort }}
+    nodePort: {{ .Values.service.nodePort }} # NodePort
+{{- end }}
+  # label keys and values that must match in order to receive traffic for this service
+  selector:
+    {{- include "micro.selectorLabels" . | nindent 4 }}

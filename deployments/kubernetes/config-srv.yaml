@@ -1,0 +1,47 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: config-srv
+  namespace: xconf
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: config-srv
+  template:
+    metadata:
+      labels:
+        app: config-srv
+    spec:
+      containers:
+        - name: config-srv
+          image: 'xuxu123/config-srv:v0.1.3'
+          imagePullPolicy: Always
+          env:
+            - name: MICRO_SERVER_ADDRESS
+              value: 0.0.0.0:8000
+            - name: DATABASE_URL
+              value: $DATABASE_URL
+            - name: MICRO_REGISTRY
+              value: "etcd"
+            - name: MICRO_REGISTRY_ADDRESS
+              value: $MICRO_REGISTRY_ADDRESS
+          ports:
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: xconf
+  name: config-srv
+spec:
+  ports:
+    - port: 8000
+      targetPort: 8000
+  selector:
+    app: config-srv
