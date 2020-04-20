@@ -56,6 +56,7 @@ const NamespaceCreate: FC<NamespaceCreateProps> = ({ appName, clusterName, onOk,
           <Input placeholder="请输入配置名" />
         </Form.Item>
         <Form.Item label="格式" name="format" rules={[{ required: true, message: '格式不能为空' }]}>
+          {/* // ! ResizeObserver loop limit exceeded https://github.com/ant-design/ant-design/issues/23246 */}
           <Select>
             {formats.map((value) => (
               <Select.Option key={value} value={value}>
