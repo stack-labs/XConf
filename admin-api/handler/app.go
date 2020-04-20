@@ -12,7 +12,7 @@ func CreateApp(c *gin.Context) {
 		AppName     string `json:"appName"        binding:"required"`
 		Description string `json:"description"`
 	}{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}
@@ -30,7 +30,7 @@ func QueryApp(c *gin.Context) {
 	var req = struct {
 		AppName string `form:"appName"        binding:"required"`
 	}{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}
@@ -46,9 +46,9 @@ func QueryApp(c *gin.Context) {
 
 func DeleteApp(c *gin.Context) {
 	var req = struct {
-		AppName string `json:"appName"        binding:"required"`
+		AppName string `form:"appName"        binding:"required"`
 	}{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}

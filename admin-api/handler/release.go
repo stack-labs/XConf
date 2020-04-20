@@ -15,7 +15,7 @@ func Release(c *gin.Context) {
 		Tag           string `json:"tag"            binding:"required"`
 		Comment       string `json:"comment"`
 	}{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}
@@ -35,7 +35,7 @@ func ListReleaseHistory(c *gin.Context) {
 		ClusterName   string `form:"clusterName"    binding:"required"`
 		NamespaceName string `form:"namespaceName"  binding:"required"`
 	}{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}
@@ -60,7 +60,7 @@ func Rollback(c *gin.Context) {
 		NamespaceName string `json:"namespaceName"  binding:"required"`
 		Tag           string `json:"tag"            binding:"required"`
 	}{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}

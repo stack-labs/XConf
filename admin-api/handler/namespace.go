@@ -15,7 +15,7 @@ func CreateNamespace(c *gin.Context) {
 		Format        string `json:"format"         binding:"required"`
 		Description   string `json:"description"`
 	}{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}
@@ -35,7 +35,7 @@ func QueryNamespace(c *gin.Context) {
 		ClusterName   string `form:"clusterName"    binding:"required"`
 		NamespaceName string `form:"namespaceName"  binding:"required"`
 	}{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}
@@ -51,11 +51,11 @@ func QueryNamespace(c *gin.Context) {
 
 func DeleteNamespace(c *gin.Context) {
 	var req = struct {
-		AppName       string `json:"appName"        binding:"required"`
-		ClusterName   string `json:"clusterName"    binding:"required"`
-		NamespaceName string `json:"namespaceName"  binding:"required"`
+		AppName       string `form:"appName"        binding:"required"`
+		ClusterName   string `form:"clusterName"    binding:"required"`
+		NamespaceName string `form:"namespaceName"  binding:"required"`
 	}{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}
@@ -74,7 +74,7 @@ func ListNamespaces(c *gin.Context) {
 		AppName     string `form:"appName"        binding:"required"`
 		ClusterName string `form:"clusterName"    binding:"required"`
 	}{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}

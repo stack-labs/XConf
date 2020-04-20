@@ -20,7 +20,7 @@ func UpdateConfig(c *gin.Context) {
 		Format        string `json:"format"         binding:"required"`
 		Value         string `json:"value"          binding:"required"`
 	}{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 		return
 	}
