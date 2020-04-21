@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"fmt"
+	"github.com/jinzhu/gorm"
 
 	"github.com/micro-in-cn/XConf/config-srv/model"
 )
@@ -26,27 +26,19 @@ func (d *Dao) QueryApp(appName string) (app model.App, err error) {
 }
 
 func (d *Dao) DeleteApp(appName string) error {
-	var err error
-	tx := d.client.Begin()
-	defer func() {
-		if err != nil {
-			err = fmt.Errorf("[DeleteApp] delete app:%s error: %s", appName, err.Error())
-			tx.Rollback()
+	return d.client.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Table("namespace").Unscoped().Delete(model.Namespace{}, "app_name = ?", appName).Error; err != nil {
+			return err
 		}
-	}()
+		if err := tx.Table("cluster").Unscoped().Delete(model.Cluster{}, "app_name = ?", appName).Error; err != nil {
+			return err
+		}
+		if err := tx.Table("app").Unscoped().Delete(model.App{}, "app_name = ?", appName).Error; err != nil {
+			return err
+		}
 
-	if err = tx.Table("namespace").Unscoped().Delete(model.Namespace{}, "app_name = ?", appName).Error; err != nil {
-		return err
-	}
-	if err = tx.Table("cluster").Unscoped().Delete(model.Cluster{}, "app_name = ?", appName).Error; err != nil {
-		return err
-	}
-	if err = tx.Table("app").Unscoped().Delete(model.App{}, "app_name = ?", appName).Error; err != nil {
-		return err
-	}
-
-	tx.Commit()
-	return nil
+		return nil
+	})
 }
 
 func (d *Dao) ListApps() (apps []model.App, err error) {

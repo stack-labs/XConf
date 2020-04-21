@@ -2,7 +2,8 @@ package dao
 
 import (
 	"errors"
-	"fmt"
+
+	"github.com/jinzhu/gorm"
 
 	"github.com/micro-in-cn/XConf/config-srv/model"
 )
@@ -32,26 +33,18 @@ func (d *Dao) QueryCluster(appName, clusterName string) (cluster model.Cluster, 
 }
 
 func (d *Dao) DeleteCluster(appName, clusterName string) error {
-	var err error
-	tx := d.client.Begin()
-	defer func() {
-		if err != nil {
-			err = fmt.Errorf("[DeleteCluster] delete cluster:%s-%s error: %s", appName, clusterName, err.Error())
-			tx.Rollback()
+	return d.client.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Table("namespace").Unscoped().Delete(model.Namespace{}, "app_name = ? and cluster_name = ?",
+			appName, clusterName).Error; err != nil {
+			return err
 		}
-	}()
+		if err := tx.Table("cluster").Unscoped().Delete(model.Cluster{}, "app_name = ? and cluster_name = ?",
+			appName, clusterName).Error; err != nil {
+			return err
+		}
 
-	if err = tx.Table("namespace").Unscoped().Delete(model.Namespace{}, "app_name = ? and cluster_name = ?",
-		appName, clusterName).Error; err != nil {
-		return err
-	}
-	if err = tx.Table("cluster").Unscoped().Delete(model.Cluster{}, "app_name = ? and cluster_name = ?",
-		appName, clusterName).Error; err != nil {
-		return err
-	}
-
-	tx.Commit()
-	return nil
+		return nil
+	})
 }
 
 func (d *Dao) ListClusters(appName string) (clusters []model.Cluster, err error) {
