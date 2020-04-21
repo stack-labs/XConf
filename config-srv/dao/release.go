@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/jinzhu/gorm"
-
 	"github.com/micro-in-cn/XConf/config-srv/model"
 )
 
