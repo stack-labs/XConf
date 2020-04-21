@@ -26,7 +26,7 @@ func Release(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	c.JSON(http.StatusOK, gin.H{})
 }
 
 func ListReleaseHistory(c *gin.Context) {
@@ -71,5 +71,5 @@ func Rollback(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	c.JSON(http.StatusOK, gin.H{})
 }
