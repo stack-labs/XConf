@@ -1,10 +1,16 @@
 package dao
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/micro-in-cn/XConf/config-srv/model"
+)
+
+const (
+	_Release  = "release"
+	_Rollback = "rollback"
 )
 
 func (d *Dao) ReleaseConfig(appName, clusterName, namespaceName, tag, comment string) error {
@@ -22,7 +28,7 @@ func (d *Dao) ReleaseConfig(appName, clusterName, namespaceName, tag, comment st
 		Tag:           tag,
 		Value:         releaseConfig.EditValue,
 		Comment:       comment,
-		Type:          "release",
+		Type:          _Release,
 	}).Error; err != nil {
 		tx.Rollback()
 		return err
@@ -53,6 +59,9 @@ func (d *Dao) Rollback(appName, clusterName, namespaceName, tag string) error {
 	if err != nil {
 		return err
 	}
+	if release.Type == _Rollback {
+		return errors.New("unable to rollback this tag: " + release.Tag)
+	}
 
 	tx := d.client.Begin()
 
@@ -73,7 +82,7 @@ func (d *Dao) Rollback(appName, clusterName, namespaceName, tag string) error {
 		Tag:           fmt.Sprintf("%s-rollback-%s", tag, time.Now().Format("2006/01/02/15:04:05")),
 		Value:         release.Value,
 		Comment:       "",
-		Type:          "rollback",
+		Type:          _Rollback,
 	}).Error; err != nil {
 		tx.Rollback()
 		return err
