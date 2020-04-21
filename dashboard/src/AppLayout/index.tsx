@@ -82,9 +82,12 @@ const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
 
   return (
     <Layout className={styles.layout}>
-      <Layout.Sider className={styles.sider} trigger={null} collapsible collapsed={collapsed}>
-        <div className={styles.logo}></div>
-        <Menu theme="dark" mode="inline" className={styles.menus} openKeys={openKeys} selectedKeys={selectedKeys}>
+      <Layout.Sider theme="light" className={styles.sider} trigger={null} collapsible collapsed={collapsed}>
+        <div className={styles.logo}>
+          <strong>XConf</strong>
+          {!collapsed && <small>分布式配置中心</small>}
+        </div>
+        <Menu theme="light" mode="inline" className={styles.menus} openKeys={openKeys} selectedKeys={selectedKeys}>
           {menus.map(renderMenuItem)}
         </Menu>
       </Layout.Sider>

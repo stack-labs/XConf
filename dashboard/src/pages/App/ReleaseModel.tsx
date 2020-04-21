@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import moment from 'moment';
 import { Button, Col, Form, Input, Modal, Row } from 'antd';
 import { ModalProps } from 'antd/lib/modal';
 
@@ -34,6 +35,7 @@ const ReleaseModel: FC<ReleaseModelProps> = ({ appName, clusterName, namespaceNa
         form={form}
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 20 }}
+        initialValues={{ tag: 'v' + moment().format('YYYY-MM-DD') }}
         onFinish={({ tag, comment }) => release({ appName, clusterName, namespaceName, tag, comment })}
       >
         <Form.Item name="tag" label="tag" rules={[{ required: true, message: '必须填写tag' }]}>
