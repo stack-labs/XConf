@@ -1,7 +1,11 @@
 .layout {
+  $borderColor: rgba(0, 21, 41, 0.08);
+
   .header {
     background: white;
     padding: 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid $borderColor;
 
     .trigger {
       font-size: 18px;
@@ -16,10 +20,20 @@
   }
 
   .sider {
+    box-sizing: border-box;
+    box-shadow: 2px 0 4px $borderColor;
+    z-index: 10;
+
     .logo {
       height: 64px;
       line-height: 64px;
       width: 100%;
+      font-size: 20px;
+      text-align: center;
+
+      strong {
+        margin-right: 4px;
+      }
     }
 
     .menus {

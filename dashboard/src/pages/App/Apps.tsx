@@ -31,7 +31,6 @@ const Apps: FC<AppsProps> = () => {
       render: (appName) => <Link to={`/apps/${appName}`}>{appName}</Link>,
     },
     { title: '描述', key: 'description', dataIndex: 'description' },
-    { title: '创建人', key: 'creator', dataIndex: 'creator' },
     { title: '创建时间', key: 'createdAt', dataIndex: 'createdAt', width: 180, render: formatDate },
     { title: '更新时间', key: 'updatedAt', dataIndex: 'updatedAt', width: 180, render: formatDate },
     {
