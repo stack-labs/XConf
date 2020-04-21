@@ -2,7 +2,6 @@ package dao
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/micro-in-cn/XConf/config-srv/model"
 )
@@ -36,21 +35,11 @@ func (d *Dao) QueryNamespace(appName, clusterName, namespaceName string) (namesp
 }
 
 func (d *Dao) DeleteNamespace(appName, clusterName, namespaceName string) error {
-	var err error
-	tx := d.client.Begin()
-	defer func() {
-		if err != nil {
-			err = fmt.Errorf("[DeleteNamespace] delete namespace:%s-%s-%s error: %s", appName, clusterName, namespaceName, err.Error())
-			tx.Rollback()
-		}
-	}()
-
-	if err = tx.Table("namespace").Unscoped().Delete(model.Namespace{}, "app_name = ? and cluster_name = ? and namespace_name = ?",
+	if err := d.client.Table("namespace").Unscoped().Delete(model.Namespace{}, "app_name = ? and cluster_name = ? and namespace_name = ?",
 		appName, clusterName, namespaceName).Error; err != nil {
 		return err
 	}
 
-	tx.Commit()
 	return nil
 }
 

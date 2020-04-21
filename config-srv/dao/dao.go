@@ -36,7 +36,7 @@ func newDao(c *conf.Config) (*Dao, error) {
 	d.client.SingularTable(true)       //表名采用单数形式
 	d.client.DB().SetMaxOpenConns(100) //SetMaxOpenConns用于设置最大打开的连接数
 	d.client.DB().SetMaxIdleConns(10)  //SetMaxIdleConns用于设置闲置的连接数
-	d.client.LogMode(true)
+	//d.client.LogMode(true)
 
 	if err = d.client.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(
 		&model.App{},

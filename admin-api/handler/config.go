@@ -35,7 +35,7 @@ func UpdateConfig(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	c.JSON(http.StatusOK, gin.H{})
 }
 
 func ListSupportedFormat(c *gin.Context) {

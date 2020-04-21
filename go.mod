@@ -12,7 +12,7 @@ require (
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/golang/protobuf v1.3.5
-	github.com/jinzhu/gorm v1.9.11
+	github.com/jinzhu/gorm v1.9.12
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.18.0
 	github.com/micro/go-micro/v2 v2.5.0

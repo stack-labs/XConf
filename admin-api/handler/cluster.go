@@ -62,7 +62,7 @@ func DeleteCluster(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	c.JSON(http.StatusOK, gin.H{})
 }
 
 func ListClusters(c *gin.Context) {

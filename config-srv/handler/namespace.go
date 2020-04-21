@@ -58,7 +58,7 @@ func (c *Config) QueryNamespace(ctx context.Context, req *config.NamespaceReques
 func (c *Config) DeleteNamespace(ctx context.Context, req *config.NamespaceRequest, rsp *config.Response) (err error) {
 	err = dao.GetDao().DeleteNamespace(req.GetAppName(), req.GetClusterName(), req.GetNamespaceName())
 	if err != nil {
-		log.Error("[CreateApp]", err)
+		log.Error("[DeleteNamespace] delete namespace:%s-%s-%s error: %s", req.GetAppName(), req.GetClusterName(), req.GetNamespaceName(), err.Error())
 	}
 	return
 }

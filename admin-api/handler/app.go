@@ -59,7 +59,7 @@ func DeleteApp(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	c.JSON(http.StatusOK, gin.H{})
 }
 
 func ListApps(c *gin.Context) {

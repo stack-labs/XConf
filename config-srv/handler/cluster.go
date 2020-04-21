@@ -43,7 +43,7 @@ func (c *Config) QueryCluster(ctx context.Context, req *config.ClusterRequest, r
 func (c *Config) DeleteCluster(ctx context.Context, req *config.ClusterRequest, rsp *config.Response) (err error) {
 	err = dao.GetDao().DeleteCluster(req.GetAppName(), req.GetClusterName())
 	if err != nil {
-		log.Error("[CreateApp]", err)
+		log.Error("[DeleteCluster] delete cluster:%s-%s error: %s", req.GetAppName(), req.GetClusterName(), err.Error())
 	}
 	return
 }

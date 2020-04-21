@@ -41,7 +41,7 @@ func (c *Config) QueryApp(ctx context.Context, req *config.AppRequest, rsp *conf
 func (c *Config) DeleteApp(ctx context.Context, req *config.AppRequest, rsp *config.Response) (err error) {
 	err = dao.GetDao().DeleteApp(req.GetAppName())
 	if err != nil {
-		log.Error("[CreateApp]", err)
+		log.Error("[DeleteApp] delete app:%s error: %s", req.GetAppName(), err.Error())
 	}
 	return
 }
