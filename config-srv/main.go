@@ -13,6 +13,7 @@ import (
 	protoConfig "github.com/micro-in-cn/XConf/proto/config"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/transport/grpc"
 	"github.com/micro/go-micro/util/log"
 )
 
@@ -23,6 +24,7 @@ func main() {
 
 	service := micro.NewService(
 		micro.Name("go.micro.srv.config"),
+		micro.Transport(grpc.NewTransport()),
 		micro.Flags(
 			cli.StringFlag{
 				Name:   "database_driver",

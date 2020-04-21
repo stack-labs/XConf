@@ -5,6 +5,8 @@ import (
 	"github.com/micro-in-cn/XConf/admin-api/config"
 	"github.com/micro-in-cn/XConf/admin-api/handler"
 	pconfig "github.com/micro-in-cn/XConf/proto/config"
+	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/transport/grpc"
 	"github.com/micro/go-micro/web"
 )
 
@@ -17,6 +19,7 @@ func main() {
 		panic(err)
 	}
 
+	service.Options().Service.Init(micro.Transport(grpc.NewTransport()))
 	client := pconfig.NewConfigService("go.micro.srv.config", service.Options().Service.Client())
 
 	config.Init(client)
