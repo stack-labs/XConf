@@ -1,4 +1,7 @@
 # Kubernets User Guide
+
+[Customizable Install with Helm](/deployments/kubernetes/helm)
+
 - [Kubernets User Guide](#Kubernets-User-Guide)
   - [0. Prerequest](#0-Prerequest)
   - [1. Deployment](#1-Deployment)
