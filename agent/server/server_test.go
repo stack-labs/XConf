@@ -27,10 +27,10 @@ func TestServer_Reload(t *testing.T) {
 					SetHeader("Content-Type", "application/json").
 					Post("http://xconf.mogutou.xyz/admin/api/v1/namespace")
 				if err != nil {
-					t.Fatal(err)
+					panic(err)
 				}
 				if resp.StatusCode() != http.StatusOK {
-					t.Fatal(resp.Status(), string(resp.Body()))
+					panic(string(resp.Body()))
 				}
 			}
 

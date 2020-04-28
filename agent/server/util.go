@@ -41,6 +41,6 @@ func getNamespaces(host, appName, clusterName string) ([]Namespace, []byte, erro
 
 func sum(data []byte) string {
 	h := md5.New()
-	h.Write(data)
+	_, _ = h.Write(data)
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
