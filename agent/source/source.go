@@ -15,25 +15,32 @@ import (
 type Source interface {
 	Read() ([]byte, error)
 	Watch() (Watcher, error)
+	Name() string
 }
 
 type httpSource struct {
 	sync.RWMutex
-	client   *resty.Client
-	readURL  string
-	watchURL string
-	watchers list.List
+	client        *resty.Client
+	readURL       string
+	watchURL      string
+	watchers      list.List
+	namespaceName string
 }
 
 func New(url, appName, clusterName, namespaceName string) Source {
 	x := &httpSource{
-		client:   resty.New(),
-		readURL:  fmt.Sprintf("%s/agent/api/v1/config/raw?appName=%s&clusterName=%s&namespaceName=%s", url, appName, clusterName, namespaceName),
-		watchURL: fmt.Sprintf("%s/agent/api/v1/watch/raw?appName=%s&clusterName=%s&namespaceName=%s&updatedAt=", url, appName, clusterName, namespaceName),
+		client:        resty.New(),
+		readURL:       fmt.Sprintf("%s/agent/api/v1/config/raw?appName=%s&clusterName=%s&namespaceName=%s", url, appName, clusterName, namespaceName),
+		watchURL:      fmt.Sprintf("%s/agent/api/v1/watch/raw?appName=%s&clusterName=%s&namespaceName=%s&updatedAt=", url, appName, clusterName, namespaceName),
+		namespaceName: namespaceName,
 	}
 
 	go x.watch()
 	return x
+}
+
+func (s *httpSource) Name() string {
+	return s.namespaceName
 }
 
 func (s *httpSource) Read() ([]byte, error) {
