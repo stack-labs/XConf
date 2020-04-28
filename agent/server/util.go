@@ -1,6 +1,7 @@
 package server
 
 import (
+	"crypto/md5"
 	"errors"
 	"fmt"
 	"net/http"
@@ -22,18 +23,24 @@ type Namespace struct {
 	Description   string `json:"description"`
 }
 
-func getNamespaces(host, appName, clusterName string) ([]Namespace, error) {
+func getNamespaces(host, appName, clusterName string) ([]Namespace, []byte, error) {
 	var ret []Namespace
 	client := resty.New()
 	resp, err := client.R().
 		SetResult(&ret).
 		Get(fmt.Sprintf("%s/admin/api/v1/namespaces?appName=%s&clusterName=%s", host, appName, clusterName))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	if resp.StatusCode() != http.StatusOK {
-		return nil, errors.New(resp.String())
+		return nil, nil, errors.New(resp.String())
 	}
 
-	return ret, nil
+	return ret, resp.Body(), nil
+}
+
+func sum(data []byte) string {
+	h := md5.New()
+	h.Write(data)
+	return fmt.Sprintf("%x", h.Sum(nil))
 }

@@ -84,3 +84,7 @@ func (s *Config) Stop() {
 		close(s.exit)
 	}
 }
+
+func (s *Config) Name() string {
+	return s.source.Name()
+}
