@@ -2,11 +2,14 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/micro-in-cn/XConf/agent/server"
 	"github.com/micro/cli"
+	"github.com/micro/go-micro/util/log"
 )
 
 func main() {
@@ -15,6 +18,7 @@ func main() {
 		appName     string
 		clusterName string
 		dir         string
+		interval    int
 	)
 
 	app := cli.NewApp()
@@ -51,6 +55,13 @@ func main() {
 			EnvVar:      "XCONF_DIR",
 			Destination: &dir,
 		},
+		cli.IntFlag{
+			Name:        "interval, i",
+			Usage:       "auto reload time interval",
+			EnvVar:      "XCONF_INTERVAL",
+			Value:       5,
+			Destination: &interval,
+		},
 	}
 
 	app.Action = func(c *cli.Context) error {
@@ -70,16 +81,42 @@ func main() {
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		fmt.Println(err)
+		log.Error(err)
 		return
 	}
 
 	s := server.New(dir, baseURL, appName, clusterName)
 	if err := s.Init(); err != nil {
-		fmt.Println(err)
+		log.Error(err)
 		return
 	}
 
-	fmt.Println(s.Dir(), s.HostURL(), s.AppName(), s.ClusterName())
+	//fmt.Println(s.Dir(), s.HostURL(), s.AppName(), s.ClusterName())
+
+	// 监听退出信号
+	shutdown := make(chan os.Signal, 1)
+	signal.Notify(shutdown, syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT)
+
+	go func() {
+		if interval <= 0 {
+			interval = 5
+		}
+		log.Infof("auto reload (interval time: %ds)\n", interval)
+		for {
+			select {
+			case <-shutdown:
+				log.Info("reload exit")
+				s.Stop()
+				return
+			default:
+				time.Sleep(time.Second * time.Duration(interval))
+				if err := s.Reload(); err != nil {
+					log.Infof("reload err : %s", err)
+				}
+			}
+		}
+	}()
+
 	s.Run()
+	log.Info("agent exit")
 }
