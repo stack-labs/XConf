@@ -28,6 +28,6 @@ export const renderDeleteWithLinkButton = ({ label, popLabel, dataSet, onDelete 
   return renderPopconfirm({
     label,
     popLabel,
-    popProps: { okButtonProps: { type: 'danger' }, onConfirm: dataSet ? onDelete.bind(dataSet) : onDelete },
+    popProps: { okButtonProps: { danger: true }, onConfirm: dataSet ? onDelete.bind(dataSet) : onDelete },
   });
 };
