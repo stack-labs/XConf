@@ -9,7 +9,7 @@ import (
 func TestHttpSource_Read(t *testing.T) {
 	client := New("http://xconf.mogutou.xyz", "test", "dev", "test")
 	b, err := client.Read()
-	if err != nil {
+	if err != nil && err.Error() != "{\"Error\":\"record not found\"}" {
 		t.Fatal(err)
 	}
 
@@ -19,7 +19,7 @@ func TestHttpSource_Read(t *testing.T) {
 func TestHttpSource_Watch(t *testing.T) {
 	client := New("http://xconf.mogutou.xyz", "test", "dev", "test")
 	w, err := client.Watch()
-	if err != nil {
+	if err != nil && err.Error() != "{\"Error\":\"record not found\"}" {
 		t.Fatal(err)
 	}
 
