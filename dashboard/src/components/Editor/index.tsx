@@ -82,8 +82,8 @@ const Editor: ForwardRefRenderFunction<any, EditorProps> = (
             保存
           </Button>
           <Button
-            type="danger"
-            disabled={released}
+            danger
+            disabled={released || props.initialValue !== value}
             onClick={() => {
               const v = value || '';
               const [result, msg] = validateFormat(v, format);
