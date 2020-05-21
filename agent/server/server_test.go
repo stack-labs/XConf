@@ -13,7 +13,7 @@ func TestServer_Reload(t *testing.T) {
 	client := resty.New()
 
 	s := New("/tmp/xconf", "http://xconf.mogutou.xyz", "test", "dev")
-	if err := s.Init(); err != nil {
+	if err := s.Init(); err != nil && err.Error() != "empty namespace" {
 		t.Fatal(err)
 		return
 	}
