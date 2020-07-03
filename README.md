@@ -8,6 +8,10 @@
 
 `XConf` 基于 go-micro 构建的分布式配置中心，提供配置的管理与发布、实时推送.
 
+## 使用本项目的公司
+
+- [CHUR Networks](https://www.churnetworks.com/)
+
 ## 特点
 
 - 修改实时推送
