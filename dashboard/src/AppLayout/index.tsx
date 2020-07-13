@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Link, matchPath, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Layout, Menu } from 'antd';
 import { GithubOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
@@ -49,6 +50,7 @@ const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
   const [collapsed, toggle] = useState<boolean>(false);
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const { t } = useTranslation();
 
   const { pathname } = useLocation();
 
@@ -85,7 +87,7 @@ const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
       <Layout.Sider theme="light" className={styles.sider} trigger={null} collapsible collapsed={collapsed}>
         <div className={styles.logo}>
           <strong>XConf</strong>
-          {!collapsed && <small>分布式配置中心</small>}
+          {!collapsed && <small>{t('layout.title')}</small>}
         </div>
         <Menu theme="light" mode="inline" className={styles.menus} openKeys={openKeys} selectedKeys={selectedKeys}>
           {menus.map(renderMenuItem)}
@@ -101,10 +103,10 @@ const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
         <Layout.Content>{children}</Layout.Content>
         <Layout.Footer style={{ textAlign: 'center' }}>
           <div>
-            <span>XConf 分布式配置中心</span>
+            <span>XConf {t('layout.title')}</span>
             <GithubOutlined style={{ marginLeft: 36 }} />
           </div>
-          <div>Copyright © 2020 Micro China开源技术出品</div>
+          <div>Copyright © 2020 {t('layout.ownership')}</div>
         </Layout.Footer>
       </Layout>
     </Layout>

@@ -32,3 +32,9 @@ export interface MenuItem {
   matchPath?: string;
   subMenus?: MenuItem[];
 }
+
+export interface Language {
+  lng: string;
+  langs: string[];
+  label: string;
+}
