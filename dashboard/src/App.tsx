@@ -36,7 +36,7 @@ function App() {
   return (
     <ConfigProvider locale={antLocales[language]}>
       <Router history={history}>
-        <AppLayout menus={menus}>
+        <AppLayout menus={menus} language={language}>
           <Suspense fallback={<Loading />}>
             <Switch>
               {routes.map((r) => (
