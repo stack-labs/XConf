@@ -15,7 +15,7 @@ const getRouteAndMenuArray = ({ t }: { t: TFunction }): RouteAndMenu[] => [
     menu: {
       menuKey: 'app_list',
       menuLink: '/apps',
-      menuLabel: t('menus.applications'),
+      menuLabel: t('menus.apps'),
       menuIcon: <AppstoreOutlined />,
     },
     route: { path: '/apps', component: React.lazy(() => import('./App/Apps')) },

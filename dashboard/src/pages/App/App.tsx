@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Collapse, PageHeader, Typography, message } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
@@ -17,6 +18,7 @@ import ClusterCreate from '@src/pages/App/ClusterCreate';
 export interface AppProps extends RouteComponentProps<{ appName: string; clusterName?: string }> {}
 
 const App: FC<AppProps> = ({ match }) => {
+  const { t } = useTranslation();
   const [collapseKey, setCollapseKey] = useState<string>('clusters');
   const [appName, setAppName] = useState<string>('');
   const [clusterName, setClusterName] = useState<string>();
@@ -49,25 +51,25 @@ const App: FC<AppProps> = ({ match }) => {
   const columns = useMemo(() => {
     const columns: ColumnProps<Cluster>[] = [
       {
-        title: '集群名',
+        title: t('table.columns.cluster'),
         key: 'clusterName',
         dataIndex: 'clusterName',
         render: (clusterName) => <Link to={`/apps/${appName}/${clusterName}`}>{clusterName}</Link>,
       },
-      { title: '描述', key: 'description', dataIndex: 'description' },
-      { title: '创建日期', key: 'createdAt', dataIndex: 'createdAt', width: 200, render: formatDate },
+      { title: t('table.columns.desc'), key: 'description', dataIndex: 'description' },
+      { title: t('table.columns.createdAt'), key: 'createdAt', dataIndex: 'createdAt', width: 200, render: formatDate },
       {
-        title: '操作',
+        title: t('table.columns.control'),
         key: 'control',
         width: 100,
         render: (_, cluster) => {
           return renderDeleteWithLinkButton({
-            label: '删除',
-            popLabel: '确认删除集群',
+            label: t('table.columns.control.remove'),
+            popLabel: t('table.columns.control.remove.confirm.cluster'),
             onDelete: () =>
               deleteCluster({ appName: cluster.appName, clusterName: cluster.clusterName })
                 .then(() => {
-                  message.success(`删除集群 ${cluster.appName} 成功`);
+                  message.success(cluster.appName + t('table.columns.control.remove.success'));
                   getClusters((query) => ({ ...query }));
                 })
                 .catch(message.error),
@@ -76,7 +78,7 @@ const App: FC<AppProps> = ({ match }) => {
       },
     ];
     return columns;
-  }, [appName, getClusters]);
+  }, [appName, getClusters, t]);
 
   const onFilterKey = useCallback((key: string, item: Cluster) => {
     return item.clusterName.includes(key);
@@ -85,11 +87,11 @@ const App: FC<AppProps> = ({ match }) => {
   return (
     <div>
       <PageHeader
-        title={`应用: ${appName}`}
+        title={t('card.app.title') + `: ${appName}`}
         ghost={false}
         breadcrumb={{
           routes: [
-            { path: '/apps', breadcrumbName: '应用列表' },
+            { path: '/apps', breadcrumbName: t('menus.apps') },
             appName && { path: `/apps/${appName}`, breadcrumbName: appName },
             appName && clusterName && { path: `/apps/${appName}/${clusterName}`, breadcrumbName: clusterName },
           ].filter((item) => !!item) as BreadcrumbItem[],
@@ -97,7 +99,7 @@ const App: FC<AppProps> = ({ match }) => {
         }}
         onBack={() => window.history.back()}
       >
-        <Typography.Paragraph>{appState.data.description || '暂无描述'}</Typography.Paragraph>
+        <Typography.Paragraph>{appState.data.description || t('empty.desc')}</Typography.Paragraph>
       </PageHeader>
       <Collapse
         className="containerLayout"
@@ -105,7 +107,7 @@ const App: FC<AppProps> = ({ match }) => {
         activeKey={collapseKey}
         onChange={setCollapseKey as (key: string | string[]) => void}
       >
-        <Collapse.Panel key="clusters" header="集群列表">
+        <Collapse.Panel key="clusters" header={t('menus.clusters')}>
           <ITable<Cluster>
             rowKey="id"
             bordered={false}
@@ -114,11 +116,11 @@ const App: FC<AppProps> = ({ match }) => {
             columns={columns}
             pagination={false}
             showCreate={{
-              label: '创建新集群',
+              label: t('card.cluster.create'),
               onCreate: () =>
                 ClusterCreate({
                   appName,
-                  title: '创建新集群',
+                  title: t('card.cluster.create'),
                   onOk: () => getClusters((state) => ({ ...state, version: (state.version ?? 0) + 1 })),
                 }),
             }}
