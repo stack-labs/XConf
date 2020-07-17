@@ -52,7 +52,7 @@ const Apps: FC<AppsProps> = () => {
                   message.success(app.appName + t('table.columns.control.remove.success'));
                   getApps((query) => ({ ...query }));
                 })
-                .catch(message.error),
+                .catch((err) => message.error(t('table.columns.control.remove.failure') + ': ' + err.message)),
           })}
         </div>
       ),

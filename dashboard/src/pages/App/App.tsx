@@ -72,7 +72,7 @@ const App: FC<AppProps> = ({ match }) => {
                   message.success(cluster.appName + t('table.columns.control.remove.success'));
                   getClusters((query) => ({ ...query }));
                 })
-                .catch(message.error),
+                .catch((err) => message.error(t('table.columns.control.remove.failure') + ': ' + err.message)),
           });
         },
       },

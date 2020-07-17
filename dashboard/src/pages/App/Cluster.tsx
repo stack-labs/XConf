@@ -118,7 +118,7 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
                       message.success(namespace.appName + t('table.columns.control.remove.success'));
                       getNamespaces((query) => ({ ...query }));
                     })
-                    .catch(message.error),
+                    .catch((err) => message.error(t('table.columns.control.remove.failure') + ': ' + err.message)),
               })}
             </div>
           );

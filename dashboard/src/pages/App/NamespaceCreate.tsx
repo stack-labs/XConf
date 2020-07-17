@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button, Col, Form, Input, Modal, Row, Select, message } from 'antd';
 import { ModalProps } from 'antd/lib/modal';
 
@@ -16,6 +17,8 @@ export interface NamespaceCreateProps extends Omit<ModalProps, 'onOk' | 'onCance
 }
 
 const NamespaceCreate: FC<NamespaceCreateProps> = ({ appName, clusterName, onOk, ...props }) => {
+  const { t } = useTranslation();
+
   const existNamespace = async (rule: any, value: string, callback: (error?: string) => void) => {
     return;
   };
@@ -33,29 +36,33 @@ const NamespaceCreate: FC<NamespaceCreateProps> = ({ appName, clusterName, onOk,
               onOk && onOk();
               props.onCancel && props.onCancel();
             })
-            .catch((err) => message.error(`创建配置失败: ${err}`))
+            .catch((err) => message.error(t('form.creation.namespace.failure') + `: ${err}`))
         }
       >
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item label="应用名" name="appName" {...halfFormLayout}>
+            <Form.Item label={t('form.creation.appName')} name="appName" {...halfFormLayout}>
               <Input readOnly />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="集群名" name="clusterName" {...halfFormLayout}>
+            <Form.Item label={t('form.creation.clusterName')} name="clusterName" {...halfFormLayout}>
               <Input readOnly />
             </Form.Item>
           </Col>
         </Row>
         <Form.Item
-          label="配置名"
+          label={t('form.creation.namespace')}
           name="namespaceName"
-          rules={[{ required: true, message: '配置名不能为空' }, { validator: existNamespace }]}
+          rules={[{ required: true, message: t('form.creation.namespace.validation') }, { validator: existNamespace }]}
         >
-          <Input placeholder="请输入配置名" />
+          <Input placeholder={t('form.creation.namespace.placeholder')} />
         </Form.Item>
-        <Form.Item label="格式" name="format" rules={[{ required: true, message: '格式不能为空' }]}>
+        <Form.Item
+          label={t('form.creation.format')}
+          name="format"
+          rules={[{ required: true, message: t('form.creation.format.validation') }]}
+        >
           {/* // ! ResizeObserver loop limit exceeded https://github.com/ant-design/ant-design/issues/23246 */}
           <Select>
             {formats.map((value) => (
@@ -65,18 +72,18 @@ const NamespaceCreate: FC<NamespaceCreateProps> = ({ appName, clusterName, onOk,
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="描述" name="description">
-          <Input.TextArea placeholder="请输入配置的描述信息" />
+        <Form.Item label={t('form.creation.desc')} name="description">
+          <Input.TextArea placeholder={t('form.creation.desc.placeholder')} />
         </Form.Item>
         <Row gutter={16}>
           <Col offset={4} span={10}>
             <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-              创建
+              {t('form.creation.button.sure')}
             </Button>
           </Col>
           <Col span={10}>
             <Button htmlType="button" onClick={props.onCancel} style={{ width: '100%' }}>
-              取消
+              {t('form.creation.button.cancel')}
             </Button>
           </Col>
         </Row>
