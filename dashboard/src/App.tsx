@@ -10,7 +10,7 @@ import i18n, { antLocales } from '@src/i18n';
 import { getMenus, getRoutes } from '@src/pages';
 import { getLanguage, parseSearch } from '@src/tools';
 
-const history = createBrowserHistory({ basename: '/' });
+const history = createBrowserHistory({ basename: process.env.NODE_ENV === 'production' ? '/admin/ui' : '/' });
 const getLang = (search: string) => {
   const { lang } = parseSearch(search);
   return getLanguage(lang);
