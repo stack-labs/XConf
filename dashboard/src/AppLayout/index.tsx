@@ -1,12 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Link, matchPath, useLocation } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
+import { Link, matchPath, useHistory, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Layout, Menu, Select } from 'antd';
 import { GithubOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
-import { BFS } from '@src/tools';
+import { BFS, replaceSearch, setComputerLanguage } from '@src/tools';
 
 import { MenuItem } from '@src/typings';
 import styles from './index.module.scss';
+import { languages } from '@src/i18n';
 
 const renderMenuItem = (menuItem: MenuItem): React.ReactElement => {
   const renderLabel = () => {
@@ -41,15 +43,18 @@ const renderMenuItem = (menuItem: MenuItem): React.ReactElement => {
 };
 
 export interface AppLayoutProps {
+  language: string;
   menus: MenuItem[];
   children: React.ReactChild;
 }
 
-const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
+const AppLayout: FC<AppLayoutProps> = ({ language, menus, children }) => {
   const [collapsed, toggle] = useState<boolean>(false);
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const { t } = useTranslation();
 
+  const history = useHistory();
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -85,7 +90,7 @@ const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
       <Layout.Sider theme="light" className={styles.sider} trigger={null} collapsible collapsed={collapsed}>
         <div className={styles.logo}>
           <strong>XConf</strong>
-          {!collapsed && <small>分布式配置中心</small>}
+          {!collapsed && <small>{t('layout.title')}</small>}
         </div>
         <Menu theme="light" mode="inline" className={styles.menus} openKeys={openKeys} selectedKeys={selectedKeys}>
           {menus.map(renderMenuItem)}
@@ -97,14 +102,30 @@ const AppLayout: FC<AppLayoutProps> = ({ menus, children }) => {
             className: styles.trigger,
             onClick: () => toggle((prev) => !prev),
           })}
+          <div className={styles.rightLayout}>
+            <Select
+              value={language}
+              style={{ width: 100 }}
+              onChange={(lang) => {
+                setComputerLanguage(lang);
+                replaceSearch(history, { lang });
+              }}
+            >
+              {languages.map((l) => (
+                <Select.Option key={l.lng} value={l.lng}>
+                  {l.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
         </Layout.Header>
         <Layout.Content>{children}</Layout.Content>
         <Layout.Footer style={{ textAlign: 'center' }}>
           <div>
-            <span>XConf 分布式配置中心</span>
+            <span>XConf {t('layout.title')}</span>
             <GithubOutlined style={{ marginLeft: 36 }} />
           </div>
-          <div>Copyright © 2020 Micro China开源技术出品</div>
+          <div>Copyright © 2020 {t('layout.ownership')}</div>
         </Layout.Footer>
       </Layout>
     </Layout>

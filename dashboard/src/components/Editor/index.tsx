@@ -1,4 +1,5 @@
 import React, { ForwardRefRenderFunction, forwardRef } from 'react';
+import { TFunction } from 'i18next';
 import { Button, Input, message } from 'antd';
 import CodeMirror from 'codemirror';
 import { CodeEditorProps } from '@src/components/Editor/Editor';
@@ -9,6 +10,7 @@ import YamlEditor from './YamlEditor';
 import TomlEditor from './TomlEditor';
 
 import styles from './index.module.scss';
+import { useTranslation } from 'react-i18next';
 
 window.CodeMirror = CodeMirror;
 
@@ -16,8 +18,8 @@ export { default as JsonEditor } from './JsonEditor';
 export { default as YamlEditor } from './YamlEditor';
 export { default as TomlEditor } from './TomlEditor';
 
-export const validateFormat = (value: string, format: NamespaceFormat): [boolean, string?] => {
-  if (!value) return [false, '配置不能为空'];
+export const validateFormat = (value: string, format: NamespaceFormat, t: TFunction): [boolean, string?] => {
+  if (!value) return [false, t('form.creation.configuration.validation')];
   if (format === NamespaceFormat.CUSTOM) return [true];
   let validate;
   if (format === NamespaceFormat.JSON) validate = window.jsonlint.parse;
@@ -46,6 +48,7 @@ const Editor: ForwardRefRenderFunction<any, EditorProps> = (
   { canControl, format, value, released, onSave, onRelease, ...props },
   ref,
 ) => {
+  const { t } = useTranslation();
   const renderEditor = () => {
     if (format === NamespaceFormat.CUSTOM)
       return (
@@ -74,24 +77,24 @@ const Editor: ForwardRefRenderFunction<any, EditorProps> = (
             type="primary"
             onClick={() => {
               const v = value || '';
-              const [result, msg] = validateFormat(v, format);
+              const [result, msg] = validateFormat(v, format, t);
               if (result) onSave && onSave(v, format);
-              else message.error(`格式错误: ${msg}`);
+              else message.error(t('form.creation.format.validation.failure') + `: ${msg}`);
             }}
           >
-            保存
+            {t('form.creation.button.save')}
           </Button>
           <Button
             danger
             disabled={released || props.initialValue !== value}
             onClick={() => {
               const v = value || '';
-              const [result, msg] = validateFormat(v, format);
+              const [result, msg] = validateFormat(v, format, t);
               if (result) onRelease && onRelease(v, format);
-              else message.error(`格式错误: ${msg}`);
+              else message.error(t('form.creation.format.validation.failure') + `: ${msg}`);
             }}
           >
-            发布
+            {t('form.creation.button.release')}
           </Button>
         </div>
       )}

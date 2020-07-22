@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RouteComponentProps } from 'react-router-dom';
 import { Card, Input, PageHeader, message } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
@@ -14,6 +15,8 @@ import { NamespaceHistoryItem, NamespaceHistoryQuery } from '@src/typings';
 export interface NamespaceHistoryProps extends RouteComponentProps<Omit<NamespaceHistoryQuery, 'version'>> {}
 
 const NamespaceHistory: FC<NamespaceHistoryProps> = ({ match }) => {
+  const { t } = useTranslation();
+
   const [historiesState, getHistories] = useCapture<NamespaceHistoryItem[], NamespaceHistoryQuery>({
     fn: fetchNamespaceHistories,
     initialState: [],
@@ -29,10 +32,10 @@ const NamespaceHistory: FC<NamespaceHistoryProps> = ({ match }) => {
   const columns = useMemo(() => {
     const columns: ColumnProps<NamespaceHistoryItem>[] = [
       { title: 'Tag', key: 'tag', dataIndex: 'tag' },
-      { title: '说明', key: 'comment', dataIndex: 'comment' },
-      { title: '创建时间', key: 'createdAt', dataIndex: 'createdAt', width: 180, render: formatDate },
+      { title: t('table.columns.comment'), key: 'comment', dataIndex: 'comment' },
+      { title: t('table.columns.createdAt'), key: 'createdAt', dataIndex: 'createdAt', width: 180, render: formatDate },
       {
-        title: '操作',
+        title: t('table.columns.control'),
         key: 'control',
         width: 100,
         render: (_, item) =>
@@ -40,8 +43,8 @@ const NamespaceHistory: FC<NamespaceHistoryProps> = ({ match }) => {
             <span style={{ cursor: 'not-allowed' }}> </span>
           ) : (
             renderPopconfirm({
-              label: '回滚',
-              popLabel: '确认回滚',
+              label: t('table.columns.control.rollback'),
+              popLabel: t('table.columns.control.rollback.confirm'),
               popProps: {
                 onConfirm: () =>
                   rollbackConfig({
@@ -51,17 +54,17 @@ const NamespaceHistory: FC<NamespaceHistoryProps> = ({ match }) => {
                     tag: item.tag,
                   })
                     .then(() => {
-                      message.success('回滚成功');
+                      message.success(t('table.columns.control.rollback.success'));
                       getHistories((state) => ({ ...state }));
                     })
-                    .catch((err) => message.error(`回滚失败: ${err.message}`)),
+                    .catch((err) => message.error(t('table.columns.control.rollback.failure') + ': ' + err.message)),
               },
             })
           ),
       },
     ];
     return columns;
-  }, [getHistories]);
+  }, [getHistories, t]);
 
   const onFilterKey = useCallback((key: string, item: NamespaceHistoryItem) => {
     return item.tag.includes(key);
@@ -71,11 +74,11 @@ const NamespaceHistory: FC<NamespaceHistoryProps> = ({ match }) => {
   return (
     <div>
       <PageHeader
-        title={`命名空间配置: ${appName}/${clusterName}/${namespaceName}`}
+        title={t('card.namespace.title') + `: ${appName}/${clusterName}/${namespaceName}`}
         ghost={false}
         breadcrumb={{
           routes: [
-            { path: '/apps', breadcrumbName: '应用列表' },
+            { path: '/apps', breadcrumbName: t('menus.apps') },
             { path: `/apps/${appName}`, breadcrumbName: appName },
             { path: `/apps/${appName}/${clusterName}`, breadcrumbName: clusterName },
             { path: `/apps/${appName}/${clusterName}/${namespaceName}/histories`, breadcrumbName: namespaceName },

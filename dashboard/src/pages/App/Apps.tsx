@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Card, Divider, message } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
@@ -16,6 +17,7 @@ export interface AppsProps extends RouteComponentProps {}
 
 const Apps: FC<AppsProps> = () => {
   const [key, setKey] = useState<string>('');
+  const { t } = useTranslation();
   const [appsState, getApps] = useCapture<App[], { version: number }>({
     fn: fetchApps,
     initialArgs: { version: 0 },
@@ -25,32 +27,32 @@ const Apps: FC<AppsProps> = () => {
 
   const columns: ColumnProps<App>[] = [
     {
-      title: '应用',
+      title: t('table.columns.app'),
       key: 'appName',
       dataIndex: 'appName',
       render: (appName) => <Link to={`/apps/${appName}`}>{appName}</Link>,
     },
-    { title: '描述', key: 'description', dataIndex: 'description' },
-    { title: '创建时间', key: 'createdAt', dataIndex: 'createdAt', width: 180, render: formatDate },
-    { title: '更新时间', key: 'updatedAt', dataIndex: 'updatedAt', width: 180, render: formatDate },
+    { title: t('table.columns.desc'), key: 'description', dataIndex: 'description' },
+    { title: t('table.columns.createdAt'), key: 'createdAt', dataIndex: 'createdAt', width: 180, render: formatDate },
+    { title: t('table.columns.updatedAt'), key: 'updatedAt', dataIndex: 'updatedAt', width: 180, render: formatDate },
     {
-      title: '操作',
+      title: t('table.columns.control'),
       key: 'control',
-      width: 120,
+      width: 130,
       render: (_, app) => (
         <div>
-          <Link to={`/apps/${app.appName}`}>查看</Link>
+          <Link to={`/apps/${app.appName}`}>{t('table.columns.control.view')}</Link>
           <Divider type="vertical" />
           {renderDeleteWithLinkButton({
-            label: '删除',
-            popLabel: '确认删除应用?',
+            label: t('table.columns.control.remove'),
+            popLabel: t('table.columns.control.remove.confirm.app'),
             onDelete: () =>
               deleteApp({ appName: app.appName })
                 .then(() => {
-                  message.success(`删除应用 ${app.appName} 成功`);
+                  message.success(app.appName + t('table.columns.control.remove.success'));
                   getApps((query) => ({ ...query }));
                 })
-                .catch(message.error),
+                .catch((err) => message.error(t('table.columns.control.remove.failure') + ': ' + err.message)),
           })}
         </div>
       ),
@@ -58,16 +60,19 @@ const Apps: FC<AppsProps> = () => {
   ];
 
   return (
-    <Card title="我的应用" className="containerLayout">
+    <Card title={t('card.app')} className="containerLayout">
       <ITable
         showSearch={{ value: key, onChange: setKey }}
         columns={columns}
         dataSource={appsState.data.filter((item) => item.appName.includes(key))}
         loading={appsState.loading}
         showCreate={{
-          label: '创建新应用',
+          label: t('card.app.create'),
           onCreate: () =>
-            AppCreation({ title: '创建新应用', onOk: () => getApps((state) => ({ version: state.version++ })) }),
+            AppCreation({
+              title: t('card.app.create'),
+              onOk: () => getApps((state) => ({ version: state.version++ })),
+            }),
         }}
       />
     </Card>

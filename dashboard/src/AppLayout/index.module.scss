@@ -6,6 +6,8 @@
     padding: 0;
     box-sizing: border-box;
     border-bottom: 1px solid $borderColor;
+    display: flex;
+    justify-content: space-between;
 
     .trigger {
       font-size: 18px;
@@ -16,6 +18,10 @@
       &:hover {
         color: #1890ff;
       }
+    }
+
+    .rightLayout {
+      margin-right: 32px;
     }
   }
 

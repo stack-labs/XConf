@@ -1,4 +1,6 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Card, Divider, message } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
@@ -14,7 +16,7 @@ import { renderDeleteWithLinkButton, renderNamespaceRelease } from '@src/renders
 import { deleteNamespace, fetchCluster, fetchNamespaces, saveConfig } from '@src/services';
 import { ClusterQuery, Cluster as ClusterType, Namespace, NamespacesQuery, defaultBaseModel } from '@src/typings';
 
-const getFunction = (namespace: Namespace, callback: () => void) => {
+const getFunction = (namespace: Namespace, t: TFunction, callback: () => void) => {
   const uploadConfig = (content: string) => {
     saveConfig({
       appName: namespace.appName,
@@ -24,17 +26,17 @@ const getFunction = (namespace: Namespace, callback: () => void) => {
       value: content,
     })
       .then(() => {
-        message.success('配置保存成功');
+        message.success(t('table.columns.control.import.success'));
         callback();
       })
-      .catch((e) => message.error('保存失败:', e.message));
+      .catch((e) => message.error(t('table.columns.control.import.failure') + `: ${e.message}`));
   };
 
   const getContent = (file: File) => {
     readFile(file, (value) => {
-      const [res, msg] = validateFormat(value, namespace.format);
+      const [res, msg] = validateFormat(value, namespace.format, t);
       if (res) uploadConfig(value);
-      else message.error(`导入文件失败: ${msg}`);
+      else message.error(t('table.columns.control.import.failure') + `: ${msg}`);
     });
   };
 
@@ -49,6 +51,8 @@ const getFunction = (namespace: Namespace, callback: () => void) => {
 export interface ClusterProps extends ClusterQuery {}
 
 const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
+  const { t } = useTranslation();
+
   const [, getCluster] = useCapture<ClusterType, ClusterQuery>({
     fn: fetchCluster,
     initialState: { ...defaultBaseModel, appName: '', clusterName: '' },
@@ -69,36 +73,43 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
 
   const columns = useMemo(() => {
     const columns: ColumnProps<Namespace>[] = [
-      { title: '空间名', key: 'namespaceName', dataIndex: 'namespaceName' },
-      { title: '描述', key: 'description', dataIndex: 'description' },
-      { title: '创建日期', key: 'createdAt', dataIndex: 'createdAt', width: 200, render: formatDate },
-      { title: '状态', key: 'release', width: 100, render: (_, namespace) => renderNamespaceRelease(namespace) },
+      { title: t('table.columns.namespace'), key: 'namespaceName', dataIndex: 'namespaceName' },
+      { title: t('table.columns.desc'), key: 'description', dataIndex: 'description' },
+      { title: t('table.columns.createdAt'), key: 'createdAt', dataIndex: 'createdAt', width: 200, render: formatDate },
       {
-        title: '操作',
+        title: t('table.columns.status'),
+        key: 'release',
+        width: 100,
+        render: (_, namespace) => renderNamespaceRelease(namespace, t),
+      },
+      {
+        title: t('table.columns.control'),
         key: 'control',
-        width: 230,
+        width: 256,
         render: (_, namespace) => {
           return (
             <div>
-              <Link to={`/apps/${appName}/${clusterName}/${namespace.namespaceName}/histories`}>历史版本</Link>
-              <Divider type="vertical" />
               <button
                 className="link-button"
-                onClick={getFunction(namespace, () => getNamespaces((state) => ({ ...state })))}
+                onClick={getFunction(namespace, t, () => getNamespaces((state) => ({ ...state })))}
               >
-                导入
+                {t('table.columns.control.import')}
               </button>
               <Divider type="vertical" />
               <button
                 className="link-button"
                 onClick={() => downloadFile(namespace.namespaceName, namespace.value, namespace.format)}
               >
-                导出
+                {t('table.columns.control.export')}
               </button>
               <Divider type="vertical" />
+              <Link to={`/apps/${appName}/${clusterName}/${namespace.namespaceName}/histories`}>
+                {t('table.columns.control.history')}
+              </Link>
+              <Divider type="vertical" />
               {renderDeleteWithLinkButton({
-                label: '删除',
-                popLabel: '确认删除空间',
+                label: t('table.columns.control.remove'),
+                popLabel: t('table.columns.control.remove.confirm.namespace'),
                 onDelete: () =>
                   deleteNamespace({
                     appName: namespace.appName,
@@ -106,10 +117,10 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
                     namespaceName: namespace.namespaceName,
                   })
                     .then(() => {
-                      message.success(`删除应用 ${namespace.appName} 成功`);
+                      message.success(namespace.appName + t('table.columns.control.remove.success'));
                       getNamespaces((query) => ({ ...query }));
                     })
-                    .catch(message.error),
+                    .catch((err) => message.error(t('table.columns.control.remove.failure') + ': ' + err.message)),
               })}
             </div>
           );
@@ -117,14 +128,14 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
       },
     ];
     return columns;
-  }, [appName, clusterName, getNamespaces]);
+  }, [appName, clusterName, getNamespaces, t]);
 
   const onFilterKey = useCallback((key: string, item: Namespace) => {
     return item.namespaceName.includes(key);
   }, []);
 
   return (
-    <Card title={`集群: ${clusterName}`} className="containerLayout">
+    <Card title={t('card.cluster.title') + `: ${clusterName}`} className="containerLayout">
       <ITable<Namespace>
         rowKey="id"
         bordered={false}
@@ -134,12 +145,12 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
         dataSource={namespacesState.data}
         showSearch={{ onFilter: onFilterKey }}
         showCreate={{
-          label: '创建新配置',
+          label: t('card.namespace.create'),
           onCreate: () =>
             NamespaceCreate({
               appName,
               clusterName,
-              title: '创建新配置',
+              title: t('card.namespace.create'),
               onOk: () => getNamespaces((state) => ({ ...state, version: (state.version ?? 0) + 1 })),
             }),
         }}
