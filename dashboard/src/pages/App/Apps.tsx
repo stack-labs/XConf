@@ -38,7 +38,7 @@ const Apps: FC<AppsProps> = () => {
     {
       title: t('table.columns.control'),
       key: 'control',
-      width: 120,
+      width: 130,
       render: (_, app) => (
         <div>
           <Link to={`/apps/${app.appName}`}>{t('table.columns.control.view')}</Link>

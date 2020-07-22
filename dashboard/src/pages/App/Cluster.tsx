@@ -34,7 +34,7 @@ const getFunction = (namespace: Namespace, t: TFunction, callback: () => void) =
 
   const getContent = (file: File) => {
     readFile(file, (value) => {
-      const [res, msg] = validateFormat(value, namespace.format);
+      const [res, msg] = validateFormat(value, namespace.format, t);
       if (res) uploadConfig(value);
       else message.error(t('table.columns.control.import.failure') + `: ${msg}`);
     });
@@ -80,17 +80,15 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
         title: t('table.columns.status'),
         key: 'release',
         width: 100,
-        render: (_, namespace) => renderNamespaceRelease(namespace),
+        render: (_, namespace) => renderNamespaceRelease(namespace, t),
       },
       {
         title: t('table.columns.control'),
         key: 'control',
-        width: 230,
+        width: 256,
         render: (_, namespace) => {
           return (
             <div>
-              <Link to={`/apps/${appName}/${clusterName}/${namespace.namespaceName}/histories`}>历史版本</Link>
-              <Divider type="vertical" />
               <button
                 className="link-button"
                 onClick={getFunction(namespace, t, () => getNamespaces((state) => ({ ...state })))}
@@ -104,6 +102,10 @@ const Cluster: FC<ClusterProps> = ({ appName, clusterName }) => {
               >
                 {t('table.columns.control.export')}
               </button>
+              <Divider type="vertical" />
+              <Link to={`/apps/${appName}/${clusterName}/${namespace.namespaceName}/histories`}>
+                {t('table.columns.control.history')}
+              </Link>
               <Divider type="vertical" />
               {renderDeleteWithLinkButton({
                 label: t('table.columns.control.remove'),

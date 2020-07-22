@@ -11,6 +11,10 @@ const locale: Locale = {
     'layout.subTit': '分布式配置中心',
     'layout.ownership': 'Micro China开源技术出品',
 
+    'label.released': '已发布',
+    'label.unreleased': '未发布',
+    'label.loading': '努力加载中捏.',
+
     'menus.apps': '应用列表',
     'menus.clusters': '集群列表',
     'menus.github': '项目地址',
@@ -26,6 +30,7 @@ const locale: Locale = {
     'card.namespace.create': '创建新配置',
 
     'table.filter': '关键字过滤',
+    'table.filter.placeholder': '输入关键字过滤',
     'table.filter_clear_button': '清除',
     'table.columns.app': '应用',
     'table.columns.cluster': '集群',
@@ -50,35 +55,47 @@ const locale: Locale = {
     'table.columns.control.remove.success': '删除成功',
     'table.columns.control.remove.failure': '删除失败',
     'table.columns.control.remove.confirm.app': '确认删除该应用?',
-    'table.columns.control.remove.confirm.cluster': '确认删除该应用?',
+    'table.columns.control.remove.confirm.cluster': '确认删除该集群?',
     'table.columns.control.remove.confirm.namespace': '确认删除该空间?',
 
     'form.creation.appName': '应用名',
     'form.creation.appName.validation': '应用名不能为空',
     'form.creation.appName.placeholder': '请输入应用名',
-
     'form.creation.clusterName': '集群名',
     'form.creation.clusterName.validation': '集群名不能为空',
     'form.creation.clusterName.placeholder': '请输入集群名',
-
     'form.creation.namespace': '配置名',
     'form.creation.namespace.validation': '配置名不能为空',
     'form.creation.namespace.placeholder': '请输入配置名',
-
     'form.creation.format': '格式',
     'form.creation.format.validation': '格式不能为空',
+    'form.creation.format.validation.failure': '格式错误',
+    'form.creation.status': '状态',
+    'form.creation.status.validation': '状态不能为空',
+    'form.creation.configuration': '配置',
+    'form.creation.configuration.validation': '配置不能为空',
+    'form.creation.tag': 'tag',
+    'form.creation.tag.validation': '必须填写tag',
+    'form.creation.tag.placeholder': '请输入Tag',
+    'form.creation.comment': '备注',
+    'form.creation.comment.validation': '发布备注',
+    'form.creation.comment.placeholder': '请输入发布备注',
 
     'form.creation.desc': '描述',
     'form.creation.desc.placeholder': '请输入描述内容',
 
     'form.creation.button.sure': '创建',
     'form.creation.button.cancel': '取消',
+    'form.creation.button.save': '保存',
+    'form.creation.button.release': '发布',
     'form.creation.app.success': '创建应用成功',
     'form.creation.app.failure': '创建应用失败',
     'form.creation.cluster.success': '创建集群成功',
     'form.creation.cluster.failure': '创建集群失败',
-    'form.creation.namespace.success': '创建配置成功',
     'form.creation.namespace.failure': '创建配置失败',
+    'form.creation.namespace.save.success': '配置保存成功',
+    'form.creation.namespace.save.failure': '配置保存失败',
+    'form.creation.namespace.release.success': '配置发布成功',
   },
 };
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { TableProps } from 'antd/lib/table';
+import { useTranslation } from 'react-i18next';
 import { Button, Input, Table } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { TableProps } from 'antd/lib/table';
 
 import { usePropsValue } from '@src/hooks/usePropsValue';
 
@@ -22,6 +23,7 @@ export interface ITableProps<T = any> extends TableProps<T> {
 }
 
 const ITable = <T extends object = any>({ showCreate, showSearch, ...props }: ITableProps<T>): JSX.Element => {
+  const { t } = useTranslation();
   const [key, setKey] = usePropsValue<string>({ value: showSearch?.value, onChange: showSearch?.onChange });
   const [data, setData] = useState<T[]>([]);
 
@@ -41,15 +43,15 @@ const ITable = <T extends object = any>({ showCreate, showSearch, ...props }: IT
       <div className="clear-float">
         {!!showSearch && (
           <div style={{ float: 'left', marginBottom: 16, display: 'flex', alignItems: 'center' }}>
-            <label>关键字过滤: </label>
+            <label>{t('table.filter')}: </label>
             <Input
               value={key}
               onChange={(e) => setKey(e.target.value)}
               style={{ marginLeft: 12, width: 300 }}
-              placeholder="输入关键字过滤"
+              placeholder={t('table.filter.placeholder')}
               addonAfter={
                 <span style={{ cursor: 'pointer' }} onClick={() => setKey('')}>
-                  清除
+                  {t('table.filter_clear_button')}
                 </span>
               }
             />

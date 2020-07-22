@@ -1,4 +1,5 @@
 import React, { FC, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Col, Form, Row, Tag, message } from 'antd';
 
 import Editor from '@src/components/Editor';
@@ -17,21 +18,28 @@ const NamespaceInfo: FC<NamespaceInfoProps> = ({ namespace, canControl, callback
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
 
+  const { t } = useTranslation();
+
   return (
     <Form>
       <Row>
         <Col span={6}>
-          <Form.Item label="格式" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+          <Form.Item label={t('form.creation.format')} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
             <Tag color="green">{namespace.format}</Tag>
           </Form.Item>
         </Col>
         <Col span={6}>
-          <Form.Item label="状态" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
-            {renderNamespaceRelease(namespace)}
+          <Form.Item label={t('form.creation.status')} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+            {renderNamespaceRelease(namespace, t)}
           </Form.Item>
         </Col>
       </Row>
-      <Form.Item name="configuration" label="配置" labelCol={{ span: 2 }} wrapperCol={{ span: 22 }}>
+      <Form.Item
+        name="configuration"
+        label={t('form.creation.configuration')}
+        labelCol={{ span: 2 }}
+        wrapperCol={{ span: 22 }}
+      >
         <Editor
           canControl={canControl}
           format={namespace.format}
@@ -48,9 +56,9 @@ const NamespaceInfo: FC<NamespaceInfoProps> = ({ namespace, canControl, callback
               .then(() => {
                 const callback = callbackRef.current;
                 callback && callback();
-                message.success('配置保存成功');
+                message.success(t('form.creation.namespace.save.success'));
               })
-              .catch((e) => message.error('保存失败:', e.message));
+              .catch((e) => message.error(t('form.creation.namespace.save.failure') + ': ' + e.message));
           }}
           onRelease={() => {
             ReleaseModel({
@@ -58,7 +66,7 @@ const NamespaceInfo: FC<NamespaceInfoProps> = ({ namespace, canControl, callback
               clusterName: namespace.clusterName,
               namespaceName: namespace.namespaceName,
               onOk: () => {
-                message.success('配置发布成功');
+                message.success(t('form.creation.namespace.release.success'));
                 const callback = callbackRef.current;
                 callback && callback();
               },
