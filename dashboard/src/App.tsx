@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
-import { createBrowserHistory } from 'history';
+import { createHashHistory } from 'history';
 import { useTranslation } from 'react-i18next';
 
 import AppLayout from '@src/AppLayout';
@@ -10,7 +10,7 @@ import i18n, { antLocales } from '@src/i18n';
 import { getMenus, getRoutes } from '@src/pages';
 import { getLanguage, parseSearch } from '@src/tools';
 
-const history = createBrowserHistory({ basename: process.env.NODE_ENV === 'production' ? '/admin/ui' : '/' });
+const history = createHashHistory();
 const getLang = (search: string) => {
   const { lang } = parseSearch(search);
   return getLanguage(lang);
