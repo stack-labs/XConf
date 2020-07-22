@@ -39,7 +39,7 @@ const locale: Locale = {
     'table.columns.desc': 'Description',
     'table.columns.status': 'Status',
     'table.columns.createdAt': 'CreatedAt',
-    'table.columns.updatedAt': 'updatedAt',
+    'table.columns.updatedAt': 'UpdatedAt',
     'table.columns.control': 'Control',
     'table.columns.control.view': 'View',
     'table.columns.control.history': 'History',
