@@ -30,7 +30,7 @@
     "js-yaml": "^3.14.0",
     "jsonlint-mod": "^1.7.5",
     "lint-staged": "^10.2.11",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "prettier": "^2.0.5",
     "react": "^16.13.1",
     "react-app-rewired": "^2.1.6",
