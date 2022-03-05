@@ -49,7 +49,6 @@
 
 ## 前端 UI
 
-线上 demo - http://xconf.mogutou.xyz/admin/ui
 
 ![image](doc/app.png)
 
@@ -113,7 +112,7 @@
     ```
 
     ```shell script
-    docker run --name agent -v /tmp/docker-xconf:/tmp  -d  xuxu123/agent  -u http://xconf.mogutou.xyz -a test -c dev -d /tmp
+    docker run --name agent -v /tmp/docker-xconf:/tmp  -d  xuxu123/agent  -u http://xxx.com -a test -c dev -d /tmp
     ```
 
 ## 客户端
