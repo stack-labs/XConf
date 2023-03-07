@@ -41,7 +41,7 @@
     "toml": "^3.0.0",
     "ts-jest": "^24.3.0",
     "typescript": "^3.8.3",
-    "webpack-bundle-analyzer": "^3.8.0"
+    "webpack-bundle-analyzer": "^4.8.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
